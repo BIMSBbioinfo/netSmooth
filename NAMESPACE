@@ -3,3 +3,4 @@
 export(random.walk.by.diffusr)
 export(random.walk.by.iterations)
 export(random.walk.by.matrix.inv)
+export(smooth.and.recombine)
