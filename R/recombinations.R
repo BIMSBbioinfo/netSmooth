@@ -14,7 +14,7 @@ project.from.network.recombine <- function(original_expression, smoothed_express
     return(data_in_original_space)
 }
 
-smooth.and.recombine <- function(gene_expression, adjnorm, lambda, smoothing.function=netsmooth::random.walk) {
+smooth.and.recombine <- function(gene_expression, adjnorm, lambda, smoothing.function=netsmooth::random.walk.by.iterations) {
     gene_expression_in_A_space <- project.on.network(gene_expression, rownames(adjnorm))
     gene_expression_in_A_space_smooth <- smoothing.function(gene_expression_in_A_space, adjnorm, lambda)
     gene_expression_smooth <- project.from.network.recombine(gene_expression, gene_expression_in_A_space_smooth)
