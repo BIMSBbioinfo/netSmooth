@@ -5,7 +5,8 @@ An R package for network smoothing scRNAseq.
 
 ### Installation
 
-blah
+	library(devtools)
+	install_github("BIMSBbioinfo/netsmooth")
 
 ### Usage
 
