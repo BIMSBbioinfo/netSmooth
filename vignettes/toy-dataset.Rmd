@@ -1,5 +1,5 @@
 ---
-title: "netsmooth: A Network smoothing based method for Single Cell RNAseq improves clustering"
+title: "netsmooth: example with a toy dataset"
 author: "Jonathan Ronen"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
