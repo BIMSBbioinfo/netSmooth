@@ -9,9 +9,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r}
-require(igraph)
+```{r setup, include=FALSE}
 require(netsmooth)
+require(igraph)
 ```
 
 
@@ -66,6 +66,28 @@ gene_expression_smoothed <- random.walk.by.matrix.inv(gene_expression, adj_matri
 gene_expression_smoothed
 ```
 
+## When the gene network doesn't have all the genes
+
+The gene network might be defined over a different set of genes than the gene expression experiment, with imperfect overlap. Take for instance this network:
+
+Now, with a network that doesn't have all the same genes as the experiment
+
+```{r}
+adj_matrix_2 <- copy(adj_matrix)
+rownames(adj_matrix_2) <- c('A','X','C','D','E')
+colnames(adj_matrix_2) <- c('A','X','C','D','E')
+
+g2 <- graph_from_adjacency_matrix(adj_matrix_2, mode='undirected')
+plot(g2)
+```
+
+where `gene B` has been replaced by `gene X`. netsmooth knows how to handle this case by first projecting the gene expression data onto the network space, including `gene X`, then perfoming the smoothing, and then projecting the resulting smoothed expression matrix back. This is achieved with the function `smooth.and.recombine`:
+
+```{r}
+smooth.and.recombine(gene_expression, adj_matrix_2, 0.5)
+```
+
+notice that the expression of `gene B` has not been smoothed, as it was not in the gene network. The other genes are smoothed on the full network (including `gene X`).
 
 ```{r}
 sessionInfo()
