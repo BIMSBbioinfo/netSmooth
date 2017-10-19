@@ -1,4 +1,5 @@
 .R*
 netsmooth.Rproj
+vignettes/*cache
 
 .Rproj.user

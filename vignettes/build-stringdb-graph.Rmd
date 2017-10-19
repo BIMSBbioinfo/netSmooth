@@ -1,0 +1,96 @@
+---
+title: "netsmooth: building the gene network from STRINGdb"
+author: "Jonathan Ronen"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{netsmooth}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+require(STRINGdb)
+require(biomaRt)
+require(igraph)
+require(ggplot2)
+```
+
+netsmooth needs a gene network to smooth expression over. This vignette demonstrates how to construct our recommended gene network from scratch; the protein-protein interaction network from STRINGdb.
+
+## The Human Protein-Protein Interaction Network
+
+First, we download the whole graph from STRINGdb:
+
+```{r echo=FALSE, cache=TRUE}
+string_db <- STRINGdb$new(species=9606)
+human_graph <- string_db$get_graph()
+```
+
+STRINGdb defines a `combined_score` for each protein-protein interaction, which is a weighed sum of interaction scores from different sources, including co-expression experiments and text mining of co-occurence in PubMed abstracts. We recommend only using the top 10% most confident interactions, by `combined_score`.
+
+```{r fig.show='asis'}
+edge.scores <- E(human_graph)$combined_score
+ninetyth.percentile <- quantile(edge.scores, 0.9)
+thresh <- data.frame(name='90th percentile', val=ninetyth.percentile)
+ggplot(data.frame(combined_score=edge.scores), aes(combined_score)) + 
+    geom_density() +
+    geom_vline(data=thresh, aes(xintercept=val, color=name), show.legend=TRUE)
+```
+
+Now that we've found the threshold, let us extract only the subgraph (nodes and edges) where interaction scores are above it
+
+```{r}
+human_graph <- subgraph.edges(human_graph, E(human_graph)[combined_score > ninetyth.percentile])
+```
+
+## Gene IDs
+
+As a protein-protein interaction database, STRINGdb relies internatlly on Ensembl protein ids:
+
+```{r}
+adj_matrix <- as_adjacency_matrix(human_graph)
+head(rownames(adj_matrix))
+```
+
+let us use biomart to translate those to gene IDs
+
+```{r}
+protein_ids <- sapply(strsplit(rownames(adj_matrix), '\\.'), function(x) x[2])
+
+mart = useMart(host = 'grch37.ensembl.org', biomart='ENSEMBL_MART_ENSEMBL', dataset='hsapiens_gene_ensembl')
+
+
+mart_results <- getBM(attributes = c("ensembl_gene_id", "ensembl_peptide_id"),
+                 filters = "ensembl_peptide_id", values = protein_ids,
+                 mart = mart)
+
+ix <- match(protein_ids, mart_results$ensembl_peptide_id)
+ix <- ix[!is.na(ix)]
+
+head(mart_results[ix,])
+```
+
+STRINGdb has some deprecated protein IDs which biomart cannot translate to gene IDs. For completeness of the network, we would like to keep those nodes, even if we don't know what they translate to, as netsmooth might still benefit from paths that pass through them even if they cannot be mapped back to genes in our experiments. For this purpose, we'll translate the `ENSP` ids to `ENSG` ids where possible, and keep the (deprecated) `ENSP` ids where we cannot.'
+
+```{r}
+newnames <- protein_ids
+newnames[match(mart_results[ix,'ensembl_peptide_id'], newnames)] <- mart_results[ix, 'ensembl_gene_id']
+rownames(adj_matrix) <- newnames
+colnames(adj_matrix) <- newnames
+```
+
+Lastly, some protein IDs will map to the same gene IDs, resulting in duplicates in the graph. We get rid of these
+
+```{r}
+adj_matrix <- adj_matrix[!duplicated(newnames), !duplicated(newnames)]
+```
+
+
+
+--------------
+
+```{r}
+sessionInfo()
+```
+
