@@ -1,3 +1,7 @@
+<div align="center">
+	<img src="hex-netsmooth.png" alt="netsmooth"/>
+</div>
+
 netsmooth
 ---------
 
