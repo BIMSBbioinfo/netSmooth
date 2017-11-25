@@ -17,7 +17,8 @@ Depends:
     entropy,
     Matrix,
     scater,
-    Rtsne
+    Rtsne,
+    clusterExperiment
 Imports:
     data.table,
     entropy
