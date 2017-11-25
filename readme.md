@@ -5,7 +5,7 @@
 netsmooth
 ---------
 
-An R package for network smoothing scRNAseq.
+netsmooth: A Network smoothing based method for Single Cell RNAseq and other gene-based genomics data sets
 
 ### Installation
 
