@@ -71,22 +71,3 @@ random.walk.by.matrix.inv <- function(f0, A, lambda) {
     K <- (1 - lambda) * solve(eye - lambda * Anorm)
     return(K %*% f0)
 }
-
-#' Smooth data on graph by performing random walk iterations until convergence
-#' using Cpp code from the diffusr package.
-#'
-#' @param f0      initial data matrix [NxM]
-#' @param adj_matrix       adjacency matrix of graph to network smooth on
-#'                will be column-normalized.
-#' @param lambda  smoothing coefficient (1 - restart probability of
-#'                random walk)
-#' @usage random.walk.by.diffusr(gene_expression, adj_matrix, lambda)
-#' @return network-smoothed gene expression
-#' @export
-random.walk.by.diffusr <- function(f0, A, lambda) {
-    Anorm <- l1.normalize.columns(A)
-    f_sm <- sapply( 1:(dim(f0)[2]), function(i) diffusr::random.walk(f0[,i], as.matrix(Anorm), lambda))
-    rownames(f_sm) <- rownames(f0)
-    colnames(f_sm) <- colnames(f0)
-    return(f_sm)
-}
