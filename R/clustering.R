@@ -97,8 +97,9 @@ clusterExperimentWorkflow <- function(se,
     }
 
     # Return cluster assignments
-    final.ix <- which(colnames(clusterMatrix(ce))=='Final Clustering')
-    yhat <- clusterMatrix(ce)[,final.ix]
+    final.ix <- which(colnames(clusterExperiment::clusterMatrix(ce))==
+                          'Final Clustering')
+    yhat <- clusterExperiment::clusterMatrix(ce)[,final.ix]
     names(yhat) <- colnames(se)
     return(yhat)
 }
