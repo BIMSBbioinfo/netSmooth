@@ -1,0 +1,95 @@
+#' Performs clustering workflow using `clusterExperiment` functions
+#' @param se    SummarizedExperiment object
+#' @param dimReduceFlavor    algorithm for reduced dimension embedding step
+#' @param cluster.ks    range of Ks to cluster over
+#' @param cluster.function    clustering algorithm to use for all clusterings
+#' @param nVarDims    numbers of variable genes to perform clusterings over
+#' @param combineManyProportion    proportion of times samples need to be
+#'                                 co-clustered for co-clustering step
+#' @param combineManyMinSize    minimum cluster size
+#' @returns    cluster assignments
+#' @export
+clusterExperimentWorkflow <- function(se,
+                                      dimReduceFlavor=c('pca', 'tsne', 'dm'),
+                                      cluster.ks=5:10,
+                                      cluster.function='pam',
+                                      nVarDims=c(100,500,1000),
+                                      combineManyProportion=.7,
+                                      combineManyMinSize=4,
+                                      random.seed=1) {
+    dimReduceFlavor <- match.arg(dimReduceFlavor)
+
+    # Run variable genes clusterings
+    ce <- clusterMany(se, clusterFunction=cluster.function, ks=cluster.ks,
+                      isCount=TRUE, dimReduce=c("var"), nVarDims=nVarDims,
+                      run=TRUE,
+                      subsampling=FALSE,
+                      random.seed=random.seed)
+
+    # Run dim reduce clusterings
+    if(dimReduceFlavor=='pca') dim.reduce.ks <- c(5,15,50)
+    else dim.reduce.ks <- c(2,3)
+
+    dim.reduce.clustermatrix <- matrix(rep(-1, dim(ce)[2] * length(cluster.ks) *
+                                               length(dim.reduce.ks)),
+                                       ncol=length(cluster.ks)*
+                                           length(dim.reduce.ks))
+    dim.reduce.cluster.labels <- rep(NA,
+                                     length(dim.reduce.ks) * length(cluster.ks))
+
+    i <- 1
+    for(dim.reduce.k in dim.reduce.ks) {
+        x <- dim.reduce(assay(se), algorithm=dimReduceFlavor, k=dim.reduce.k)
+        for(cluster.k in cluster.ks) {
+            dim.reduce.cluster.labels[i] <- paste0(dimReduceFlavor,
+                                                   dim.reduce.k,
+                                                   cluster.function,
+                                                   cluster.k)
+            dim.reduce.clustermatrix[,i] <- cluster.one(x, cluster.function,
+                                                        cluster.k)
+            i <- i+1
+        }
+    }
+    colnames(dim.reduce.clustermatrix) <- dim.reduce.cluster.labels
+
+    # Make a new overall clusterExperiment object
+    ce <- clusterExperiment(se, cbind(clusterMatrix(ce),
+                                      dim.reduce.clustermatrix),
+                            transformation=transformation(ce))
+
+    # Run a few combinations of the manys
+    ce <- combineMany(ce, proportion=combineManyProportion,
+                      minSize=combineManyMinSize,
+                      clusterLabel="combineMany",
+                      whichClusters = 'all')
+
+    # Make a dendrogram
+    ce <- makeDendrogram(ce,dimReduce="var",ndims=500,
+                         whichCluster="combineMany")
+
+    # Merge clusters
+    ce <- mergeClusters(ce, cutoff=0.05, mergeMethod="adjP", plotType="none",
+                        clusterLabel="mergeClusters_adjP_0.05")
+
+    # Set merged to final
+    ce <- setToFinal(ce, whichCluster="mergeClusters_adjP_0.05",
+                     clusterLabel="Final Clustering")
+
+    # Return cluster assignments
+    final.ix <- which(colnames(clusterMatrix(ce))=='Final Clustering')
+    yhat <- clusterMatrix(ce)[,final.ix]
+    names(yhat) <- colnames(se)
+    return(yhat)
+}
+
+#' Perform robust clustering on dataset, and calculate the proportion of
+#' samples in robust clusters
+#' @param se    SummarizedExperiment object
+#' @param ...    arguments passed on to `clusterExperimentWorkflow`
+#' @returns list(clusters, proportion.robust)
+#' @export
+robustClusters <- function(se, ...) {
+    yhat <- clusterExperimentWorkflow(se, ...)
+    proportion.robust <- mean(yhat!=-1)
+    return(list(clusters=yhat, proportion.robust=proportion.robust))
+}
