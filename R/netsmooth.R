@@ -62,17 +62,11 @@ netSmooth <- function(x, adjMatrix, alpha='optimal',
 
     if(is.numeric(alpha)) {
         if(alpha<0 | alpha > 1) stop('alpha must be between 0 and 1')
-        expr.smoothed <- netsmooth::smooth.and.recombine(expr,
-                                                         adjMatrix,
-                                                         alpha,
-                                           netsmooth::random.walk.by.matrix.inv)
+        expr.smoothed <- netsmooth::smoothAndRecombine(expr, adjMatrix, alpha)
     }
     else if(alpha=='optimal') {
         smoothed.expression.matrices <- lapply(optimalAlphaRange, function(a) {
-            netsmooth::smooth.and.recombine(expr,
-                                            adjMatrix,
-                                            a,
-                                           netsmooth::random.walk.by.matrix.inv)
+            netsmooth::smoothAndRecombine(expr, adjMatrix, a)
         })
         scores <- sapply(1:length(smoothed.expression.matrices), function(i) {
             x.sm <- smoothed.expression.matrices[[i]]

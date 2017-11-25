@@ -1,16 +1,22 @@
-project.on.network <- function(gene_expression, new_features, missing.value=0) {
-    data_in_new_space = matrix(rep(0, length(new_features)*dim(gene_expression)[2]), nrow=length(new_features))
+projectOnNetwork <- function(gene_expression, new_features, missing.value=0) {
+    data_in_new_space = matrix(rep(0, length(new_features)*
+                                       dim(gene_expression)[2]),
+                               nrow=length(new_features))
     rownames(data_in_new_space) <- new_features
     colnames(data_in_new_space) <- colnames(gene_expression)
-    genes_in_both <- intersect(rownames(data_in_new_space), rownames(gene_expression))
+    genes_in_both <- intersect(rownames(data_in_new_space),
+                               rownames(gene_expression))
     data_in_new_space[genes_in_both,] <- gene_expression[genes_in_both,]
     return(data_in_new_space)
 }
 
-project.from.network.recombine <- function(original_expression, smoothed_expression) {
+projectFromNetworkRecombine <- function(original_expression,
+                                        smoothed_expression) {
     data_in_original_space <- copy(original_expression)
-    genes_in_both <- intersect(rownames(original_expression), rownames(smoothed_expression))
-    data_in_original_space[genes_in_both,] <- as.matrix(smoothed_expression[genes_in_both,])
+    genes_in_both <- intersect(rownames(original_expression),
+                               rownames(smoothed_expression))
+    data_in_original_space[genes_in_both,] <- as.matrix(
+        smoothed_expression[genes_in_both,])
     return(data_in_original_space)
 }
 
@@ -23,23 +29,27 @@ project.from.network.recombine <- function(original_expression, smoothed_express
 #' data onto the gene space defined by the network prior to smoothing. Then,
 #' it projects the smoothed data back into the original dimansions.
 #'
-#' @param gene_expression  gene expession data to be smoothed. [N_genes x M_samples]
+#' @param gene_expression  gene expession data to be smoothed
+#'                         [N_genes x M_samples]
 #' @param adj_matrix  adjacenty matrix of network to perform smoothing over.
 #'                    Will be column-normalized.
 #'                    Rownames and colnames should be genes.
-#' @param lambda  network smoothing parameter (1 - restart probability in random
+#' @param alpha  network smoothing parameter (1 - restart probability in random
 #'                walk model.
 #' @param smoothing.function  must be a function that takes in data, adjacency
-#'                            matrix, and lambda. Will be used to perform the
+#'                            matrix, and alpha. Will be used to perform the
 #'                            actual smoothing.
-#' @usage  smooth.and.recombine(gene_expression, adj_matrix, lambda,
-#'                              smoothing.function=netsmooth::smooth.by.matrix.inv)
+#' @usage  smoothAndRecombine(gene_expression, adj_matrix, alpha)
 #' @return  matrix with network-smoothed gene expression data. Genes that are
 #'          not present in smoothing network will retain original values.
 #' @export
-smooth.and.recombine <- function(gene_expression, adj_matrix, lambda, smoothing.function=netsmooth::random.walk.by.iterations) {
-    gene_expression_in_A_space <- project.on.network(gene_expression, rownames(adj_matrix))
-    gene_expression_in_A_space_smooth <- smoothing.function(gene_expression_in_A_space, adj_matrix, lambda)
-    gene_expression_smooth <- project.from.network.recombine(gene_expression, gene_expression_in_A_space_smooth)
+smoothAndRecombine <- function(gene_expression, adj_matrix, alpha,
+                      smoothing.function=netsmooth::randomWalkByMatrixInv) {
+    gene_expression_in_A_space <- projectOnNetwork(gene_expression,
+                                                   rownames(adj_matrix))
+    gene_expression_in_A_space_smooth <- smoothing.function(
+        gene_expression_in_A_space, adj_matrix, alpha)
+    gene_expression_smooth <- projectFromNetworkRecombine(
+        gene_expression, gene_expression_in_A_space_smooth)
     return(gene_expression_smooth)
 }

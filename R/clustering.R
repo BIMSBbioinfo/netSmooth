@@ -78,13 +78,14 @@ clusterExperimentWorkflow <- function(se,
                              whichCluster="combineMany")
 
         # Merge clusters
-        ce <- clusterExperiment::mergeClusters(ce, cutoff=0.05, mergeMethod="adjP",
+        ce <- clusterExperiment::mergeClusters(ce, cutoff=0.05,
+                                               mergeMethod="adjP",
                                                plotType="none",
-                            clusterLabel="mergeClusters_adjP_0.05")
+                                               clusterLabel="mergeClusters")
 
         # Set merged to final
         ce <- clusterExperiment::setToFinal(ce,
-                                            whichCluster="mergeClusters_adjP_0.05",
+                                            whichCluster="mergeClusters",
                                             clusterLabel="Final Clustering")
     }
     else {
