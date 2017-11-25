@@ -14,11 +14,13 @@ LazyData: true
 Depends:
     R (>= 3.4.0),
     data.table,
-    diffusr,
-    Matrix
+    entropy,
+    Matrix,
+    scater,
+    Rtsne
 Imports:
     data.table,
-    diffusr
+    entropy
 Suggests: knitr
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
