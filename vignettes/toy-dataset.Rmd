@@ -54,7 +54,7 @@ gene_expression
 We see that sample 1 only expresses gene A, and sample 2 only expresses gene E. Let's run the network smoothing algorithm to see what the smoothed expression might look like:
 
 ```{r}
-gene_expression_smoothed <- random.walk.by.matrix.inv(gene_expression, adj_matrix, 0.1)
+gene_expression_smoothed <- randomWalkByMatrixInv(gene_expression, adj_matrix, 0.1)
 gene_expression_smoothed
 ```
 
@@ -62,7 +62,7 @@ gene_expression_smoothed
 ## Other values of lambda
 
 ```{r}
-gene_expression_smoothed <- random.walk.by.matrix.inv(gene_expression, adj_matrix, 0.9)
+gene_expression_smoothed <- randomWalkByMatrixInv(gene_expression, adj_matrix, 0.9)
 gene_expression_smoothed
 ```
 
@@ -84,7 +84,7 @@ plot(g2)
 where `gene B` has been replaced by `gene X`. netsmooth knows how to handle this case by first projecting the gene expression data onto the network space, including `gene X`, then perfoming the smoothing, and then projecting the resulting smoothed expression matrix back. This is achieved with the function `smooth.and.recombine`:
 
 ```{r}
-smooth.and.recombine(gene_expression, adj_matrix_2, 0.5)
+smoothAndRecombine(gene_expression, adj_matrix_2, 0.5)
 ```
 
 notice that the expression of `gene B` has not been smoothed, as it was not in the gene network. The other genes are smoothed on the full network (including `gene X`).
