@@ -5,10 +5,17 @@
 \title{Perform robust clustering on dataset, and calculate the proportion of
 samples in robust clusters}
 \usage{
-robustClusters(se, ...)
+robustClusters(se, dimReduceFlavor = "auto", is.counts = TRUE, ...)
 }
 \arguments{
 \item{se}{SummarizedExperiment object}
+
+\item{dimReduceFlavor}{algorithm for dimensionality reduction step
+of clustering procedure. May be 'pca', 'tsne',
+'dm' or 'auto', which uses shannon entropy to
+pick the algorithm.}
+
+\item{is.counts}{logical: is the data counts}
 
 \item{...}{arguments passed on to `clusterExperimentWorkflow`}
 }

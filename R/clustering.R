@@ -15,6 +15,7 @@ clusterOne <- function(x, algorithm=c('kmeans', 'pam'), k=5) {
 #'                                 co-clustered for co-clustering step
 #' @param combineManyMinSize    minimum cluster size
 #' @param runMergeClusters    logical: merge similar clusters
+#' @param is.counts    logical: is data counts
 #' @return    cluster assignments
 #' @export
 clusterExperimentWorkflow <- function(se,
@@ -25,13 +26,14 @@ clusterExperimentWorkflow <- function(se,
                                       combineManyProportion=.7,
                                       combineManyMinSize=4,
                                       runMergeClusters=TRUE,
+                                      is.counts=TRUE,
                                       random.seed=1) {
     dimReduceFlavor <- match.arg(dimReduceFlavor)
 
     # Run variable genes clusterings
     ce <- clusterExperiment::clusterMany(se, clusterFunction=cluster.function,
                                          ks=cluster.ks,
-                      isCount=TRUE, dimReduce=c("var"), nVarDims=nVarDims,
+                      isCount=is.counts, dimReduce=c("var"), nVarDims=nVarDims,
                       run=TRUE,
                       subsampling=FALSE,
                       random.seed=random.seed)
@@ -104,11 +106,21 @@ clusterExperimentWorkflow <- function(se,
 #' Perform robust clustering on dataset, and calculate the proportion of
 #' samples in robust clusters
 #' @param se    SummarizedExperiment object
+#' @param dimReduceFlavor    algorithm for dimensionality reduction step
+#'                           of clustering procedure. May be 'pca', 'tsne',
+#'                           'dm' or 'auto', which uses shannon entropy to
+#'                           pick the algorithm.
+#' @param is.counts    logical: is the data counts
 #' @param ...    arguments passed on to `clusterExperimentWorkflow`
 #' @return list(clusters, proportion.robust)
 #' @export
-robustClusters <- function(se, ...) {
-    yhat <- clusterExperimentWorkflow(se, ...)
+robustClusters <- function(se, dimReduceFlavor='auto', is.counts=TRUE, ...) {
+    if(dimReduceFlavor=='auto') {
+        dimReduceFlavor <- pickDimReduction(assay(se),
+                                flavors=c('pca', 'tsne'), is.counts=is.counts)
+    }
+    yhat <- clusterExperimentWorkflow(se, is.counts=is.counts,
+                                      dimReduceFlavor=dimReduceFlavor, ...)
     proportion.robust <- mean(yhat!=-1)
     return(list(clusters=yhat, proportion.robust=proportion.robust))
 }

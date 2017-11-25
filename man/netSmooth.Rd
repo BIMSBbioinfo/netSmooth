@@ -4,27 +4,37 @@
 \alias{netSmooth}
 \title{Perform network smoothing of gene expression or other omics data}
 \usage{
-netSmooth(x, adjMatrix, alpha = "optimal",
-  optimalAlphaMethod = c("robustness", "entropy"), optimalAlphaRange = 0.1 *
-  (1:9), summarizedExprrimentAssay = 1, is.counts = TRUE, ...)
+netSmooth(x, adjMatrix, alpha = "auto", autoAlphaMethod = c("robustness",
+  "entropy"), autoAlphaRange = 0.1 * (1:9),
+  autoAlphaDimReduceFlavor = "auto", summarizedExprrimentAssay = 1,
+  is.counts = TRUE, ...)
 }
 \arguments{
 \item{x}{matrix or SummarizedExperiment}
 
 \item{adjMatrix}{adjacency matrix of gene network to use}
 
-\item{alpha}{numeric in [0,1] or 'optimal'. if 'optimal', the optimal
+\item{alpha}{numeric in [0,1] or 'audo'. if 'auto', the optimal
 value for alpha will be automatically chosen among the values
-specified in `optimalAlphaRange`, using the strategy
-specified in `optimalAlphaMethod`}
+specified in `autoAlphaRange`, using the strategy
+specified in `autoAlphaMethod`}
 
-\item{optimalAlphaMethod}{if 'robustness', pick alpha that gives the
+\item{autoAlphaMethod}{if 'robustness', pick alpha that gives the
 highest proportion of samples in robust clusters
 if 'entropy', pick alpha that gives highest
 Shannon entropy in 2D PCA embedding}
 
-\item{optimalAlphaRange}{if `alpha='optimal'`, search these values
+\item{autoAlphaRange}{if `alpha='optimal'`, search these values
 for the best alpha}
+
+\item{autoAlphaDimReduceFlavor}{algorithm for dimensionality reduction
+that will be used to pick the optimal
+value for alpha. Either the 2D embedding
+to calculate the Shannon entropy for (if
+`autoAlphaMethod='entropy'`), or the
+dimensionality reduction algorithm to be
+used in robust clustering (if
+`autoAlphamethod='robustness'`)}
 
 \item{is.counts}{logical: is the assay count data}
 

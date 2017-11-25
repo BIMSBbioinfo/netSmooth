@@ -7,7 +7,7 @@
 clusterExperimentWorkflow(se, dimReduceFlavor = c("pca", "tsne", "dm"),
   cluster.ks = 5:10, cluster.function = "pam", nVarDims = c(100, 500,
   1000), combineManyProportion = 0.7, combineManyMinSize = 4,
-  runMergeClusters = TRUE, random.seed = 1)
+  runMergeClusters = TRUE, is.counts = TRUE, random.seed = 1)
 }
 \arguments{
 \item{se}{SummarizedExperiment object}
@@ -26,6 +26,8 @@ co-clustered for co-clustering step}
 \item{combineManyMinSize}{minimum cluster size}
 
 \item{runMergeClusters}{logical: merge similar clusters}
+
+\item{is.counts}{logical: is data counts}
 }
 \value{
 cluster assignments
