@@ -11,6 +11,12 @@ calc2DEntropy(x, numBins1 = 20, numBins2 = 20)
 
 \item{numBins1}{the number of bins along the first dimension to
 discretize data into}
+
+\item{numBins2}{the number of bins along the second dimension to
+discretize data into}
+}
+\value{
+The Shannon entropy in the 2D data x
 }
 \description{
 Calculate entropy in 2D data

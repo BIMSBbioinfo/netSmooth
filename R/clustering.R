@@ -7,7 +7,7 @@
 #' @param combineManyProportion    proportion of times samples need to be
 #'                                 co-clustered for co-clustering step
 #' @param combineManyMinSize    minimum cluster size
-#' @returns    cluster assignments
+#' @return    cluster assignments
 #' @export
 clusterExperimentWorkflow <- function(se,
                                       dimReduceFlavor=c('pca', 'tsne', 'dm'),
@@ -86,7 +86,7 @@ clusterExperimentWorkflow <- function(se,
 #' samples in robust clusters
 #' @param se    SummarizedExperiment object
 #' @param ...    arguments passed on to `clusterExperimentWorkflow`
-#' @returns list(clusters, proportion.robust)
+#' @return list(clusters, proportion.robust)
 #' @export
 robustClusters <- function(se, ...) {
     yhat <- clusterExperimentWorkflow(se, ...)
