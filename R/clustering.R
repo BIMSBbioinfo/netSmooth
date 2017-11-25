@@ -118,6 +118,7 @@ robustClusters <- function(se, dimReduceFlavor='auto', is.counts=TRUE, ...) {
     if(dimReduceFlavor=='auto') {
         dimReduceFlavor <- pickDimReduction(assay(se),
                                 flavors=c('pca', 'tsne'), is.counts=is.counts)
+        cat(paste0("Picked dimReduceFlavor: ",dimReduceFlavor,"\n"))
     }
     yhat <- clusterExperimentWorkflow(se, is.counts=is.counts,
                                       dimReduceFlavor=dimReduceFlavor, ...)
