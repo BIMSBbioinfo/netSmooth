@@ -44,7 +44,7 @@ projectFromNetworkRecombine <- function(original_expression,
 #'          not present in smoothing network will retain original values.
 #' @export
 smoothAndRecombine <- function(gene_expression, adj_matrix, alpha,
-                      smoothing.function=netsmooth::randomWalkByMatrixInv) {
+                      smoothing.function=netsmooth::randomWalkBySolve) {
     gene_expression_in_A_space <- projectOnNetwork(gene_expression,
                                                    rownames(adj_matrix))
     gene_expression_in_A_space_smooth <- smoothing.function(
