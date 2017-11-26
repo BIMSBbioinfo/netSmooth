@@ -7,6 +7,9 @@ projectOnNetwork <- function(gene_expression, new_features, missing.value=0) {
     genes_in_both <- intersect(rownames(data_in_new_space),
                                rownames(gene_expression))
     data_in_new_space[genes_in_both,] <- gene_expression[genes_in_both,]
+
+    genes_only_in_network <- setdiff(new_features, rownames(gene_expression))
+    data_in_new_space[genes_only_in_network,] <- missing.value
     return(data_in_new_space)
 }
 
