@@ -5,12 +5,12 @@
 \title{Smooth data on graph by computing the closed-form steady state
 distribution of the random walk with restarts process.}
 \usage{
-randomWalkByMatrixInv(gene_expression, adj_matrix, lambda)
+randomWalkByMatrixInv(gene_expression, adj_matrix, alpha)
 }
 \arguments{
 \item{f0}{initial data matrix [NxM]}
 
-\item{lambda}{smoothing coefficient (1 - restart probability of
+\item{alpha}{smoothing coefficient (1 - restart probability of
 random walk)}
 
 \item{adj_matrix}{adjacency matrix of graph to network smooth on
@@ -21,6 +21,6 @@ network-smoothed gene expression
 }
 \description{
 The closed-form solution is given by
-  f_{ss} = (1 - lambda) * (I - lambda * A)^{-1} * f_0
+  f_{ss} = (1 - alpha) * (I - alpha * A)^{-1} * f_0
 and is computed by matrix inversion in this function.
 }
