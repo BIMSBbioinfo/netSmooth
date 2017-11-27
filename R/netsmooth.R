@@ -72,7 +72,7 @@ netSmooth <- function(x, adjMatrix, alpha='auto',
 
     if(is.numeric(alpha)) {
         if(alpha<0 | alpha > 1) stop('alpha must be between 0 and 1')
-        expr.smoothed <- netsmooth::smoothAndRecombine(expr, adjMatrix, alpha)
+        expr.smoothed <- smoothAndRecombine(expr, adjMatrix, alpha)
     }
     else if(alpha=='auto') {
         if(autoAlphaDimReduceFlavor=='auto') {
