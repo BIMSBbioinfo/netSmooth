@@ -5,7 +5,6 @@
 #'                  clustering and reports the proportion of samples in
 #'                  robust clusters
 #' @return the score
-#' @export
 scoreSmoothing <- function(x, method=c('entropy', 'robustness'),
                            is.counts=TRUE, ...) {
     method <- match.arg(method)
@@ -84,7 +83,7 @@ netSmooth <- function(x, adjMatrix, alpha='auto',
         }
 
         smoothed.expression.matrices <- mclapply(autoAlphaRange, function(a) {
-            netsmooth::smoothAndRecombine(expr, adjMatrix, a)
+            smoothAndRecombine(expr, adjMatrix, a)
         },
         mc.cores=numcores)
 

@@ -1,15 +1,3 @@
-#' Row-normalize a sparse matrix (using the l1 norm) so that each
-#' row sums to 1.
-#'
-#' @param A matrix
-#' @usage l1NormalizeRows(A)
-#' @return row-normalized sparse matrix object
-l1NormalizeRows <- function(A) {
-    rs = Matrix::rowSums(A)
-    factors = 1 / replace(rs, rs==0, 1)
-    return(Matrix::Diagonal(x=factors) %*% A)
-}
-
 #' Column-normalize a sparse, symmetric matrix (using the l1 norm) so that each
 #' column sums to 1.
 #'
@@ -17,7 +5,7 @@ l1NormalizeRows <- function(A) {
 #' @usage l1NormalizeColumns(A)
 #' @return row-normalized sparse matrix object
 l1NormalizeColumns <- function(A) {
-    return(Matrix::t(l1NormalizeRows((A))))
+    return(Matrix::t(Matrix::t(A)/Matrix::colSums(A)))
 }
 
 #' Smooth data on graph by computing the closed-form steady state
@@ -34,7 +22,6 @@ l1NormalizeColumns <- function(A) {
 #'                random walk)
 #' @usage randomWalkByMatrixInv(gene_expression, adj_matrix, alpha)
 #' @return network-smoothed gene expression
-#' @export
 randomWalkByMatrixInv <- function(f0, A, alpha) {
     Anorm <- l1NormalizeColumns(A)
     eye <- diag(dim(A)[1])
@@ -52,10 +39,9 @@ randomWalkByMatrixInv <- function(f0, A, alpha) {
 #' @param alpha  smoothing coefficient (1 - restart probability of
 #'                random walk)
 #' @return network-smoothed gene expression
-#' @export
 randomWalkBySolve <- function(E, A, alpha) {
     E <- t(E)
-    Anorm <- t(t(A) / colSums(A))
+    Anorm <- l1NormalizeColumns(A)
     eye <- diag(dim(A)[1])
     AA <- t(eye - alpha*Anorm)
     BB <- (1-alpha) * t(E)

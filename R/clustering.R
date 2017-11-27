@@ -17,7 +17,6 @@ clusterOne <- function(x, algorithm=c('kmeans', 'pam'), k=5) {
 #' @param runMergeClusters    logical: merge similar clusters
 #' @param is.counts    logical: is data counts
 #' @return    cluster assignments
-#' @export
 clusterExperimentWorkflow <- function(se,
                                       dimReduceFlavor=c('pca', 'tsne', 'dm'),
                                       cluster.ks=5:10,
