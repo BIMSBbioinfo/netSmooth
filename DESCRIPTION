@@ -23,6 +23,9 @@ Imports:
     data.table,
     entropy
 Suggests: knitr,
-    testthat
+    testthat,
+    biomaRt,
+    igraph,
+    STRINGdb
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
