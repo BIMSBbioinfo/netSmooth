@@ -101,7 +101,7 @@ netSmooth <- function(x, adjMatrix, alpha='auto',
     }
     else if(class(x)=='SummarizedExperiment') {
         ret <- SummarizedExperiment::SummarizedExperiment(expr.smoothed,
-                                                          pData(pData(x)))
+                                                          colData=colData(x))
         return(ret)
     }
 }
