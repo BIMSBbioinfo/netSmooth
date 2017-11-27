@@ -88,7 +88,8 @@ netSmooth <- function(x, adjMatrix, alpha='auto',
         },
         mc.cores=numcores)
 
-        scores <- unlist(mclapply(1:length(smoothed.expression.matrices), function(i) {
+        scores <- unlist(mclapply(1:length(smoothed.expression.matrices),
+                                  function(i) {
             x.sm <- smoothed.expression.matrices[[i]]
             scoreSmoothing(x=x.sm, method=autoAlphaMethod,
                            is.counts=is.counts,
