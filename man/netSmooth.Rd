@@ -7,7 +7,7 @@
 netSmooth(x, adjMatrix, alpha = "auto", autoAlphaMethod = c("robustness",
   "entropy"), autoAlphaRange = 0.1 * (1:9),
   autoAlphaDimReduceFlavor = "auto", summarizedExprrimentAssay = 1,
-  is.counts = TRUE, ...)
+  is.counts = TRUE, numcores = 1, ...)
 }
 \arguments{
 \item{x}{matrix or SummarizedExperiment}
@@ -37,6 +37,8 @@ used in robust clustering (if
 `autoAlphamethod='robustness'`)}
 
 \item{is.counts}{logical: is the assay count data}
+
+\item{numcores}{number of parallel processes to use for auto alpha choice}
 
 \item{...}{arguments passed on to `robustClusters` if using the robustness
 criterion for optimizing alpha}

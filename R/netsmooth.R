@@ -45,6 +45,7 @@ scoreSmoothing <- function(x, method=c('entropy', 'robustness'),
 #' @param summarizedExperimentAssay    if `x` is a SummarizedExperiment object,
 #'                                     the index of the assay to use
 #' @param is.counts    logical: is the assay count data
+#' @param numcores    number of parallel processes to use for auto alpha choice
 #' @param ...    arguments passed on to `robustClusters` if using the robustness
 #'               criterion for optimizing alpha
 #' @return network-smoothed gene expression matrix or SummarizedExperiment
@@ -56,6 +57,7 @@ netSmooth <- function(x, adjMatrix, alpha='auto',
                       autoAlphaDimReduceFlavor='auto',
                       summarizedExprrimentAssay=1,
                       is.counts=TRUE,
+                      numcores=1,
                       ...) {
     autoAlphaMethod <- match.arg(autoAlphaMethod)
 
@@ -81,16 +83,18 @@ netSmooth <- function(x, adjMatrix, alpha='auto',
                        "\n"))
         }
 
-        smoothed.expression.matrices <- lapply(autoAlphaRange, function(a) {
+        smoothed.expression.matrices <- mclapply(autoAlphaRange, function(a) {
             netsmooth::smoothAndRecombine(expr, adjMatrix, a)
-        })
+        },
+        mc.cores=numcores)
 
-        scores <- sapply(1:length(smoothed.expression.matrices), function(i) {
+        scores <- unlist(mclapply(1:length(smoothed.expression.matrices), function(i) {
             x.sm <- smoothed.expression.matrices[[i]]
             scoreSmoothing(x=x.sm, method=autoAlphaMethod,
                            is.counts=is.counts,
                            dimReduceFlavor=autoAlphaDimReduceFlavor, ...)
-        })
+        },
+        mc.cores=numcores))
         expr.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
         chosen.a <- autoAlphaRange[which.max(scores)]
         cat(paste0("Picked alpha=",chosen.a,"\n"))
