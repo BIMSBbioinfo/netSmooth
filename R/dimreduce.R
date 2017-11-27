@@ -44,8 +44,11 @@ calc2DEntropy <- function(x, numBins1=20, numBins2=20) {
 #'            2d entropy
 #' @export
 pickDimReduction <- function(expr, flavors=c('pca', 'tsne'), is.counts=TRUE) {
+    if(class(expr)=='matrix') x <- expr
+    else if(class(expr)=='SummarizedExperiment') x <- assay(expr)
+    else stop("must be matrix or SummarizedExperiment")
     entropies <- sapply(flavors, function(flavor) {
-        calc2DEntropy(dimReduce(expr, flavor=flavor, is.counts=is.counts))
+        calc2DEntropy(dimReduce(x, flavor=flavor, is.counts=is.counts))
     })
     return(names(which.max(entropies)))
 }
