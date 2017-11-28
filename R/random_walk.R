@@ -4,6 +4,7 @@
 #' @param A matrix
 #' @usage l1NormalizeColumns(A)
 #' @return row-normalized sparse matrix object
+#' @keywords internal
 l1NormalizeColumns <- function(A) {
     return(Matrix::t(Matrix::t(A)/Matrix::colSums(A)))
 }
@@ -22,6 +23,7 @@ l1NormalizeColumns <- function(A) {
 #'                random walk)
 #' @usage randomWalkByMatrixInv(gene_expression, adj_matrix, alpha)
 #' @return network-smoothed gene expression
+#' @keywords internal
 randomWalkByMatrixInv <- function(f0, A, alpha) {
     Anorm <- l1NormalizeColumns(A)
     eye <- diag(dim(A)[1])
@@ -39,6 +41,7 @@ randomWalkByMatrixInv <- function(f0, A, alpha) {
 #' @param alpha  smoothing coefficient (1 - restart probability of
 #'                random walk)
 #' @return network-smoothed gene expression
+#' @keywords internal
 randomWalkBySolve <- function(E, A, alpha) {
     E <- t(E)
     Anorm <- l1NormalizeColumns(A)

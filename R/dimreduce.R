@@ -6,6 +6,7 @@
 #' @param k    the number of dimensions in the reduced dimension representation
 #' @param is.counts    logical: is `expr` counts data
 #' @return    reduced dimensionality representation
+#' @keywords internal
 dimReduce <- function(expr, flavor=c('pca', 'tsne'), k=2, is.counts=TRUE) {
     flavor <- match.arg(flavor)
     if(flavor=='pca') function.to.call <- scater::plotPCA
@@ -28,6 +29,7 @@ dimReduce <- function(expr, flavor=c('pca', 'tsne'), k=2, is.counts=TRUE) {
 #' @param numBins2    the number of bins along the second dimension to
 #'                    discretize data into
 #' @return The Shannon entropy in the 2D data x
+#' @keywords internal
 calc2DEntropy <- function(x, numBins1=20, numBins2=20) {
     embedding.discretized <- entropy::discretize2d(x[,1], x[,2], numBins1, numBins2)
     return(entropy::entropy(embedding.discretized))

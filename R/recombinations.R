@@ -45,6 +45,7 @@ projectFromNetworkRecombine <- function(original_expression,
 #' @usage  smoothAndRecombine(gene_expression, adj_matrix, alpha)
 #' @return  matrix with network-smoothed gene expression data. Genes that are
 #'          not present in smoothing network will retain original values.
+#' @keywords internal
 smoothAndRecombine <- function(gene_expression, adj_matrix, alpha,
                       smoothing.function=randomWalkBySolve) {
     gene_expression_in_A_space <- projectOnNetwork(gene_expression,

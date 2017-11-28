@@ -5,6 +5,7 @@
 #'                  clustering and reports the proportion of samples in
 #'                  robust clusters
 #' @return the score
+#' @keywords internal
 scoreSmoothing <- function(x, method=c('entropy', 'robustness'),
                            is.counts=TRUE, ...) {
     if(class(x)=='matrix') {
