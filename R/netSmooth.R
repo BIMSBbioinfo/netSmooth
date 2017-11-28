@@ -1,33 +1,3 @@
-#' Calculate a score for a smoothing result, for picking the best alpha value
-#' @param x    the network-smoothed expression matrix
-#' @param method    the scoring method. 'entropy' calculates shannon entropy
-#'                  in a 2D PCA of the data. 'robustness' performs robsut
-#'                  clustering and reports the proportion of samples in
-#'                  robust clusters
-#' @return the score
-#' @keywords internal
-scoreSmoothing <- function(x, method=c('entropy', 'robustness'),
-                           is.counts=TRUE, ...) {
-    if(class(x)=='matrix') {
-        x <- x
-        se <- SummarizedExperiment::SummarizedExperiment(x)
-    } else if(class(x)=='SummarizedExperiment') {
-        se <- x
-        x <- assay(x)
-    } else stop("must be matrix or SummarizedExperiment object")
-
-    method <- match.arg(method)
-    if(method=='entropy') {
-        score <- calc2DEntropy(dimReduce(x,
-                                         flavor='pca', is.counts=is.counts))
-    }
-    else if(method=='robustness') {
-        score <- robustClusters(se, runMergeClusters=FALSE,
-                                ...)$proportion.robust
-    }
-    return(score)
-}
-
 #' Perform network smoothing of gene expression or other omics data
 #' @param x    matrix or SummarizedExperiment
 #' @param adjMatrix    adjacency matrix of gene network to use
@@ -104,12 +74,12 @@ netSmooth <- function(x, adjMatrix, alpha='auto',
 
         scores <- unlist(mclapply(1:length(smoothed.expression.matrices),
                                   function(i) {
-            x.sm <- smoothed.expression.matrices[[i]]
-            scoreSmoothing(x=x.sm, method=autoAlphaMethod,
-                           is.counts=is.counts,
-                           dimReduceFlavor=autoAlphaDimReduceFlavor, ...)
-        },
-        mc.cores=numcores))
+                                      x.sm <- smoothed.expression.matrices[[i]]
+                                      scoreSmoothing(x=x.sm, method=autoAlphaMethod,
+                                                     is.counts=is.counts,
+                                                     dimReduceFlavor=autoAlphaDimReduceFlavor, ...)
+                                  },
+                                  mc.cores=numcores))
         expr.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
         chosen.a <- autoAlphaRange[which.max(scores)]
         cat(paste0("Picked alpha=",chosen.a,"\n"))

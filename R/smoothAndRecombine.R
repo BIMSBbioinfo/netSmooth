@@ -1,28 +1,3 @@
-projectOnNetwork <- function(gene_expression, new_features, missing.value=0) {
-    data_in_new_space = matrix(rep(0, length(new_features)*
-                                       dim(gene_expression)[2]),
-                               nrow=length(new_features))
-    rownames(data_in_new_space) <- new_features
-    colnames(data_in_new_space) <- colnames(gene_expression)
-    genes_in_both <- intersect(rownames(data_in_new_space),
-                               rownames(gene_expression))
-    data_in_new_space[genes_in_both,] <- gene_expression[genes_in_both,]
-
-    genes_only_in_network <- setdiff(new_features, rownames(gene_expression))
-    data_in_new_space[genes_only_in_network,] <- missing.value
-    return(data_in_new_space)
-}
-
-projectFromNetworkRecombine <- function(original_expression,
-                                        smoothed_expression) {
-    data_in_original_space <- copy(original_expression)
-    genes_in_both <- intersect(rownames(original_expression),
-                               rownames(smoothed_expression))
-    data_in_original_space[genes_in_both,] <- as.matrix(
-        smoothed_expression[genes_in_both,])
-    return(data_in_original_space)
-}
-
 #' Perform network smoothing on network when the network genes and the
 #' experiment genes aren't exactly the same.
 #'
@@ -47,7 +22,7 @@ projectFromNetworkRecombine <- function(original_expression,
 #'          not present in smoothing network will retain original values.
 #' @keywords internal
 smoothAndRecombine <- function(gene_expression, adj_matrix, alpha,
-                      smoothing.function=randomWalkBySolve) {
+                               smoothing.function=randomWalkBySolve) {
     gene_expression_in_A_space <- projectOnNetwork(gene_expression,
                                                    rownames(adj_matrix))
     gene_expression_in_A_space_smooth <- smoothing.function(
