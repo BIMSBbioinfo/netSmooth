@@ -1,3 +1,10 @@
+setGeneric(
+    name = "netSmooth",
+    def = function(x, ...) {
+        standardGeneric("netSmooth")
+    }
+)
+
 #' Perform network smoothing of gene expression or other omics data
 #' @param x    matrix or SummarizedExperiment
 #' @param adjMatrix    adjacency matrix of gene network to use
@@ -19,8 +26,6 @@
 #'                                    dimensionality reduction algorithm to be
 #'                                    used in robust clustering (if
 #'                                    `autoAlphamethod='robustness'`)
-#' @param summarizedExperimentAssay    if `x` is a SummarizedExperiment object,
-#'                                     the index of the assay to use
 #' @param is.counts    logical: is the assay count data
 #' @param numcores    number of parallel processes to use for auto alpha choice
 #' @param ...    arguments passed on to `robustClusters` if using the robustness
@@ -35,62 +40,65 @@
 #' rownames(adj_matrix) <- colnames(adj_matrix) <- paste0('gene', 1:(dim(x)[1]))
 #' x.smoothed <- netSmooth(x, adj_matrix, alpha=0.5)
 #' @export
-netSmooth <- function(x, adjMatrix, alpha='auto',
+#' @rdname netSmooth
+#' @inheritParams netSmooth,matrix-method
+#' @aliases netSmooth
+setMethod("netSmooth",
+          signature(x='matrix'),
+          function(x, adjMatrix, alpha='auto',
                       autoAlphaMethod=c('robustness', 'entropy'),
                       autoAlphaRange=.1*(1:9),
                       autoAlphaDimReduceFlavor='auto',
-                      summarizedExprrimentAssay=1,
                       is.counts=TRUE,
                       numcores=1,
                       ...) {
-    autoAlphaMethod <- match.arg(autoAlphaMethod)
+        autoAlphaMethod <- match.arg(autoAlphaMethod)
 
-    if(class(x)=='matrix') {
-        expr <- x
-        se <- SummarizedExperiment::SummarizedExperiment(x)
-    }
-    else if(class(x)=='SummarizedExperiment') {
-        expr <- SummarizedExperiment::assays(x)[[summarizedExprrimentAssay]]
-        se <- x
-    }
-    else stop("x must be either a matrix or a SummarizedExperiment object")
+        if(is.numeric(alpha)) {
+            if(alpha<0 | alpha > 1) stop('alpha must be between 0 and 1')
+            x <- smoothAndRecombine(x, adjMatrix, alpha)
+        }
+        else if(alpha=='auto') {
+            if(autoAlphaDimReduceFlavor=='auto') {
+                autoAlphaDimReduceFlavor <-
+                    pickDimReduction(x, is.counts=is.counts)
+                cat(paste0("Picked dimReduceFlavor: ",
+                           autoAlphaDimReduceFlavor,
+                           "\n"))
+            }
 
-    if(is.numeric(alpha)) {
-        if(alpha<0 | alpha > 1) stop('alpha must be between 0 and 1')
-        expr.smoothed <- smoothAndRecombine(expr, adjMatrix, alpha)
-    }
-    else if(alpha=='auto') {
-        if(autoAlphaDimReduceFlavor=='auto') {
-            autoAlphaDimReduceFlavor <- pickDimReduction(expr,
-                                                         is.counts=is.counts)
-            cat(paste0("Picked dimReduceFlavor: ", autoAlphaDimReduceFlavor,
-                       "\n"))
+            smoothed.expression.matrices <- mclapply(autoAlphaRange,
+                                                     function(a) {
+                smoothAndRecombine(x, adjMatrix, a)
+            },
+            mc.cores=numcores)
+
+            scores <- unlist(mclapply(1:length(smoothed.expression.matrices),
+                                      function(i) {
+                                          x.sm <-
+                                              smoothed.expression.matrices[[i]]
+                  scoreSmoothing(x=x.sm,
+                                 method=autoAlphaMethod,
+                                 is.counts=is.counts,
+                                 dimReduceFlavor=autoAlphaDimReduceFlavor, ...)
+                                      },
+                                      mc.cores=numcores))
+            x.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
+            chosen.a <- autoAlphaRange[which.max(scores)]
+            cat(paste0("Picked alpha=",chosen.a,"\n"))
         }
 
-        smoothed.expression.matrices <- mclapply(autoAlphaRange, function(a) {
-            smoothAndRecombine(expr, adjMatrix, a)
-        },
-        mc.cores=numcores)
+        return(x.smoothed)
+    }
+)
 
-        scores <- unlist(mclapply(1:length(smoothed.expression.matrices),
-                                  function(i) {
-                                      x.sm <- smoothed.expression.matrices[[i]]
-                                      scoreSmoothing(x=x.sm, method=autoAlphaMethod,
-                                                     is.counts=is.counts,
-                                                     dimReduceFlavor=autoAlphaDimReduceFlavor, ...)
-                                  },
-                                  mc.cores=numcores))
-        expr.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
-        chosen.a <- autoAlphaRange[which.max(scores)]
-        cat(paste0("Picked alpha=",chosen.a,"\n"))
-    }
-
-    if(class(x)=='matrix') {
-        return(expr.smoothed)
-    }
-    else if(class(x)=='SummarizedExperiment') {
-        ret <- SummarizedExperiment::SummarizedExperiment(expr.smoothed,
-                                                          colData=colData(x))
-        return(ret)
-    }
-}
+#' @rdname netSmooth
+#' @export
+setMethod("netSmooth",
+          signature(x='SummarizedExperiment'),
+          function(x, ...) {
+             matrixdata <- assay(x)
+             ret <- netSmooth(matrixdata, ...)
+             return(SummarizedExperiment::SummarizedExperiment(ret,
+                                                            colData=colData(x)))
+          })
