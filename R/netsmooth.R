@@ -5,15 +5,22 @@
 #'                  clustering and reports the proportion of samples in
 #'                  robust clusters
 #' @return the score
-scoreSmoothing <- function(x, method=c('entropy', 'robustness'),
+scoreSmoothing <- function(expr, method=c('entropy', 'robustness'),
                            is.counts=TRUE, ...) {
+    if(class(expr)=='matrix') {
+        x <- expr
+        se <- SummarizedExperiment::SummarizedExperiment(expr)
+    } else if(class(expr)=='SummarizedExperiment') {
+        x <- assay(expr)
+        se <- expr
+    } else stop("must be matrix or SummarizedExperiment object")
+
     method <- match.arg(method)
     if(method=='entropy') {
-        score <- calc2DEntropy(dimReduce(expr,
+        score <- calc2DEntropy(dimReduce(x,
                                          flavor='pca', is.counts=is.counts))
     }
     else if(method=='robustness') {
-        se <- SummarizedExperiment::SummarizedExperiment(x)
         score <- robustClusters(se, runMergeClusters=FALSE,
                                 ...)$proportion.robust
     }

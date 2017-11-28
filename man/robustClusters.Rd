@@ -5,10 +5,10 @@
 \title{Perform robust clustering on dataset, and calculate the proportion of
 samples in robust clusters}
 \usage{
-robustClusters(se, dimReduceFlavor = "auto", is.counts = TRUE, ...)
+robustClusters(expr, dimReduceFlavor = "auto", is.counts = TRUE, ...)
 }
 \arguments{
-\item{se}{SummarizedExperiment object}
+\item{expr}{matrix or SummarizedExperiment object}
 
 \item{dimReduceFlavor}{algorithm for dimensionality reduction step
 of clustering procedure. May be 'pca', 'tsne',
