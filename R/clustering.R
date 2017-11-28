@@ -104,7 +104,7 @@ clusterExperimentWorkflow <- function(se,
 
 #' Perform robust clustering on dataset, and calculate the proportion of
 #' samples in robust clusters
-#' @param expr    matrix or SummarizedExperiment object
+#' @param x    matrix or SummarizedExperiment object
 #' @param dimReduceFlavor    algorithm for dimensionality reduction step
 #'                           of clustering procedure. May be 'pca', 'tsne',
 #'                           'dm' or 'auto', which uses shannon entropy to
@@ -113,13 +113,13 @@ clusterExperimentWorkflow <- function(se,
 #' @param ...    arguments passed on to `clusterExperimentWorkflow`
 #' @return list(clusters, proportion.robust)
 #' @export
-robustClusters <- function(expr, dimReduceFlavor='auto', is.counts=TRUE, ...) {
-    if(class(expr)=='matrix') {
-        x <- expr
-        se <- SummarizedExperiment::SummarizedExperiment(expr)
-    } else if(class(expr)=='SummarizedExperiment') {
-        x <- assay(expr)
-        se <- expr
+robustClusters <- function(x, dimReduceFlavor='auto', is.counts=TRUE, ...) {
+    if(class(x)=='matrix') {
+        x <- x
+        se <- SummarizedExperiment::SummarizedExperiment(x)
+    } else if(class(x)=='SummarizedExperiment') {
+        se <- x
+        x <- assay(x)
     } else stop("must be matrix or SummarizedExperiment object")
     if(dimReduceFlavor=='auto') {
         dimReduceFlavor <- pickDimReduction(x,

@@ -5,14 +5,14 @@
 #'                  clustering and reports the proportion of samples in
 #'                  robust clusters
 #' @return the score
-scoreSmoothing <- function(expr, method=c('entropy', 'robustness'),
+scoreSmoothing <- function(x, method=c('entropy', 'robustness'),
                            is.counts=TRUE, ...) {
-    if(class(expr)=='matrix') {
-        x <- expr
-        se <- SummarizedExperiment::SummarizedExperiment(expr)
-    } else if(class(expr)=='SummarizedExperiment') {
-        x <- assay(expr)
-        se <- expr
+    if(class(x)=='matrix') {
+        x <- x
+        se <- SummarizedExperiment::SummarizedExperiment(x)
+    } else if(class(x)=='SummarizedExperiment') {
+        se <- x
+        x <- assay(x)
     } else stop("must be matrix or SummarizedExperiment object")
 
     method <- match.arg(method)
