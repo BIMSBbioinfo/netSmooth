@@ -5,10 +5,10 @@
 \title{Perform robust clustering on dataset, and calculate the proportion of
 samples in robust clusters}
 \usage{
-robustClusters(expr, dimReduceFlavor = "auto", is.counts = TRUE, ...)
+robustClusters(x, dimReduceFlavor = "auto", is.counts = TRUE, ...)
 }
 \arguments{
-\item{expr}{matrix or SummarizedExperiment object}
+\item{x}{matrix or SummarizedExperiment object}
 
 \item{dimReduceFlavor}{algorithm for dimensionality reduction step
 of clustering procedure. May be 'pca', 'tsne',
@@ -25,4 +25,9 @@ list(clusters, proportion.robust)
 \description{
 Perform robust clustering on dataset, and calculate the proportion of
 samples in robust clusters
+}
+\examples{
+x <- cbind(matrix(rexp(60000, rate=.1), ncol=100) + 1000*rexp(600, rate=.9),
+matrix(rexp(30000, rate=.5), ncol=50) + 1*rexp(600, rate=.9))
+netsmooth::robustClusters(x)
 }

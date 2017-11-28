@@ -4,16 +4,16 @@
 \alias{scoreSmoothing}
 \title{Calculate a score for a smoothing result, for picking the best alpha value}
 \usage{
-scoreSmoothing(expr, method = c("entropy", "robustness"), is.counts = TRUE,
+scoreSmoothing(x, method = c("entropy", "robustness"), is.counts = TRUE,
   ...)
 }
 \arguments{
+\item{x}{the network-smoothed expression matrix}
+
 \item{method}{the scoring method. 'entropy' calculates shannon entropy
 in a 2D PCA of the data. 'robustness' performs robsut
 clustering and reports the proportion of samples in
 robust clusters}
-
-\item{x}{the network-smoothed expression matrix}
 }
 \value{
 the score
@@ -21,3 +21,4 @@ the score
 \description{
 Calculate a score for a smoothing result, for picking the best alpha value
 }
+\keyword{internal}

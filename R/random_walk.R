@@ -43,10 +43,9 @@ randomWalkByMatrixInv <- function(f0, A, alpha) {
 #' @return network-smoothed gene expression
 #' @keywords internal
 randomWalkBySolve <- function(E, A, alpha) {
-    E <- t(E)
     Anorm <- l1NormalizeColumns(A)
     eye <- diag(dim(A)[1])
     AA <- t(eye - alpha*Anorm)
-    BB <- (1-alpha) * t(E)
+    BB <- (1-alpha) * E
     return(solve(AA, BB))
 }

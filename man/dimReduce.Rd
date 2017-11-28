@@ -22,3 +22,4 @@ reduced dimensionality representation
 \description{
 Get lower dimension embedding
 }
+\keyword{internal}

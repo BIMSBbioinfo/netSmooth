@@ -24,3 +24,4 @@ The closed-form solution is given by
   f_{ss} = (1 - alpha) * (I - alpha * A)^{-1} * f_0
 and is computed by matrix inversion in this function.
 }
+\keyword{internal}

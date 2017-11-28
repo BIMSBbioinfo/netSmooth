@@ -29,6 +29,7 @@ clusterExperimentWorkflow <- function(se,
                                       random.seed=1) {
     dimReduceFlavor <- match.arg(dimReduceFlavor)
     # Run variable genes clusterings
+    nVarDims <- nVarDims[nVarDims < dim(se)[1]]
     ce <- clusterExperiment::clusterMany(se, clusterFunction=cluster.function,
                                          ks=cluster.ks,
                       isCount=is.counts, dimReduce=c("var"), nVarDims=nVarDims,
@@ -49,7 +50,8 @@ clusterExperimentWorkflow <- function(se,
 
     i <- 1
     for(dim.reduce.k in dim.reduce.ks) {
-        x <- dimReduce(assay(se), flavor=dimReduceFlavor, k=dim.reduce.k)
+        x <- dimReduce(assay(se), flavor=dimReduceFlavor, k=dim.reduce.k,
+                       is.counts=is.counts)
         for(cluster.k in cluster.ks) {
             dim.reduce.cluster.labels[i] <- paste0(dimReduceFlavor,
                                                    dim.reduce.k,
@@ -112,6 +114,10 @@ clusterExperimentWorkflow <- function(se,
 #' @param is.counts    logical: is the data counts
 #' @param ...    arguments passed on to `clusterExperimentWorkflow`
 #' @return list(clusters, proportion.robust)
+#' @examples
+#' x <- cbind(matrix(rexp(60000, rate=.1), ncol=100) + 1000*rexp(600, rate=.9),
+#'            matrix(rexp(30000, rate=.5), ncol=50) + 1*rexp(600, rate=.9))
+#' robustClusters(x)
 #' @export
 robustClusters <- function(x, dimReduceFlavor='auto', is.counts=TRUE, ...) {
     if(class(x)=='matrix') {

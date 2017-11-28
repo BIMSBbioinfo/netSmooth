@@ -17,3 +17,4 @@ row-normalized sparse matrix object
 Column-normalize a sparse, symmetric matrix (using the l1 norm) so that each
 column sums to 1.
 }
+\keyword{internal}

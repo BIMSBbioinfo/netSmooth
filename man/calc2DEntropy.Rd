@@ -21,3 +21,4 @@ The Shannon entropy in the 2D data x
 \description{
 Calculate entropy in 2D data
 }
+\keyword{internal}

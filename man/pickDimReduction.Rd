@@ -8,7 +8,7 @@
 pickDimReduction(expr)
 }
 \arguments{
-\item{expr}{expression matrix [GENES x SAMPLES]}
+\item{x}{matrix or SummarizedExperiment object [GENES x SAMPLES]}
 
 \item{flavors}{list of dimensionality reduction algorithms to try}
 
@@ -21,4 +21,8 @@ name of dimensionality reduction method that gives the highest
 \description{
 Pick the dimensionality reduction method for a dataset that gives the
 2D embedding with the highest entropy
+}
+\examples{
+x <- matrix(rnbinom(60000, size=1, prob = .1), ncol=100)
+pickDimReduction(x)
 }

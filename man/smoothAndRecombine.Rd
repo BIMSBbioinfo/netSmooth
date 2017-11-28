@@ -33,3 +33,4 @@ genes that are present in the network. This function projects the experiment
 data onto the gene space defined by the network prior to smoothing. Then,
 it projects the smoothed data back into the original dimansions.
 }
+\keyword{internal}

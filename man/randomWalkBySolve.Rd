@@ -23,3 +23,4 @@ network-smoothed gene expression
 Smooth data on graph by solving the linear equation
 (I - alpha*A)^T * E_sm^T = E^T * (1-alpha)
 }
+\keyword{internal}

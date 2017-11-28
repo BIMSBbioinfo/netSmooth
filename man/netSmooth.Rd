@@ -53,3 +53,11 @@ network-smoothed gene expression matrix or SummarizedExperiment
 \description{
 Perform network smoothing of gene expression or other omics data
 }
+\examples{
+x <- matrix(rnbinom(12000, size=1, prob = .1), ncol=60)
+rownames(x) <- paste0('gene', 1:(dim(x)[1]))
+
+adj_matrix <- matrix(as.numeric(rnorm(200*200)>.8), ncol=200)
+rownames(adj_matrix) <- colnames(adj_matrix) <- paste0('gene', 1:(dim(x)[1]))
+x.smoothed <- netSmooth(x, adj_matrix, alpha=0.5)
+}
