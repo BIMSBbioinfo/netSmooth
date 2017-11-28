@@ -45,5 +45,5 @@ randomWalkBySolve <- function(E, A, alpha) {
     eye <- diag(dim(A)[1])
     AA <- t(eye - alpha*Anorm)
     BB <- (1-alpha) * t(E)
-    return(t(solve(AA, BB)))
+    return(solve(AA, BB))
 }
