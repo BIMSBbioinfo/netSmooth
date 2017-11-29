@@ -56,7 +56,7 @@ setMethod("netSmooth",
 
         if(is.numeric(alpha)) {
             if(alpha<0 | alpha > 1) stop('alpha must be between 0 and 1')
-            x <- smoothAndRecombine(x, adjMatrix, alpha)
+            x.smoothed <- smoothAndRecombine(x, adjMatrix, alpha)
         }
         else if(alpha=='auto') {
             if(autoAlphaDimReduceFlavor=='auto') {
