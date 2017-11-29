@@ -12,6 +12,9 @@ setGeneric(
 #'                 value for alpha will be automatically chosen among the values
 #'                 specified in `autoAlphaRange`, using the strategy
 #'                 specified in `autoAlphaMethod`
+#' @param normalizeAjdMatrix    how to normalize the adjacency matrix
+#'                              possible values are 'rows' (in-degree)
+#'                              and 'columns' (out-degree)
 #' @param autoAlphaMethod    if 'robustness', pick alpha that gives the
 #'                              highest proportion of samples in robust clusters
 #'                              if 'entropy', pick alpha that gives highest
@@ -46,6 +49,7 @@ setGeneric(
 setMethod("netSmooth",
           signature(x='matrix'),
           function(x, adjMatrix, alpha='auto',
+                      normalizeAdjMatrix=c('rows','columns'),
                       autoAlphaMethod=c('robustness', 'entropy'),
                       autoAlphaRange=.1*(1:9),
                       autoAlphaDimReduceFlavor='auto',
@@ -53,13 +57,15 @@ setMethod("netSmooth",
                       numcores=1,
                       ...) {
         autoAlphaMethod <- match.arg(autoAlphaMethod)
+        normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
 
         if(is.numeric(alpha)) {
             cat(paste0("Using given alpha: ", alpha))
             if(alpha<0 | alpha > 1) {
                 stop('alpha must be between 0 and 1')
             }
-            x.smoothed <- smoothAndRecombine(x, adjMatrix, alpha)
+            x.smoothed <- smoothAndRecombine(x, adjMatrix, alpha,
+                                        normalizeAdjMatrix=normalizeAdjMatrix)
         } else if(alpha=='auto') {
             if(autoAlphaDimReduceFlavor=='auto') {
                 autoAlphaDimReduceFlavor <-
@@ -71,7 +77,8 @@ setMethod("netSmooth",
 
             smoothed.expression.matrices <- mclapply(autoAlphaRange,
                                                      function(a) {
-                smoothAndRecombine(x, adjMatrix, a)
+                smoothAndRecombine(x, adjMatrix, a,
+                                   normalizeAdjMatrix=normalizeAdjMatrix)
             },
             mc.cores=numcores)
 

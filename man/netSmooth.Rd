@@ -8,6 +8,7 @@
 \title{Perform network smoothing of gene expression or other omics data}
 \usage{
 \S4method{netSmooth}{matrix}(x, adjMatrix, alpha = "auto",
+  normalizeAdjMatrix = c("rows", "columns"),
   autoAlphaMethod = c("robustness", "entropy"), autoAlphaRange = 0.1 *
   (1:9), autoAlphaDimReduceFlavor = "auto", is.counts = TRUE,
   numcores = 1, ...)
@@ -47,6 +48,10 @@ used in robust clustering (if
 
 \item{...}{arguments passed on to `robustClusters` if using the robustness
 criterion for optimizing alpha}
+
+\item{normalizeAjdMatrix}{how to normalize the adjacency matrix
+possible values are 'rows' (in-degree)
+and 'columns' (out-degree)}
 }
 \value{
 network-smoothed gene expression matrix or SummarizedExperiment

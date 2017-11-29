@@ -3,7 +3,7 @@
 #'
 #' @param A matrix
 #' @usage l1NormalizeColumns(A)
-#' @return row-normalized sparse matrix object
+#' @return column-normalized sparse matrix object
 #' @keywords internal
 l1NormalizeColumns <- function(A) {
     return(Matrix::t(Matrix::t(A)/Matrix::colSums(A)))

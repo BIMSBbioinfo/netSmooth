@@ -9,8 +9,11 @@
 #'                random walk)
 #' @return network-smoothed gene expression
 #' @keywords internal
-randomWalkBySolve <- function(E, A, alpha) {
-    Anorm <- l1NormalizeColumns(A)
+randomWalkBySolve <- function(E, A, alpha,
+                              normalizeAjdMatrix=c('rows','columns')) {
+    normalizeAjdMatrix <- match.arg(normalizeAjdMatrix)
+    if(normalizeAjdMatrix=='rows') Anorm <- l1NormalizeRows(A)
+    else if(normalizeAjdMatrix=='columns') Anorm <- l1NormalizeColumns(A)
     eye <- diag(dim(A)[1])
     AA <- t(eye - alpha*Anorm)
     BB <- (1-alpha) * E
