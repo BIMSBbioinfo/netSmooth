@@ -55,10 +55,12 @@ setMethod("netSmooth",
         autoAlphaMethod <- match.arg(autoAlphaMethod)
 
         if(is.numeric(alpha)) {
-            if(alpha<0 | alpha > 1) stop('alpha must be between 0 and 1')
-            x <- smoothAndRecombine(x, adjMatrix, alpha)
-        }
-        else if(alpha=='auto') {
+            cat(paste0("Using given alpha: ", alpha))
+            if(alpha<0 | alpha > 1) {
+                stop('alpha must be between 0 and 1')
+            }
+            x.smoothed <- smoothAndRecombine(x, adjMatrix, alpha)
+        } else if(alpha=='auto') {
             if(autoAlphaDimReduceFlavor=='auto') {
                 autoAlphaDimReduceFlavor <-
                     pickDimReduction(x, is.counts=is.counts)
@@ -86,8 +88,7 @@ setMethod("netSmooth",
             x.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
             chosen.a <- autoAlphaRange[which.max(scores)]
             cat(paste0("Picked alpha=",chosen.a,"\n"))
-        }
-
+        } else stop(paste0("unsupprted alpha value: ", class(alpha)))
         return(x.smoothed)
     }
 )
