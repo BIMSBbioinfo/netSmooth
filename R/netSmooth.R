@@ -108,6 +108,5 @@ setMethod("netSmooth",
           function(x, ...) {
              matrixdata <- assay(x)
              ret <- netSmooth(matrixdata, ...)
-             return(SummarizedExperiment::SummarizedExperiment(ret,
-                                                            colData=colData(x)))
+             return(SummarizedExperiment(ret, colData=colData(x)))
           })

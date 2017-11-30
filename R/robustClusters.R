@@ -44,7 +44,7 @@ setMethod("robustClusters",
 #' @rdname robustClusters
 setMethod("robustClusters",
           signature(x='matrix'),
-          function(x,...) {
-              robustClusters(SummarizedExperiment(x))
+          function(x, ...) {
+              robustClusters(SummarizedExperiment(x), ...)
   }
 )
