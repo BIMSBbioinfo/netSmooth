@@ -12,13 +12,15 @@ License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
 Depends:
-    R (>= 3.4.0),
+    R (>= 3.4.2),
     data.table,
     entropy,
     Matrix,
-    scater,
+    scater (>= 1.6.0),
     Rtsne,
-    clusterExperiment
+    clusterExperiment (>= 1.4.0),
+    SummarizedExperiment,
+    cluster
 Imports:
     data.table,
     entropy

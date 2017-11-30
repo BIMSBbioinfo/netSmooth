@@ -75,7 +75,9 @@ clusterExperimentWorkflow <- function(se,
         # Merge clusters
         ce <- clusterExperiment::mergeClusters(ce, cutoff=0.05,
                                                mergeMethod="adjP",
-                                               plotType="none",
+                                               plotInfo="none",
+                                               plot=FALSE,
+                                               showWarnings=FALSE,
                                                clusterLabel="mergeClusters")
 
         # Set merged to final

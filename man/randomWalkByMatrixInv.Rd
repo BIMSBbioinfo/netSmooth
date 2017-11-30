@@ -5,16 +5,16 @@
 \title{Smooth data on graph by computing the closed-form steady state
 distribution of the random walk with restarts process.}
 \usage{
-randomWalkByMatrixInv(gene_expression, adj_matrix, alpha)
+randomWalkByMatrixInv(gene_expression, adjMatrix, alpha)
 }
 \arguments{
 \item{f0}{initial data matrix [NxM]}
 
+\item{adjMatrix}{adjacency matrix of graph to network smooth on
+will be column-normalized.}
+
 \item{alpha}{smoothing coefficient (1 - restart probability of
 random walk)}
-
-\item{adj_matrix}{adjacency matrix of graph to network smooth on
-will be column-normalized.}
 }
 \value{
 network-smoothed gene expression
