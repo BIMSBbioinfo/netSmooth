@@ -16,7 +16,8 @@
 \arguments{
 \item{x}{matrix or SummarizedExperiment object [GENES x SAMPLES]}
 
-\item{flavors}{list of dimensionality reduction algorithms to try}
+\item{flavors}{list of dimensionality reduction algorithms to try.
+Currently the options are "pca" and "tsne"}
 
 \item{is.counts}{logical: is exprs count data}
 }

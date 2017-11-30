@@ -57,7 +57,7 @@ test_that("projectFromNetworkRecombine uses smoothed values", {
 
 ############################
 
-smoother <- function(expr, adjmatrix, alpha) expr+alpha
+smoother <- function(expr, adjmatrix, alpha, ...) expr+alpha
 expr <- matrix(rep(1,20), ncol=5)
 rownames(expr) <- paste('gene', 1:(dim(expr)[1]))
 
