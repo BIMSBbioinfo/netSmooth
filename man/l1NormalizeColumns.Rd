@@ -11,7 +11,7 @@ l1NormalizeColumns(A)
 \item{A}{matrix}
 }
 \value{
-row-normalized sparse matrix object
+column-normalized sparse matrix object
 }
 \description{
 Column-normalize a sparse, symmetric matrix (using the l1 norm) so that each

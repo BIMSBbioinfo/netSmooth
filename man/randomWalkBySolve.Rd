@@ -5,7 +5,7 @@
 \title{Smooth data on graph by solving the linear equation
 (I - alpha*A)^T * E_sm^T = E^T * (1-alpha)}
 \usage{
-randomWalkBySolve(E, A, alpha)
+randomWalkBySolve(E, A, alpha, normalizeAjdMatrix = c("rows", "columns"))
 }
 \arguments{
 \item{E}{initial data matrix [NxM]}
