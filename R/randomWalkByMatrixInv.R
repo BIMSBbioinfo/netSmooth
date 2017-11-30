@@ -19,7 +19,7 @@ randomWalkByMatrixInv <- function(f0, adjMatrix, alpha,
     if(normalizeAjdMatrix=='rows') Anorm <- l1NormalizeRows(adjMatrix)
     else if(normalizeAjdMatrix=='columns') Anorm <-
             l1NormalizeColumns(adjMatrix)
-    eye <- diag(dim(A)[1])
+    eye <- diag(dim(adjMatrix)[1])
     K <- (1 - alpha) * solve(eye - alpha * Anorm)
     return(K %*% f0)
 }
