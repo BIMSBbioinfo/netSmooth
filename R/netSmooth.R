@@ -60,7 +60,7 @@ setMethod("netSmooth",
         normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
 
         if(is.numeric(alpha)) {
-            cat(paste0("Using given alpha: ", alpha))
+            cat(paste0("Using given alpha: ", alpha,"\n"))
             if(alpha<0 | alpha > 1) {
                 stop('alpha must be between 0 and 1')
             }
