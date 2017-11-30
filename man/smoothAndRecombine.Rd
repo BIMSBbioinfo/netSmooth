@@ -5,7 +5,9 @@
 \title{Perform network smoothing on network when the network genes and the
 experiment genes aren't exactly the same.}
 \usage{
-smoothAndRecombine(gene_expression, adj_matrix, alpha)
+smoothAndRecombine(gene_expression, adj_matrix, alpha,
+  smoothing.function = randomWalkBySolve, normalizeAdjMatrix = c("rows",
+  "columns"))
 }
 \arguments{
 \item{gene_expression}{gene expession data to be smoothed

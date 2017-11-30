@@ -5,7 +5,8 @@
 \title{Smooth data on graph by computing the closed-form steady state
 distribution of the random walk with restarts process.}
 \usage{
-randomWalkByMatrixInv(gene_expression, adjMatrix, alpha)
+randomWalkByMatrixInv(f0, adjMatrix, alpha, normalizeAjdMatrix = c("rows",
+  "columns"))
 }
 \arguments{
 \item{f0}{initial data matrix [NxM]}

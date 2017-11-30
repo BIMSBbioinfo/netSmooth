@@ -10,7 +10,6 @@
 #'                will be column-normalized.
 #' @param alpha  smoothing coefficient (1 - restart probability of
 #'                random walk)
-#' @usage randomWalkByMatrixInv(gene_expression, adjMatrix, alpha)
 #' @return network-smoothed gene expression
 #' @keywords internal
 randomWalkByMatrixInv <- function(f0, adjMatrix, alpha,

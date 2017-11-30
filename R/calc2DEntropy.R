@@ -6,7 +6,8 @@
 #'                    discretize data into
 #' @return The Shannon entropy in the 2D data x
 #' @keywords internal
+#' @importFrom entropy discretize2d entropy
 calc2DEntropy <- function(x, numBins1=20, numBins2=20) {
-    embedding.discretized <- entropy::discretize2d(x[,1], x[,2], numBins1, numBins2)
-    return(entropy::entropy(embedding.discretized))
+    embedding.discretized <- discretize2d(x[,1], x[,2], numBins1, numBins2)
+    return(entropy(embedding.discretized))
 }
