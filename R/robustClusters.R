@@ -40,10 +40,11 @@ setMethod("robustClusters",
 )
 
 #' @export
+#' @importFrom SummarizedExperiment SummarizedExperiment
 #' @rdname robustClusters
 setMethod("robustClusters",
           signature(x='matrix'),
           function(x,...) {
-              robustClusters(SummarizedExperiment::SummarizedExperiment(x))
+              robustClusters(SummarizedExperiment(x))
   }
 )

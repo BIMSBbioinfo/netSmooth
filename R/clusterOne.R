@@ -1,3 +1,7 @@
+#' Run one clustering using kmeans o PAM
+#'
+#' @keywords internal
+#' @importFrom stats kmeans
 clusterOne <- function(x, algorithm=c('kmeans', 'pam'), k=5) {
     algorithm <- match.arg(algorithm)
     if(algorithm == 'kmeans') yhat <- kmeans(x, k)$cluster

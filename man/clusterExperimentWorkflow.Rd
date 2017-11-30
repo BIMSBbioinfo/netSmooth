@@ -28,6 +28,9 @@ co-clustered for co-clustering step}
 \item{runMergeClusters}{logical: merge similar clusters}
 
 \item{is.counts}{logical: is data counts}
+
+\item{random.seed}{passed to clusterExperiment. set to NULL in order
+to not set a random seed.}
 }
 \value{
 cluster assignments

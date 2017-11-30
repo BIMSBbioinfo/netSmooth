@@ -16,6 +16,7 @@ setGeneric(
 #' @param is.counts    logical: is exprs count data
 #' @return    name of dimensionality reduction method that gives the highest
 #'            2d entropy
+#' @importFrom SummarizedExperiment assay
 #' @examples
 #' x <- matrix(rnbinom(60000, size=1, prob = .1), ncol=100)
 #' pickDimReduction(x)
@@ -34,6 +35,7 @@ setMethod("pickDimReduction",
 )
 
 #' @export
+#' @importFrom SummarizedExperiment assay
 #' @rdname pickDimReduction
 setMethod("pickDimReduction",
           signature(x='SummarizedExperiment'),

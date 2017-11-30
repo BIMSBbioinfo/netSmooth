@@ -12,7 +12,7 @@ setGeneric(
 #'                 value for alpha will be automatically chosen among the values
 #'                 specified in `autoAlphaRange`, using the strategy
 #'                 specified in `autoAlphaMethod`
-#' @param normalizeAjdMatrix    how to normalize the adjacency matrix
+#' @param normalizeAdjMatrix    how to normalize the adjacency matrix
 #'                              possible values are 'rows' (in-degree)
 #'                              and 'columns' (out-degree)
 #' @param autoAlphaMethod    if 'robustness', pick alpha that gives the
@@ -46,6 +46,7 @@ setGeneric(
 #' @rdname netSmooth
 #' @inheritParams netSmooth,matrix-method
 #' @aliases netSmooth
+#' @importFrom SummarizedExperiment colData
 setMethod("netSmooth",
           signature(x='matrix'),
           function(x, adjMatrix, alpha='auto',

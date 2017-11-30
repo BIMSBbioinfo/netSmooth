@@ -25,6 +25,10 @@ value for alpha will be automatically chosen among the values
 specified in `autoAlphaRange`, using the strategy
 specified in `autoAlphaMethod`}
 
+\item{normalizeAdjMatrix}{how to normalize the adjacency matrix
+possible values are 'rows' (in-degree)
+and 'columns' (out-degree)}
+
 \item{autoAlphaMethod}{if 'robustness', pick alpha that gives the
 highest proportion of samples in robust clusters
 if 'entropy', pick alpha that gives highest
@@ -48,10 +52,6 @@ used in robust clustering (if
 
 \item{...}{arguments passed on to `robustClusters` if using the robustness
 criterion for optimizing alpha}
-
-\item{normalizeAjdMatrix}{how to normalize the adjacency matrix
-possible values are 'rows' (in-degree)
-and 'columns' (out-degree)}
 }
 \value{
 network-smoothed gene expression matrix or SummarizedExperiment

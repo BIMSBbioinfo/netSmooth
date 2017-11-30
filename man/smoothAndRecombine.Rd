@@ -21,6 +21,11 @@ walk model.}
 \item{smoothing.function}{must be a function that takes in data, adjacency
 matrix, and alpha. Will be used to perform the
 actual smoothing.}
+
+\item{normalizeAdjMatrix}{which dimension (rows or columns) should the
+adjacency matrix be normalized by. rows
+corresponds to in-degree, columns to
+out-degree.}
 }
 \value{
 matrix with network-smoothed gene expression data. Genes that are

@@ -17,6 +17,10 @@
 #' @param smoothing.function  must be a function that takes in data, adjacency
 #'                            matrix, and alpha. Will be used to perform the
 #'                            actual smoothing.
+#' @param normalizeAdjMatrix    which dimension (rows or columns) should the
+#'                              adjacency matrix be normalized by. rows
+#'                              corresponds to in-degree, columns to
+#'                              out-degree.
 #' @usage  smoothAndRecombine(gene_expression, adj_matrix, alpha)
 #' @return  matrix with network-smoothed gene expression data. Genes that are
 #'          not present in smoothing network will retain original values.

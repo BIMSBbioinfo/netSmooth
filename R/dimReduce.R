@@ -7,10 +7,12 @@
 #' @param is.counts    logical: is `x` counts data
 #' @return    reduced dimensionality representation
 #' @keywords internal
+#' @importFrom scater plotPCA plotTSNE calculateCPM
+#' @importFrom SingleCellExperiment reducedDim
 dimReduce <- function(x, flavor=c('pca', 'tsne'), k=2, is.counts=TRUE) {
     flavor <- match.arg(flavor)
-    if(flavor=='pca') function.to.call <- scater::plotPCA
-    if(flavor=='tsne') function.to.call <- scater::plotTSNE
+    if(flavor=='pca') function.to.call <- plotPCA
+    if(flavor=='tsne') function.to.call <- plotTSNE
 
     if(is.counts){
         sce <- SingleCellExperiment(assays=list(counts=x))

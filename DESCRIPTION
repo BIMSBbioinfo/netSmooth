@@ -19,9 +19,14 @@ Depends:
     scater (>= 1.6.0),
     Rtsne,
     clusterExperiment (>= 1.4.0),
-    SummarizedExperiment,
     cluster
 Imports:
+    entropy,
+    SummarizedExperiment,
+    SingleCellExperiment,
+    Matrix,
+    Rtsne,
+    cluster,
     data.table,
     entropy
 Suggests: knitr,

@@ -9,7 +9,13 @@
 #' @param combineManyMinSize    minimum cluster size
 #' @param runMergeClusters    logical: merge similar clusters
 #' @param is.counts    logical: is data counts
+#' @param random.seed    passed to clusterExperiment. set to NULL in order
+#'                       to not set a random seed.
 #' @return    cluster assignments
+#' @importFrom SummarizedExperiment assay
+#' @importFrom clusterExperiment clusterMany clusterMatrix clusterExperiment
+#'                               combineMany makeDendrogram mergeClusters
+#'                               setToFinal transformation
 clusterExperimentWorkflow <- function(se,
                                       dimReduceFlavor=c('pca', 'tsne', 'dm'),
                                       cluster.ks=5:10,
@@ -23,7 +29,7 @@ clusterExperimentWorkflow <- function(se,
     dimReduceFlavor <- match.arg(dimReduceFlavor)
     # Run variable genes clusterings
     nVarDims <- nVarDims[nVarDims < dim(se)[1]]
-    ce <- clusterExperiment::clusterMany(se, clusterFunction=cluster.function,
+    ce <- clusterMany(se, clusterFunction=cluster.function,
                                          ks=cluster.ks,
                                          isCount=is.counts, dimReduce=c("var"), nVarDims=nVarDims,
                                          run=TRUE,
@@ -58,22 +64,23 @@ clusterExperimentWorkflow <- function(se,
     colnames(dim.reduce.clustermatrix) <- dim.reduce.cluster.labels
 
     # Make a new overall clusterExperiment object
-    ce <- clusterExperiment::clusterExperiment(se, cbind(clusterMatrix(ce),
-                                                         dim.reduce.clustermatrix),
-                                               transformation=transformation(ce))
+    ce <- clusterExperiment(se,
+                                    cbind(clusterMatrix(ce),
+                                          dim.reduce.clustermatrix),
+                                    transformation=transformation(ce))
 
     # Run a few combinations of the manys
-    ce <- clusterExperiment::combineMany(ce, proportion=combineManyProportion,
+    ce <- combineMany(ce, proportion=combineManyProportion,
                                          minSize=combineManyMinSize,
                                          clusterLabel="combineMany",
                                          whichClusters = 'all')
     if(runMergeClusters) {
         # Make a dendrogram
-        ce <- clusterExperiment::makeDendrogram(ce,dimReduce="var",ndims=500,
+        ce <- makeDendrogram(ce,dimReduce="var",ndims=500,
                                                 whichCluster="combineMany")
 
         # Merge clusters
-        ce <- clusterExperiment::mergeClusters(ce, cutoff=0.05,
+        ce <- mergeClusters(ce, cutoff=0.05,
                                                mergeMethod="adjP",
                                                plotInfo="none",
                                                plot=FALSE,
@@ -81,20 +88,20 @@ clusterExperimentWorkflow <- function(se,
                                                clusterLabel="mergeClusters")
 
         # Set merged to final
-        ce <- clusterExperiment::setToFinal(ce,
+        ce <- setToFinal(ce,
                                             whichCluster="mergeClusters",
                                             clusterLabel="Final Clustering")
     }
     else {
-        ce <- clusterExperiment::setToFinal(ce,
+        ce <- setToFinal(ce,
                                             whichCluster='combineMany',
                                             clusterLabel='Final Clustering')
     }
 
     # Return cluster assignments
-    final.ix <- which(colnames(clusterExperiment::clusterMatrix(ce))==
+    final.ix <- which(colnames(clusterMatrix(ce))==
                           'Final Clustering')
-    yhat <- clusterExperiment::clusterMatrix(ce)[,final.ix]
+    yhat <- clusterMatrix(ce)[,final.ix]
     names(yhat) <- colnames(se)
     return(yhat)
 }
