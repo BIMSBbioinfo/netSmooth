@@ -13,19 +13,13 @@ Encoding: UTF-8
 LazyData: true
 Depends:
     R (>= 3.4.2),
-    data.table,
-    entropy,
-    Matrix,
     scater (>= 1.6.0),
-    Rtsne,
-    clusterExperiment (>= 1.4.0),
-    cluster
+    clusterExperiment (>= 1.4.0)
 Imports:
     entropy,
     SummarizedExperiment,
     SingleCellExperiment,
     Matrix,
-    Rtsne,
     cluster,
     data.table,
     entropy
@@ -33,6 +27,9 @@ Suggests: knitr,
     testthat,
     biomaRt,
     igraph,
-    STRINGdb
+    STRINGdb,
+    NMI,
+    pheatmap,
+    ggplot2
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1

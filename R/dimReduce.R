@@ -9,6 +9,7 @@
 #' @keywords internal
 #' @importFrom scater plotPCA plotTSNE calculateCPM
 #' @importFrom SingleCellExperiment reducedDim
+#' @import SingleCellExperiment
 dimReduce <- function(x, flavor=c('pca', 'tsne'), k=2, is.counts=TRUE) {
     flavor <- match.arg(flavor)
     if(flavor=='pca') function.to.call <- plotPCA
