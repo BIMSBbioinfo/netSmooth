@@ -15,7 +15,8 @@ must be in c('pca', 'tsne')}
 
 \item{k}{the number of dimensions in the reduced dimension representation}
 
-\item{is.counts}{logical: is `x` counts data}
+\item{is.counts}{logical: is `x` counts data. If true, will apply
+log2(x+1) transform to data.}
 
 \item{ntop}{number of most variable genes to use for dimensionality
 reduction}
