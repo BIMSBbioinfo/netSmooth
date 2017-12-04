@@ -5,12 +5,14 @@
 #'                  must be in c('pca', 'tsne')
 #' @param k    the number of dimensions in the reduced dimension representation
 #' @param is.counts    logical: is `x` counts data
+#' @param ntop    number of most variable genes to use for dimensionality
+#'                reduction
 #' @return    reduced dimensionality representation
 #' @keywords internal
 #' @importFrom scater plotPCA plotTSNE calculateCPM
 #' @importFrom SingleCellExperiment reducedDim
 #' @import SingleCellExperiment
-dimReduce <- function(x, flavor=c('pca', 'tsne'), k=2, is.counts=TRUE) {
+dimReduce <- function(x, flavor=c('pca', 'tsne'), k=2, is.counts=TRUE, ntop=500) {
     flavor <- match.arg(flavor)
     if(flavor=='pca') function.to.call <- plotPCA
     if(flavor=='tsne') function.to.call <- plotTSNE
@@ -23,7 +25,7 @@ dimReduce <- function(x, flavor=c('pca', 'tsne'), k=2, is.counts=TRUE) {
     }
 
     sce <- function.to.call(sce, return_SCE=TRUE, draw_plot=FALSE,
-                            ncomponents=k)
+                            ncomponents=k, ntop=ntop)
     red.dim <- data.frame(reducedDim(sce))[,1:k]
     colnames(red.dim) <- paste0(flavor, 1:k)
     return(red.dim)

@@ -4,7 +4,8 @@
 \alias{dimReduce}
 \title{Get lower dimension embedding}
 \usage{
-dimReduce(x, flavor = c("pca", "tsne"), k = 2, is.counts = TRUE)
+dimReduce(x, flavor = c("pca", "tsne"), k = 2, is.counts = TRUE,
+  ntop = 500)
 }
 \arguments{
 \item{x}{gene expresison matrix [GENES x SAMPLES]}
@@ -15,6 +16,9 @@ must be in c('pca', 'tsne')}
 \item{k}{the number of dimensions in the reduced dimension representation}
 
 \item{is.counts}{logical: is `x` counts data}
+
+\item{ntop}{number of most variable genes to use for dimensionality
+reduction}
 }
 \value{
 reduced dimensionality representation
