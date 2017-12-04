@@ -4,13 +4,12 @@
 #' @param flavor    the algorithm to use to obtain the dimensionality reduction
 #'                  must be in c('pca', 'tsne')
 #' @param k    the number of dimensions in the reduced dimension representation
-#' @param is.counts    logical: is `x` counts data. If true, will apply
-#'                     log2(x+1) transform to data.
+#' @param is.counts    logical: is `x` counts data
 #' @param ntop    number of most variable genes to use for dimensionality
 #'                reduction
 #' @return    reduced dimensionality representation
 #' @keywords internal
-#' @importFrom scater plotPCA plotTSNE
+#' @importFrom scater plotPCA plotTSNE calculateCPM
 #' @importFrom SingleCellExperiment reducedDim
 #' @import SingleCellExperiment
 dimReduce <- function(x, flavor=c('pca', 'tsne'), k=2, is.counts=TRUE, ntop=500) {
@@ -20,7 +19,7 @@ dimReduce <- function(x, flavor=c('pca', 'tsne'), k=2, is.counts=TRUE, ntop=500)
 
     if(is.counts){
         sce <- SingleCellExperiment(assays=list(counts=x))
-        exprs(sce) <- log2(x + 1)
+        exprs(sce) <- log2(calculateCPM(sce, use.size.factors = FALSE) + 1)
     } else {
         sce <- SingleCellExperiment(assays=list(logcounts=x))
     }
