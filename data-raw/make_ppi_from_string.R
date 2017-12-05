@@ -18,7 +18,7 @@ getBiomartForspecies <- function(species=c('human','mouse')) {
                                          dataset="mmusculus_gene_ensembl") )
 }
 
-getPPIFromString <- function(species) {
+getPPIFromStringDB <- function(species) {
     string_db <- getSTRINGdbForSpecies(species)
     human_graph <- string_db$get_graph()
 
@@ -56,11 +56,13 @@ getPPIFromString <- function(species) {
     colnames(adj_matrix) <- newnames
 
     ppi <- adj_matrix[!duplicated(newnames), !duplicated(newnames)]
+    nullrows <- Matrix::rowSums(ppi)==0
+    ppi <- ppi[!nullrows,!nullrows]
     return(ppi)
 }
 
-human.ppi <- getPPIFromString('human')
-mouse.ppi <- getPPIFromString('mouse')
+human.ppi <- getPPIFromStringDB('human')
+mouse.ppi <- getPPIFromStringDB('mouse')
 
-devtools::use_data(human.ppi)
-devtools::use_data(mouse.ppi)
+devtools::use_data(human.ppi, overwrite = TRUE)
+devtools::use_data(mouse.ppi, overwrite = TRUE)
