@@ -28,8 +28,8 @@ The algorithm is a graph based diffusion process on networks. The
 intuition behind the algorithm is that gene networks encoding 
 coexpression patterns may be used to smooth scRNA-seq expression 
 data, since the gene expression values of connected nodes in the 
-network will be predictive of eachother. Protein-protein interaction 
-(PI) networks and coexpression networks are among the networks that 
+network will be predictive of eachother. Protein-protein interaction
+(PPI) networks and coexpression networks are among the networks that
 could be used for such procedure. 
 
 
@@ -58,7 +58,7 @@ vignette demonstrate functionality of `netSmooth` package.
 
 # Smoothing single-cell gene expression data with netSmooth() function
 The workhorse of the _netSmooth_ package is the `netSmooth()` 
-function. This function takes at least two arugments, 
+function. This function takes at least two arguments, 
 a network and genes-by-samples matrix as input, and performs 
 smoothing on genes-by-samples matrix. The network should be 
 organized
@@ -89,22 +89,97 @@ a heatmap.
 ## Optimizing the smoothing parameter `alpha`
 By default, the parameter `alpha` will be optimized using a robust
 clustering statistic. Briefly, this approach will try different 
-clustering algorithms and/or parameters.
+clustering algorithms and/or parameters and find clusters that can be reproduced with different algorithms. `netSmooth()` function will
+try different `alpha` values controlled by additional arguments to maximize the number of samples in robust clusters.
 
-Now, we smooth the expression using alpha optimization and plot heatmaps of raw and smooth versions.
+Now, we smooth the expression using alpha optimization and plot the heatmaps of raw and smooth versions.
 ```{r , echo=TRUE,eval=FALSE}
 # show heatmaps from smooth vs raw matrices
 ```
 
 # Getting robust clusters from data
+There is no standard method especially for clustering single cell RNAseq data, as different studies produce data with different topologies, which respond differently to the various clustering algorithms. In order to avoid optimizing different clustering routines for the different datasets, we have implemented a robust clustering routine based on [clusterExperiment::clusterExperiment](https://www.bioconductor.org/packages/3.6/bioc/html/clusterExperiment.html). The _clusterExperiment_ framework for robust clustering is based on consensus clustering of clustering assignments obtained from different views of the data and different clustering algorithms. The different views are different reduced dimensionality projections of the data based on different techniques; thus, no single clustering result will dominate the data, and only cluster structures which are robust to different analyses will prevail. We implemented a clustering framework using the components of _clusterExperiment_ and different dimensionality reduction.
 
+We can directly use the robust clustering function `robustClusters`.
+```{r , echo=TRUE,eval=FALSE}
+# show how to use robustClusters
+```
 
 # Deciding for the best dimension reduction method for visualization and clustering
-show how to use pickDimReduction, text from methods
+```{r , echo=TRUE,eval=FALSE}
+# show how to use pickDimReduction and plot scatters for 
+# different dim reductions
+```
 
 # Obtaining network data from stringDB
-Many other networks
-Show how to get and prune networks from stringDB
+Other networks can also be used with _netSmooth_. We mostly rely on networks from stringDB. StringDB has multiple species available such as human, mouse, zebrafish, _C.elengas_ and _D.melanogaster_. It is also possible to prune the network differently. For our purposes we use the edges that have highest confidence score. Below, we are showing how to obtain and prune human network from stringDB. 
+```{r , echo=TRUE,eval=FALSE}
+require(STRINGdb)
+require(igraph)
+require(biomaRt)
+
+getSTRINGdbForSpecies <- function(species=c('human','mouse')) {
+    species <- match.arg(species)
+    if(species=='human') return( STRINGdb$new(species=9606) )
+    if(species=='mouse') return( STRINGdb$new(species=10090) )
+
+}
+
+getBiomartForspecies <- function(species=c('human','mouse')) {
+    species <- match.arg(species)
+    if(species=='human') return( useMart(host = 'grch37.ensembl.org',
+                                         biomart='ENSEMBL_MART_ENSEMBL',
+                                         dataset='hsapiens_gene_ensembl') )
+    if(species=='mouse') return( useMart("ensembl",
+                                         dataset="mmusculus_gene_ensembl") )
+}
+
+getPPIFromStringDB <- function(species) {
+    string_db <- getSTRINGdbForSpecies(species)
+    human_graph <- string_db$get_graph()
+
+    edge.scores <- E(human_graph)$combined_score
+    ninetyth.percentile <- quantile(edge.scores, 0.9)
+    thresh <- data.frame(name='90th percentile', val=ninetyth.percentile)
+
+
+
+    human_graph <- subgraph.edges(human_graph,
+                                  E(human_graph)[combined_score >
+                                                     ninetyth.percentile])
+
+    adj_matrix <- as_adjacency_matrix(human_graph)
+
+    protein_ids <- sapply(strsplit(rownames(adj_matrix), '\\.'),
+                          function(x) x[2])
+
+    mart = getBiomartForspecies(species)
+
+    mart_results <- getBM(attributes = c("ensembl_gene_id",
+                                         "ensembl_peptide_id"),
+    filters = "ensembl_peptide_id", values = protein_ids,
+    mart = mart)
+
+    ix <- match(protein_ids, mart_results$ensembl_peptide_id)
+    ix <- ix[!is.na(ix)]
+
+
+
+    newnames <- protein_ids
+    newnames[match(mart_results[ix,'ensembl_peptide_id'], newnames)] <-
+        mart_results[ix, 'ensembl_gene_id']
+    rownames(adj_matrix) <- newnames
+    colnames(adj_matrix) <- newnames
+
+    ppi <- adj_matrix[!duplicated(newnames), !duplicated(newnames)]
+    nullrows <- Matrix::rowSums(ppi)==0
+    ppi <- ppi[!nullrows,!nullrows]
+    return(ppi)
+}
+
+human.ppi <- getPPIFromStringDB('human')
+
+```
 
 
 # Frequently asked questions
