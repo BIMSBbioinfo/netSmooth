@@ -22,31 +22,99 @@ vignette: >
 
 
 # Introduction
-`netSmooth` implements a network-smoothing framework to smooth single-cell gene expression data as well as other omics datasets. The algorithm is a graph based diffusion process on networks. The intuition behind the algorithm is that gene networks encoding coexpression patterns may be used to smooth scRNA-seq expression data, since the gene expression values of connected nodes in the network will be predictive of eachother. Protein-protein interaction networks and coexpression networks are among the networks that could be used for such procedure. 
+_netSmooth_ implements a network-smoothing framework to smooth 
+single-cell gene expression data as well as other omics datasets. 
+The algorithm is a graph based diffusion process on networks. The 
+intuition behind the algorithm is that gene networks encoding 
+coexpression patterns may be used to smooth scRNA-seq expression 
+data, since the gene expression values of connected nodes in the 
+network will be predictive of eachother. Protein-protein interaction 
+(PI) networks and coexpression networks are among the networks that 
+could be used for such procedure. 
 
 
-More precisely, `netSmooth` works as follows. First, the gene expression values or other quantitative values per gene from each sample is projected on to the provided network. Then, the diffusion process is used to smooth the expression values of adjacent genes in the graph, so that a genes expression value represent an estimate of expression levels based the gene it self, as well as the expression values of the neighbors in the graph. The rate at which expression values of genes diffuse to their neighbors is degree-normalized, so that genes with many edges will affect their neighbors less than genes with more specific interactions. The implementation has one free parameter, `alpha`, which controls if the diffusion will be local or will reach further in the graph. Higher the value, the further the difussion will reach. The `netSmooth` package implements strategies to optimize the value of `alpha`.
+More precisely, _netSmooth_ works as follows. First, the gene 
+expression values or other quantitative values per gene from each 
+sample is projected on to the provided network. Then, the diffusion 
+process is used to smooth the expression values of adjacent 
+genes in the graph, so that a genes expression value 
+represent an estimate of expression levels based the gene it self, 
+as well as the expression 
+values of the neighbors in the graph. The rate at which expression 
+values of genes diffuse to their neighbors is degree-normalized, so 
+that genes with many edges will affect their neighbors less than 
+genes with more specific interactions. The implementation has one 
+free parameter, `alpha`, which controls if the diffusion will be 
+local or will reach further in the graph. Higher the value, the 
+further the difussion will reach. The _netSmooth_ package 
+implements strategies to optimize the value of `alpha`.
 
 
-In summary, `netSmooth` enables users to smooth quantitative values associated with genes using a gene interaction network such as a protein-protein interaction network. The following sections of this vignette demonstrates functionality of `netSmooth` package.
+In summary, _netSmooth_ enables users to smooth quantitative values 
+associated with genes using a gene interaction network such as a 
+protein-protein interaction network. The following sections of this 
+vignette demonstrate functionality of `netSmooth` package.
 
 
 # Smoothing single-cell gene expression data with netSmooth() function
+The workhorse of the _netSmooth_ package is the `netSmooth()` 
+function. This function takes at least two arugments, 
+a network and genes-by-samples matrix as input, and performs 
+smoothing on genes-by-samples matrix. The network should be 
+organized
+as an adjacency matrix and its row and column names should match
+the rownames of genes-by-samples matrix. 
 
+We will demonstrate the usage of the `netSmooth()` function using
+a subset of human PPI and a subset of single-cell RNA-seq data from
+X experiment. We will first load the example datasets that are available 
+through _netSmooth_ package.
+```{r , echo=TRUE,eval=FALSE}
+data(smallPPI)
+data(smallscRNAseq)
+```
 
-## Optimizing the smoothing parameter
-explain how to use optimization, text from methods
+We can now smooth the gene expression network. We will use `alpha`
+as 0.5.
+```{r , echo=TRUE,eval=FALSE}
+# smooth the gene expression matrix
+```
+
+Now, we can look at the smoothed and raw expression values using 
+a heatmap.
+```{r , echo=TRUE,eval=FALSE}
+# show heatmaps from smooth vs raw matrices
+```
+
+## Optimizing the smoothing parameter `alpha`
+By default, the parameter `alpha` will be optimized using a robust
+clustering statistic. Briefly, this approach will try different 
+clustering algorithms and/or parameters.
+
+Now, we smooth the expression using alpha optimization and plot heatmaps of raw and smooth versions.
+```{r , echo=TRUE,eval=FALSE}
+# show heatmaps from smooth vs raw matrices
+```
 
 # Getting robust clusters from data
-show robust clusters and explain text from methods
+
 
 # Deciding for the best dimension reduction method for visualization and clustering
 show how to use pickDimReduction, text from methods
 
 # Obtaining network data from stringDB
+Many other networks
 Show how to get and prune networks from stringDB
 
 
+# Frequently asked questions
+
+### How can I make smoothing faster ?
+Make sure you compile R with openBLAS or variants that are faster.
+
+### What happens if all the genes are not in my network ?
+The smoothing will only be done using the genes in the network then
+unsmoothed genes will be attached to the gene expression matrix.
 
 -------
 
