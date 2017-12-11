@@ -40,6 +40,9 @@ clusterExperimentWorkflow <- function(se,
     if(dimReduceFlavor=='pca') dim.reduce.ks <- c(5,15,50)
     else dim.reduce.ks <- c(2,3)
 
+    dim.reduce.ks <- dim.reduce.ks[dim.reduce.ks <= dim(se)[1]]
+    dim.reduce.ks <- dim.reduce.ks[dim.reduce.ks <= dim(se)[2]]
+
     dim.reduce.clustermatrix <- matrix(rep(-1, dim(ce)[2] * length(cluster.ks) *
                                                length(dim.reduce.ks)),
                                        ncol=length(cluster.ks)*
