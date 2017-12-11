@@ -73,7 +73,7 @@ the rownames of genes-by-samples matrix.
 
 We will demonstrate the usage of the `netSmooth()` function using
 a subset of human PPI and a subset of single-cell RNA-seq data from
-X experiment. We will first load the example datasets that are available 
+GSE44183-GPL11154. We will first load the example datasets that are available 
 through _netSmooth_ package.
 ```{r , echo=TRUE,eval=FALSE}
 data(smallPPI)
