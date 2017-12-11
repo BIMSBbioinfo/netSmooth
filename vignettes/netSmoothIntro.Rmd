@@ -17,7 +17,9 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
-
+library(netsmooth)
+library(pheatmap)
+library(SingleCellExperiment)
 ```
 
 
@@ -78,17 +80,24 @@ data(smallPPI)
 data(smallscRNAseq)
 ```
 
-We can now smooth the gene expression network now with `netSmooth()` function. We will use `alpha`
-as `0.5`. One important thing to keep in mind that adjacency matrix
-should have the same gene ids as the gene expression matrix or other gene expression data structures such as `SummarizedExperiment`.
+We can now smooth the gene expression network now with `netSmooth()` function. We will use `alpha=0.5`.
 ```{r , echo=TRUE,eval=FALSE}
-# smooth the gene expression matrix
+smallscRNAseq.sm.se <- netSmooth(smallscRNAseq, smallPPI, alpha=0.5)
+smallscRNAseq.sm.sce <- SingleCellExperiment(assays=list(counts=assay(smallscRNAseq.sm.se)), colData=colData(smallscRNAseq.sm.se))
 ```
 
 Now, we can look at the smoothed and raw expression values using 
 a heatmap.
 ```{r , echo=TRUE,eval=FALSE}
-# show heatmaps from smooth vs raw matrices
+anno.df <- data.frame(cell.type=colData(smallscRNAseq)$source_name_ch1)
+rownames(anno.df) <- colnames(smallscRNAseq)
+pheatmap(log2(assay(smallscRNAseq)+1), annotation_col = anno.df,
+         show_rownames = FALSE, show_colnames = FALSE,
+         main="before netSmooth")
+
+pheatmap(log2(assay(smallscRNAseq.sm.sce)+1), annotation_col = anno.df,
+         show_rownames = FALSE, show_colnames = FALSE,
+         main="after netSmooth")
 ```
 
 ## Optimizing the smoothing parameter `alpha`
@@ -99,7 +108,12 @@ try different `alpha` values controlled by additional arguments to maximize the 
 
 Now, we smooth the expression values using automated alpha optimization and plot the heatmaps of raw and smooth versions.
 ```{r , echo=TRUE,eval=FALSE}
-# show heatmaps from smooth vs raw matrices
+smallscRNAseq.sm.se <- netSmooth(smallscRNAseq, smallPPI, alpha='auto')
+smallscRNAseq.sm.sce <- SingleCellExperiment(assays=list(counts=assay(smallscRNAseq.sm.se)), colData=colData(smallscRNAseq.sm.se))
+
+pheatmap(log2(assay(smallscRNAseq.sm.sce)+1), annotation_col = anno.df,
+         show_rownames = FALSE, show_colnames = FALSE,
+         main="after netSmooth (optimal alpha)")
 ```
 
 # Getting robust clusters from data
