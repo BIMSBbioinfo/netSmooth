@@ -75,20 +75,24 @@ We will demonstrate the usage of the `netSmooth()` function using
 a subset of human PPI and a subset of single-cell RNA-seq data from
 GSE44183-GPL11154. We will first load the example datasets that are available 
 through _netSmooth_ package.
-```{r , echo=TRUE,eval=FALSE}
+```{r , echo=TRUE}
 data(smallPPI)
 data(smallscRNAseq)
 ```
 
-We can now smooth the gene expression network now with `netSmooth()` function. We will use `alpha=0.5`.
-```{r , echo=TRUE,eval=FALSE}
+We can now smooth the gene expression network now with `netSmooth()` function.
+We will use `alpha=0.5`.
+```{r , echo=TRUE}
 smallscRNAseq.sm.se <- netSmooth(smallscRNAseq, smallPPI, alpha=0.5)
-smallscRNAseq.sm.sce <- SingleCellExperiment(assays=list(counts=assay(smallscRNAseq.sm.se)), colData=colData(smallscRNAseq.sm.se))
+smallscRNAseq.sm.sce <- SingleCellExperiment(
+    assays=list(counts=assay(smallscRNAseq.sm.se)),
+    colData=colData(smallscRNAseq.sm.se)
+)
 ```
 
 Now, we can look at the smoothed and raw expression values using 
 a heatmap.
-```{r , echo=TRUE,eval=FALSE}
+```{r , echo=TRUE}
 anno.df <- data.frame(cell.type=colData(smallscRNAseq)$source_name_ch1)
 rownames(anno.df) <- colnames(smallscRNAseq)
 pheatmap(log2(assay(smallscRNAseq)+1), annotation_col = anno.df,
@@ -103,13 +107,19 @@ pheatmap(log2(assay(smallscRNAseq.sm.sce)+1), annotation_col = anno.df,
 ## Optimizing the smoothing parameter `alpha`
 By default, the parameter `alpha` will be optimized using a robust
 clustering statistic. Briefly, this approach will try different 
-clustering algorithms and/or parameters and find clusters that can be reproduced with different algorithms. `netSmooth()` function will
-try different `alpha` values controlled by additional arguments to maximize the number of samples in robust clusters.
+clustering algorithms and/or parameters and find clusters that can be reproduced
+with different algorithms. The `netSmooth()` function will try different `alpha`
+values controlled by additional arguments to maximize the number of samples in
+robust clusters.
 
-Now, we smooth the expression values using automated alpha optimization and plot the heatmaps of raw and smooth versions.
-```{r , echo=TRUE,eval=FALSE}
+Now, we smooth the expression values using automated alpha optimization and plot
+the heatmaps of raw and smooth versions.
+```{r , echo=TRUE}
 smallscRNAseq.sm.se <- netSmooth(smallscRNAseq, smallPPI, alpha='auto')
-smallscRNAseq.sm.sce <- SingleCellExperiment(assays=list(counts=assay(smallscRNAseq.sm.se)), colData=colData(smallscRNAseq.sm.se))
+smallscRNAseq.sm.sce <- SingleCellExperiment(
+    assays=list(counts=assay(smallscRNAseq.sm.se)),
+    colData=colData(smallscRNAseq.sm.se)
+)
 
 pheatmap(log2(assay(smallscRNAseq.sm.sce)+1), annotation_col = anno.df,
          show_rownames = FALSE, show_colnames = FALSE,
@@ -117,25 +127,69 @@ pheatmap(log2(assay(smallscRNAseq.sm.sce)+1), annotation_col = anno.df,
 ```
 
 # Getting robust clusters from data
-There is no standard method especially for clustering single cell RNAseq data, as different studies produce data with different topologies, which respond differently to the various clustering algorithms. In order to avoid optimizing different clustering routines for the different datasets, we have implemented a robust clustering routine based on [clusterExperiment::clusterExperiment](https://www.bioconductor.org/packages/3.6/bioc/html/clusterExperiment.html). The _clusterExperiment_ framework for robust clustering is based on consensus clustering of clustering assignments obtained from different views of the data and different clustering algorithms. The different views are different reduced dimensionality projections of the data based on different techniques; thus, no single clustering result will dominate the data, and only cluster structures which are robust to different analyses will prevail. We implemented a clustering framework using the components of _clusterExperiment_ and different dimensionality reduction methods.
+There is no standard method especially for clustering single cell RNAseq data,
+as different studies produce data with different topologies, which respond
+differently to the various clustering algorithms. In order to avoid optimizing
+different clustering routines for the different datasets, we have implemented a
+robust clustering routine based on [clusterExperiment][ce].
+The _clusterExperiment_ framework for robust clustering is based on consensus
+clustering of clustering assignments obtained from different views of the data
+and different clustering algorithms. The different views are different reduced
+dimensionality projections of the data based on different techniques; thus, no
+single clustering result will dominate the data, and only cluster structures
+which are robust to different analyses will prevail. We implemented a clustering
+framework using the components of _clusterExperiment_ and different
+dimensionality reduction methods.
 
 We can directly use the robust clustering function `robustClusters`.
-```{r , echo=TRUE,eval=FALSE}
-# show how to use robustClusters
+```{r , echo=TRUE}
+yhat <- robustClusters(smallscRNAseq)$clusters
+yhat.sm <- robustClusters(smallscRNAseq.sm.se)$clusters
+cell.types <- colData(smallscRNAseq)$source_name_ch1
+knitr::kable(
+  table(cell.types, yhat), caption = 'Cell types and `robustClusters` in the raw data.'
+)
+knitr::kable(
+  table(cell.types, yhat.sm), caption = 'Cell types and `robustClusters` in the smoothed data.'
+)
 ```
+
+A cluster assignment of `-1` indicates that the cell could not be placed in a robsut cluster, and has consequently been omitted. We see that the clusters are completely uninformative in the raw data, while the smoothed data at least permitted the `robustClusters` procedure to identify a subset of the 8-cell blastomeres as a separate cluster.
 
 # Deciding for the best dimension reduction method for visualization and clustering
-The `robustClusters()` function works by clustering samples in a lower dimension embedding using either PCA or t-SNE. Different single cell datasets might respond better to different dimensionality reduction techniques. In order to pick the right technique algorithmically, we compute the entropy in a 2D embedding. We obtained 2D embeddings from the 500 most variable genes using either PCA or t-SNE, binned them in a 20x20 grid, and computed the entropy. The entropy in the 2D embedding is a measure for the information captured by it. We pick the embedding with the highest information content. `pickDimReduction()` function implements this
+The `robustClusters()` function works by clustering samples in a lower dimension
+embedding using either PCA or t-SNE. Different single cell datasets might respond
+better to different dimensionality reduction techniques. In order to pick the
+right technique algorithmically, we compute the entropy in a 2D embedding. We
+obtained 2D embeddings from the 500 most variable genes using either PCA or
+t-SNE, binned them in a 20x20 grid, and computed the entropy. The entropy in the
+2D embedding is a measure for the information captured by it. We pick the
+embedding with the highest information content. `pickDimReduction()` function
+implements this
 strategy and returns the best embedding according to this strategy.
 
-Below, we pick the best embedding for our example dataset and plot scatter plots for different 2D embedding methods.
-```{r , echo=TRUE,eval=FALSE}
-# show how to use pickDimReduction and plot scatters for 
-# different dim reductions
+Below, we pick the best embedding for our example dataset and plot scatter plots
+for different 2D embedding methods.
+```{r , echo=TRUE}
+plotPCA(smallscRNAseq, colour_by='source_name_ch1') + ggtitle("PCA plot")
+plotTSNE(smallscRNAseq, colour_by='source_name_ch1') + ggtitle("tSNE plot")
 ```
 
+The `pickDimReduction` method picks the dimensionality reduction method which
+produces the highest entropy embedding:
+
+```{r echo=TRUE}
+pickDimReduction(smallscRNAseq)
+```
+
+
 # Obtaining network data from stringDB
-Other networks can also be used with _netSmooth_. We mostly rely on networks from stringDB. StringDB has multiple species available such as human, mouse, zebrafish, _C.elengas_ and _D.melanogaster_. It is also possible to prune the network differently. For our purposes we use the edges that have highest confidence score. Below, we are showing how to obtain and prune human network from stringDB. Specifically, we use the work flow below.
+Other networks can also be used with _netSmooth_. We mostly rely on networks
+from stringDB. StringDB has multiple species available such as human, mouse,
+zebrafish, _C.elengas_ and _D.melanogaster_. It is also possible to prune the
+network differently. For our purposes we use the edges that have highest
+confidence score. Below, we are showing how to obtain and prune human network
+from stringDB. Specifically, we use the work flow below.
 
 1. Get human network/graph from STRINGdb.
 2. Prune the network to get only high-confidence edges
@@ -212,9 +266,9 @@ unsmoothed genes will be attached to the gene expression matrix.
 
 -------
 
-```
 
 ```{r}
 sessionInfo()
 ```
 
+[ce]: https://www.bioconductor.org/packages/3.6/bioc/html/clusterExperiment.html "clusterExperiment"
