@@ -1,1 +1,7 @@
 language: r
+cache: packages
+bioc_packages:
+  - clusterExperiment
+  - scater
+  - SingleCellExperiment
+  - SummarizedExperiment
