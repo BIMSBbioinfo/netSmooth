@@ -14,7 +14,7 @@ netsmooth: A Network smoothing based method for Single Cell RNAseq and other gen
 
 ### Usage
 
-See [the vignette](vignettes/netSmoothIntro.html).
+See [the vignette](http://htmlpreview.github.io/?https://github.com/BIMSBbioinfo/netsmooth/blob/master/vignettes/netSmoothIntro.html).
 
 ### Contributing
 
