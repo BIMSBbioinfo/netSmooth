@@ -1,4 +1,4 @@
 library(testthat)
-library(netsmooth)
+library(netSmooth)
 
-test_check("netsmooth")
+test_check("netSmooth")
