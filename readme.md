@@ -5,6 +5,8 @@
 netSmooth
 ---------
 
+[![Build Status](https://travis-ci.org/BIMSBbioinfo/netSmooth.svg?branch=master)](https://travis-ci.org/BIMSBbioinfo/netSmooth)
+
 netSmooth: A Network smoothing based method for Single Cell RNAseq and other gene-based genomics data sets
 
 ### Installation
