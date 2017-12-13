@@ -143,8 +143,8 @@ dimensionality reduction methods.
 
 We can directly use the robust clustering function `robustClusters`.
 ```{r , echo=TRUE}
-yhat <- robustClusters(smallscRNAseq)$clusters
-yhat.sm <- robustClusters(smallscRNAseq.sm.se)$clusters
+yhat <- robustClusters(smallscRNAseq, combineManyMinSize=2, combineManyProportion=.9)$clusters
+yhat.sm <- robustClusters(smallscRNAseq.sm.se, combineManyMinSize=2, combineManyProportion=.9)$clusters
 cell.types <- colData(smallscRNAseq)$source_name_ch1
 knitr::kable(
   table(cell.types, yhat), caption = 'Cell types and `robustClusters` in the raw data.'
