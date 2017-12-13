@@ -7,10 +7,14 @@ netSmooth
 
 [![Build Status](https://travis-ci.org/BIMSBbioinfo/netSmooth.svg?branch=master)](https://travis-ci.org/BIMSBbioinfo/netSmooth) [![codecov](https://codecov.io/gh/BIMSBbioinfo/netSmooth/branch/master/graph/badge.svg)](https://codecov.io/gh/BIMSBbioinfo/netSmooth)
 
-_netSmooth: A Network smoothing based method for Single Cell RNAseq and other gene-based genomics data sets_
+_netSmooth: A Network smoothing based method for Single Cell RNAseq and other gene-based genomics data sets_:
 netSmooth is an R package for network smoothing of single cell RNA sequencing data. Using gene interaction networks such as protein-
-protein interactions as priors for gene co-expression, netsmooth improves cell type identification from noisy, sparse scRNAseq data.
-The smoothing method is suitable for other gene-based omics data sets as well such as proteomics, copy-number variation, etc.
+protein interactions as priors for gene co-expression, netsmooth improves cell type identification from noisy, sparse scRNA-seq data.
+The smoothing method is suitable for other gene-based omics data sets such as proteomics, copy-number variation, etc.
+
+The algorithm uses a network-diffusion based approach which takes in a network (such as PPI network) and gene-expression matrix. The gene 
+expression values in the matrix are smoothed using the interaction information in the network. The parameter of the network-smoothing are 
+optimized using a robust clustering approach.
 
 ### Installation
 
