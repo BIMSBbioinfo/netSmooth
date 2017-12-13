@@ -5,3 +5,7 @@ bioc_packages:
   - scater
   - SingleCellExperiment
   - SummarizedExperiment
+r_packages:
+  - covr
+after_success:
+  - Rscript -e 'covr::codecov()'
