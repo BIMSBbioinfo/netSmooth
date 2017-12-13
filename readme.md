@@ -14,12 +14,12 @@ netsmooth: A Network smoothing based method for Single Cell RNAseq and other gen
 
 ### Usage
 
-bleh
+See [the vignette](vignettes/netSmoothIntro.html).
 
 ### Contributing
 
-blijh
+Fork and send a pull request. Or just e-mail us.
 
 -------------------------
-@jonathanronen 2017
+@jonathanronen, BIMSBbioinfo, 2017
 
