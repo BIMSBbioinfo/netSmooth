@@ -5,7 +5,8 @@ bioc_packages:
   - scater
   - SingleCellExperiment
   - SummarizedExperiment
-r_packages:
+sudo: required
+r_binary_packages:
   - covr
   - Rtsne
 after_success:
