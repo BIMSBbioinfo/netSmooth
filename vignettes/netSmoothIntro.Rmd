@@ -75,14 +75,14 @@ We will demonstrate the usage of the `netSmooth()` function using
 a subset of human PPI and a subset of single-cell RNA-seq data from
 GSE44183-GPL11154. We will first load the example datasets that are available 
 through _netSmooth_ package.
-```{r , echo=TRUE}
+```{r , echo=TRUE, eval=FALSE}
 data(smallPPI)
 data(smallscRNAseq)
 ```
 
 We can now smooth the gene expression network now with `netSmooth()` function.
 We will use `alpha=0.5`.
-```{r , echo=TRUE}
+```{r , echo=TRUE, eval=FALSE}
 smallscRNAseq.sm.se <- netSmooth(smallscRNAseq, smallPPI, alpha=0.5)
 smallscRNAseq.sm.sce <- SingleCellExperiment(
     assays=list(counts=assay(smallscRNAseq.sm.se)),
@@ -92,7 +92,7 @@ smallscRNAseq.sm.sce <- SingleCellExperiment(
 
 Now, we can look at the smoothed and raw expression values using 
 a heatmap.
-```{r , echo=TRUE}
+```{r , echo=TRUE, eval=FALSE}
 anno.df <- data.frame(cell.type=colData(smallscRNAseq)$source_name_ch1)
 rownames(anno.df) <- colnames(smallscRNAseq)
 pheatmap(log2(assay(smallscRNAseq)+1), annotation_col = anno.df,
@@ -114,7 +114,7 @@ robust clusters.
 
 Now, we smooth the expression values using automated alpha optimization and plot
 the heatmaps of raw and smooth versions.
-```{r , echo=TRUE}
+```{r , echo=TRUE, eval=FALSE}
 smallscRNAseq.sm.se <- netSmooth(smallscRNAseq, smallPPI, alpha='auto')
 smallscRNAseq.sm.sce <- SingleCellExperiment(
     assays=list(counts=assay(smallscRNAseq.sm.se)),
@@ -142,7 +142,7 @@ framework using the components of _clusterExperiment_ and different
 dimensionality reduction methods.
 
 We can directly use the robust clustering function `robustClusters`.
-```{r , echo=TRUE}
+```{r , echo=TRUE, eval=FALSE}
 yhat <- robustClusters(smallscRNAseq, combineManyMinSize=2, combineManyProportion=.9)$clusters
 yhat.sm <- robustClusters(smallscRNAseq.sm.se, combineManyMinSize=2, combineManyProportion=.9)$clusters
 cell.types <- colData(smallscRNAseq)$source_name_ch1
@@ -170,7 +170,7 @@ strategy and returns the best embedding according to this strategy.
 
 Below, we pick the best embedding for our example dataset and plot scatter plots
 for different 2D embedding methods.
-```{r , echo=TRUE}
+```{r , echo=TRUE, eval=FALSE}
 plotPCA(smallscRNAseq, colour_by='source_name_ch1') + ggtitle("PCA plot")
 plotTSNE(smallscRNAseq, colour_by='source_name_ch1') + ggtitle("tSNE plot")
 ```
@@ -178,7 +178,7 @@ plotTSNE(smallscRNAseq, colour_by='source_name_ch1') + ggtitle("tSNE plot")
 The `pickDimReduction` method picks the dimensionality reduction method which
 produces the highest entropy embedding:
 
-```{r echo=TRUE}
+```{r echo=TRUE, eval=FALSE}
 pickDimReduction(smallscRNAseq)
 ```
 
