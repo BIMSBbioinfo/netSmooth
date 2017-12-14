@@ -8,6 +8,7 @@ bioc_packages:
 sudo: required
 r_binary_packages:
   - covr
+r_packages:
   - Rtsne
 after_success:
   - Rscript -e 'covr::codecov()'
