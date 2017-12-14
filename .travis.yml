@@ -7,5 +7,6 @@ bioc_packages:
   - SummarizedExperiment
 r_packages:
   - covr
+  - Rtsne
 after_success:
   - Rscript -e 'covr::codecov()'
