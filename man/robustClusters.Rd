@@ -33,7 +33,6 @@ Perform robust clustering on dataset, and calculate the proportion of
 samples in robust clusters
 }
 \examples{
-x <- cbind(matrix(rexp(60000, rate=.1), ncol=100) + 1000*rexp(600, rate=.9),
-           matrix(rexp(30000, rate=.5), ncol=50) + 1*rexp(600, rate=.9))
-robustClusters(x)
+data(smallscRNAseq)
+robustClusters(smallscRNAseq)
 }
