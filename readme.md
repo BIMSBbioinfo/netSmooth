@@ -13,7 +13,7 @@ protein interactions as priors for gene co-expression, netsmooth improves cell t
 The smoothing method is suitable for other gene-based omics data sets such as proteomics, copy-number variation, etc.
 
 The algorithm uses a network-diffusion based approach which takes in a network (such as PPI network) and gene-expression matrix. The gene 
-expression values in the matrix are smoothed using the interaction information in the network. The parameter of the network-smoothing are 
+expression values in the matrix are smoothed using the interaction information in the network. The network-smoothing parameter is 
 optimized using a robust clustering approach.
 
 ### Installation
