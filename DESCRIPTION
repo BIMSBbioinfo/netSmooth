@@ -25,6 +25,7 @@ Imports:
     entropy
 Suggests: knitr,
     testthat,
+    Rtsne,
     biomaRt,
     igraph,
     STRINGdb,
