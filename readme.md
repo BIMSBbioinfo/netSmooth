@@ -27,6 +27,10 @@ optimized using a robust clustering approach.
 For detailed usage information see  [the vignette](http://htmlpreview.github.io/?https://github.com/BIMSBbioinfo/netSmooth/blob/master/vignettes/netSmoothIntro.html). In addition,
 R package has full function documentation with examples. 
 
+### License
+
+netSmooth is available under a GPLv3 license.
+
 ### Contributing
 
 Fork and send a pull request. Or just e-mail us.
