@@ -27,7 +27,7 @@ optimized using a robust clustering approach.
 For detailed usage information see  [the vignette](http://htmlpreview.github.io/?https://github.com/BIMSBbioinfo/netSmooth/blob/master/vignettes/netSmoothIntro.html). In addition,
 R package has full function documentation with examples. 
 
-###How to cite 
+### How to cite 
 Ronen J and Akalin A. netSmooth: Network-smoothing based imputation for single cell RNA-seq [version 2; referees: 1 approved]. F1000Research 2018, 7:8 (doi: 10.12688/f1000research.13511.2)
 
 ### License
