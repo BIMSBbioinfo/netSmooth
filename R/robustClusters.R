@@ -17,9 +17,6 @@ setGeneric(
 #' @param is.counts    logical: is the data counts
 #' @param ...    arguments passed on to `clusterExperimentWorkflow`
 #' @return list(clusters, proportion.robust)
-#' @examples
-#' data(smallscRNAseq)
-#' robustClusters(smallscRNAseq)
 #' @export
 setMethod("robustClusters",
           signature(x='SummarizedExperiment'),
