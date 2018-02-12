@@ -1,3 +1,10 @@
+setGeneric(
+    name = "randomWalkBySolve",
+    def = function(E, A, alpha, normalizeAjdMatrix) {
+        standardGeneric("randomWalkBySolve")
+    }
+)
+
 #' Smooth data on graph by solving the linear equation
 #' (I - alpha*A)^T * E_sm^T = E^T * (1-alpha)
 #'
@@ -9,13 +16,28 @@
 #'                random walk)
 #' @return network-smoothed gene expression
 #' @keywords internal
-randomWalkBySolve <- function(E, A, alpha,
+setMethod("randomWalkBySolve",
+          signature(E='matrix'), function(E, A, alpha,
                               normalizeAjdMatrix=c('rows','columns')) {
     normalizeAjdMatrix <- match.arg(normalizeAjdMatrix)
     if(normalizeAjdMatrix=='rows') Anorm <- l1NormalizeRows(A)
     else if(normalizeAjdMatrix=='columns') Anorm <- l1NormalizeColumns(A)
     eye <- diag(dim(A)[1])
-    AA <- t(eye - alpha*Anorm)
+    AA <- Matrix::t(eye - alpha*Anorm)
     BB <- (1-alpha) * E
     return(solve(AA, BB))
-}
+    }
+)
+
+setMethod("randomWalkBySolve",
+          signature(E='Matrix'), function(E, A, alpha,
+                                          normalizeAjdMatrix=c('rows','columns')) {
+              normalizeAjdMatrix <- match.arg(normalizeAjdMatrix)
+              if(normalizeAjdMatrix=='rows') Anorm <- l1NormalizeRows(A)
+              else if(normalizeAjdMatrix=='columns') Anorm <- l1NormalizeColumns(A)
+              eye <- diag(dim(A)[1])
+              AA <- Matrix::t(eye - alpha*Anorm)
+              BB <- (1-alpha) * E
+              return(Matrix::solve(AA, BB))
+          }
+)

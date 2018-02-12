@@ -5,6 +5,7 @@
 \alias{netSmooth,matrix-method}
 \alias{netSmooth}
 \alias{netSmooth,SummarizedExperiment-method}
+\alias{netSmooth,Matrix-method}
 \title{Perform network smoothing of gene expression or other omics data}
 \usage{
 \S4method{netSmooth}{matrix}(x, adjMatrix, alpha = "auto",
@@ -14,6 +15,12 @@
   numcores = 1, ...)
 
 \S4method{netSmooth}{SummarizedExperiment}(x, ...)
+
+\S4method{netSmooth}{Matrix}(x, adjMatrix, alpha = "auto",
+  normalizeAdjMatrix = c("rows", "columns"),
+  autoAlphaMethod = c("robustness", "entropy"), autoAlphaRange = 0.1 *
+  (1:9), autoAlphaDimReduceFlavor = "auto", is.counts = TRUE,
+  numcores = 1, ...)
 }
 \arguments{
 \item{x}{matrix or SummarizedExperiment}
