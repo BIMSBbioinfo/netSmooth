@@ -110,3 +110,59 @@ setMethod("netSmooth",
              ret <- netSmooth(matrixdata, ...)
              return(SummarizedExperiment(ret, colData=colData(x)))
           })
+
+#' @rdname netSmooth
+#' @export
+setMethod("netSmooth",
+          signature(x='Matrix'),
+          function(x, adjMatrix, alpha='auto',
+                   normalizeAdjMatrix=c('rows','columns'),
+                   autoAlphaMethod=c('robustness', 'entropy'),
+                   autoAlphaRange=.1*(1:9),
+                   autoAlphaDimReduceFlavor='auto',
+                   is.counts=TRUE,
+                   numcores=1,
+                   ...) {
+              autoAlphaMethod <- match.arg(autoAlphaMethod)
+              normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
+
+              if(is.numeric(alpha)) {
+                  cat(paste0("Using given alpha: ", alpha,"\n"))
+                  if(alpha<0 | alpha > 1) {
+                      stop('alpha must be between 0 and 1')
+                  }
+                  x.smoothed <- smoothAndRecombine(x, adjMatrix, alpha,
+                                                   normalizeAdjMatrix=normalizeAdjMatrix)
+              } else if(alpha=='auto') {
+                  if(autoAlphaDimReduceFlavor=='auto') {
+                      autoAlphaDimReduceFlavor <-
+                          pickDimReduction(x, is.counts=is.counts)
+                      cat(paste0("Picked dimReduceFlavor: ",
+                                 autoAlphaDimReduceFlavor,
+                                 "\n"))
+                  }
+
+                  smoothed.expression.matrices <- mclapply(autoAlphaRange,
+                                                           function(a) {
+                                                               smoothAndRecombine(x, adjMatrix, a,
+                                                                                  normalizeAdjMatrix=normalizeAdjMatrix)
+                                                           },
+                                                           mc.cores=numcores)
+
+                  scores <- unlist(mclapply(1:length(smoothed.expression.matrices),
+                                            function(i) {
+                                                x.sm <-
+                                                    smoothed.expression.matrices[[i]]
+                                                scoreSmoothing(x=x.sm,
+                                                               method=autoAlphaMethod,
+                                                               is.counts=is.counts,
+                                                               dimReduceFlavor=autoAlphaDimReduceFlavor, ...)
+                                            },
+                                            mc.cores=numcores))
+                  x.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
+                  chosen.a <- autoAlphaRange[which.max(scores)]
+                  cat(paste0("Picked alpha=",chosen.a,"\n"))
+              } else stop(paste0("unsupprted alpha value: ", class(alpha)))
+              return(x.smoothed)
+          }
+)
