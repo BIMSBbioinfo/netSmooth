@@ -8,13 +8,13 @@
 #' @keywords internal
 scoreSmoothing <- function(x, method=c('entropy', 'robustness'),
                            is.counts=TRUE, ...) {
-    if(class(x)=='matrix') {
+    if(class(x)=='matrix' || any(is(x)=='Matrix')) {
         x <- x
         se <- SummarizedExperiment::SummarizedExperiment(x)
     } else if(class(x)=='SummarizedExperiment') {
         se <- x
         x <- assay(x)
-    } else stop("must be matrix or SummarizedExperiment object")
+    } else stop("must be matrix/Matrix or SummarizedExperiment object")
 
     method <- match.arg(method)
     if(method=='entropy') {

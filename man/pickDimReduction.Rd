@@ -5,6 +5,7 @@
 \alias{pickDimReduction,matrix-method}
 \alias{pickDimReduction}
 \alias{pickDimReduction,SummarizedExperiment-method}
+\alias{pickDimReduction,Matrix-method}
 \title{Pick the dimensionality reduction method for a dataset that gives the
 2D embedding with the highest entropy}
 \usage{
@@ -12,6 +13,9 @@
   is.counts = TRUE)
 
 \S4method{pickDimReduction}{SummarizedExperiment}(x)
+
+\S4method{pickDimReduction}{Matrix}(x, flavors = c("pca", "tsne"),
+  is.counts = TRUE)
 }
 \arguments{
 \item{x}{matrix or SummarizedExperiment object [GENES x SAMPLES]}

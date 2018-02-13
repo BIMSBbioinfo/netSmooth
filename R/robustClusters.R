@@ -24,7 +24,9 @@ setGeneric(
 setMethod("robustClusters",
           signature(x='SummarizedExperiment'),
           function(x, dimReduceFlavor='auto', is.counts=TRUE, ...) {
-
+        if(any(is(assay(x))=='Matrix')){
+            stop("robust clustering does not currently support sparse matrices.")
+        }
         if(dimReduceFlavor=='auto') {
             dimReduceFlavor <- pickDimReduction(assay(x),
                                                 flavors=c('pca', 'tsne'),
@@ -47,3 +49,4 @@ setMethod("robustClusters",
               robustClusters(SummarizedExperiment(x), ...)
   }
 )
+
