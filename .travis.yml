@@ -52,6 +52,7 @@ r_binary_packages:
   - reshape2
   - rjson
 r_packages:
+  - Rcpp
   - Rtsne
 after_success:
   - Rscript -e 'covr::codecov()'
