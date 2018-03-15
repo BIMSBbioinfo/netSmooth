@@ -23,7 +23,7 @@ Imports:
     Matrix,
     cluster,
     data.table,
-    entropy
+    stats
 Suggests: knitr,
     testthat,
     Rtsne,
