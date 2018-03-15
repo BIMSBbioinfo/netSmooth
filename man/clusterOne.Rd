@@ -6,6 +6,9 @@
 \usage{
 clusterOne(x, algorithm = c("kmeans", "pam"), k = 5)
 }
+\value{
+kmeans or PAM cluster assignments
+}
 \description{
 Run one clustering using kmeans o PAM
 }

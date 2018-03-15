@@ -12,6 +12,7 @@ setGeneric(
 #'                           the gene expression matrix
 #' @param missing.value      value to assign to genes that are in network,
 #'                           but missing from gene expression matrix
+#' @return the gene expression matrix projected onto the gene space defined by new_features
 #' @rdname projectOnNetwork
 #' @aliases projectOnNetwork
 #' @keywords internal

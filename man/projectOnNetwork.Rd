@@ -19,6 +19,9 @@ the gene expression matrix}
 \item{missing.value}{value to assign to genes that are in network,
 but missing from gene expression matrix}
 }
+\value{
+the gene expression matrix projected onto the gene space defined by new_features
+}
 \description{
 Project the gene expression matrix onto a lower space
 of the genes defined in the smoothing network
