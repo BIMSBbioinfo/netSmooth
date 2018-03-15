@@ -14,8 +14,8 @@
 #' @import SingleCellExperiment
 dimReduce <- function(x, flavor=c('pca', 'tsne'), k=2, is.counts=TRUE, ntop=500) {
     flavor <- match.arg(flavor)
-    if(flavor=='pca') function.to.call <- plotPCA
-    if(flavor=='tsne') function.to.call <- plotTSNE
+    if(flavor=='pca') function.to.call <- runPCA
+    if(flavor=='tsne') function.to.call <- runTSNE
 
     if(is.counts){
         sce <- SingleCellExperiment(assays=list(counts=x))
