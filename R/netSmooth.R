@@ -37,10 +37,10 @@ setGeneric(
 #'         object
 #' @examples
 #' x <- matrix(rnbinom(12000, size=1, prob = .1), ncol=60)
-#' rownames(x) <- paste0('gene', 1:(dim(x)[1]))
+#' rownames(x) <- paste0('gene', seq_len(dim(x)[1]))
 #'
 #' adj_matrix <- matrix(as.numeric(rnorm(200*200)>.8), ncol=200)
-#' rownames(adj_matrix) <- colnames(adj_matrix) <- paste0('gene', 1:(dim(x)[1]))
+#' rownames(adj_matrix) <- colnames(adj_matrix) <- paste0('gene', seq_len(dim(x)[1]))
 #' x.smoothed <- netSmooth(x, adj_matrix, alpha=0.5)
 #' @export
 #' @rdname netSmooth
@@ -52,7 +52,7 @@ setMethod("netSmooth",
           function(x, adjMatrix, alpha='auto',
                       normalizeAdjMatrix=c('rows','columns'),
                       autoAlphaMethod=c('robustness', 'entropy'),
-                      autoAlphaRange=.1*(1:9),
+                      autoAlphaRange=.1*(seq_len(9)),
                       autoAlphaDimReduceFlavor='auto',
                       is.counts=TRUE,
                       numcores=1,
@@ -83,7 +83,7 @@ setMethod("netSmooth",
             },
             mc.cores=numcores)
 
-            scores <- unlist(mclapply(1:length(smoothed.expression.matrices),
+            scores <- unlist(mclapply(seq_len(length(smoothed.expression.matrices)),
                                       function(i) {
                                           x.sm <-
                                               smoothed.expression.matrices[[i]]
@@ -118,7 +118,7 @@ setMethod("netSmooth",
           function(x, adjMatrix, alpha='auto',
                    normalizeAdjMatrix=c('rows','columns'),
                    autoAlphaMethod=c('robustness', 'entropy'),
-                   autoAlphaRange=.1*(1:9),
+                   autoAlphaRange=.1*(seq_len(9)),
                    autoAlphaDimReduceFlavor='auto',
                    is.counts=TRUE,
                    numcores=1,
@@ -149,7 +149,7 @@ setMethod("netSmooth",
                                                            },
                                                            mc.cores=numcores)
 
-                  scores <- unlist(mclapply(1:length(smoothed.expression.matrices),
+                  scores <- unlist(mclapply(seq_len(length(smoothed.expression.matrices)),
                                             function(i) {
                                                 x.sm <-
                                                     smoothed.expression.matrices[[i]]

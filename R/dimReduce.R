@@ -24,9 +24,8 @@ dimReduce <- function(x, flavor=c('pca', 'tsne'), k=2, is.counts=TRUE, ntop=500)
         sce <- SingleCellExperiment(assays=list(logcounts=x))
     }
 
-    sce <- function.to.call(sce, return_SCE=TRUE, draw_plot=FALSE,
-                            ncomponents=k, ntop=ntop)
-    red.dim <- data.frame(reducedDim(sce))[,1:k]
-    colnames(red.dim) <- paste0(flavor, 1:k)
+    sce <- function.to.call(sce, ncomponents=k, ntop=ntop)
+    red.dim <- data.frame(reducedDim(sce))[,seq_len(k)]
+    colnames(red.dim) <- paste0(flavor, seq_len(k))
     return(red.dim)
 }
