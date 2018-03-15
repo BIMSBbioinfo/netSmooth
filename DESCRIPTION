@@ -1,7 +1,7 @@
 Package: netSmooth
 Type: Package
 Title: Network smoothing for scRNAseq
-Version: 0.99.3
+Version: 0.99.4
 Author: Jonathan Ronen [aut, cre], Altuna Akalin [aut, cre]
 Maintainer: Jonathan Ronen <yablee@gmail.com>
 Description: netSmooth is an R package for network smoothing of single cell RNA
