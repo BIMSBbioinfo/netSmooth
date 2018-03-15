@@ -9,7 +9,7 @@
 #'                reduction
 #' @return    reduced dimensionality representation
 #' @keywords internal
-#' @importFrom scater plotPCA plotTSNE calculateCPM
+#' @importFrom scater runPCA runTSNE calculateCPM
 #' @importFrom SingleCellExperiment reducedDim
 #' @import SingleCellExperiment
 dimReduce <- function(x, flavor=c('pca', 'tsne'), k=2, is.counts=TRUE, ntop=500) {
