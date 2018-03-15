@@ -15,7 +15,7 @@ LazyData: true
 Depends:
     R (>= 3.5),
     scater (>= 1.7.0),
-    clusterExperiment (>= 1.4.0)
+    clusterExperiment (>= 1.99.1)
 Imports:
     entropy,
     SummarizedExperiment,

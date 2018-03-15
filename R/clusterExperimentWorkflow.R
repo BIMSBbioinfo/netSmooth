@@ -13,7 +13,7 @@
 #'                       to not set a random seed.
 #' @return    cluster assignments
 #' @importFrom SummarizedExperiment assay
-#' @importFrom clusterExperiment clusterMany clusterMatrix clusterExperiment
+#' @importFrom clusterExperiment clusterMany clusterMatrix ClusterExperiment
 #'                               combineMany makeDendrogram mergeClusters
 #'                               setToFinal transformation
 clusterExperimentWorkflow <- function(se,
@@ -67,7 +67,7 @@ clusterExperimentWorkflow <- function(se,
     colnames(dim.reduce.clustermatrix) <- dim.reduce.cluster.labels
 
     # Make a new overall clusterExperiment object
-    ce <- clusterExperiment(se,
+    ce <- ClusterExperiment(se,
                                     cbind(clusterMatrix(ce),
                                           dim.reduce.clustermatrix),
                                     transformation=transformation(ce))
@@ -79,7 +79,7 @@ clusterExperimentWorkflow <- function(se,
                                          whichClusters = 'all')
     if(runMergeClusters) {
         # Make a dendrogram
-        ce <- makeDendrogram(ce,dimReduce="var",ndims=500,
+        ce <- makeDendrogram(ce, reduceMethod="var", nDims=500,
                                                 whichCluster="combineMany")
 
         # Merge clusters
