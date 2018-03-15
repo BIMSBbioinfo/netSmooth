@@ -32,3 +32,7 @@ list(clusters, proportion.robust)
 Perform robust clustering on dataset, and calculate the proportion of
 samples in robust clusters
 }
+\examples{
+data("smallscRNAseq")
+robustClusters(smallscRNAseq, dimReduceFlavor='pca')
+}

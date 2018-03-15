@@ -16,6 +16,9 @@ setGeneric(
 #'                           pick the algorithm.
 #' @param is.counts    logical: is the data counts
 #' @param ...    arguments passed on to `clusterExperimentWorkflow`
+#' @examples
+#' data("smallscRNAseq")
+#' robustClusters(smallscRNAseq, dimReduceFlavor='pca')
 #' @return list(clusters, proportion.robust)
 #' @export
 setMethod("robustClusters",
