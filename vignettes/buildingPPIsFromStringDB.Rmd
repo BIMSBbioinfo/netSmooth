@@ -18,7 +18,7 @@ vignette: >
 
 # Introduction
 This vignette demonstrates how a Protein-Protein interaction (PPI) graph may be
-constructed from the databse [stringDB][stringdb].
+constructed from the database [stringDB][stringdb].
 
 # Obtaining network data from stringDB
 Other networks can also be used with _netSmooth_. We mostly rely on networks

@@ -30,7 +30,7 @@ The algorithm is a graph based diffusion process on networks. The
 intuition behind the algorithm is that gene networks encoding 
 coexpression patterns may be used to smooth scRNA-seq expression 
 data, since the gene expression values of connected nodes in the 
-network will be predictive of eachother. Protein-protein interaction
+network will be predictive of each other. Protein-protein interaction
 (PPI) networks and coexpression networks are among the networks that
 could be used for such procedure. 
 
@@ -48,7 +48,7 @@ that genes with many edges will affect their neighbors less than
 genes with more specific interactions. The implementation has one 
 free parameter, `alpha`, which controls if the diffusion will be 
 local or will reach further in the graph. Higher the value, the 
-further the difussion will reach. The _netSmooth_ package 
+further the diffusion will reach. The _netSmooth_ package 
 implements strategies to optimize the value of `alpha`.
 
 ```{r netsum,echo=FALSE,fig.cap="Network-smoothing concept"}
@@ -69,7 +69,7 @@ a network and genes-by-samples matrix as input, and performs
 smoothing on genes-by-samples matrix. The network should be 
 organized
 as an adjacency matrix and its row and column names should match
-the rownames of genes-by-samples matrix. 
+the row names of genes-by-samples matrix. 
 
 We will demonstrate the usage of the `netSmooth()` function using
 a subset of human PPI and a subset of single-cell RNA-seq data from
@@ -154,7 +154,7 @@ knitr::kable(
 )
 ```
 
-A cluster assignment of `-1` indicates that the cell could not be placed in a robsut cluster, and has consequently been omitted. We see that the clusters are completely uninformative in the raw data, while the smoothed data at least permitted the `robustClusters` procedure to identify a subset of the 8-cell blastomeres as a separate cluster.
+A cluster assignment of `-1` indicates that the cell could not be placed in a robust cluster, and has consequently been omitted. We see that the clusters are completely uninformative in the raw data, while the smoothed data at least permitted the `robustClusters` procedure to identify a subset of the 8-cell blastomeres as a separate cluster.
 
 # Deciding for the best dimension reduction method for visualization and clustering
 The `robustClusters()` function works by clustering samples in a lower dimension
