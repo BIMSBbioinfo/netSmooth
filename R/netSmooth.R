@@ -56,7 +56,7 @@ setMethod("netSmooth",
         autoAlphaRange=.1*(seq_len(9)),
         autoAlphaDimReduceFlavor='auto',
         is.counts=TRUE,
-        bpparam=BiocParallel::SnowParam(workers = 1, type = "SOCK"),
+        bpparam=BiocParallel::SnowParam(workers = 1),
         ...) {
         autoAlphaMethod <- match.arg(autoAlphaMethod)
         normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
@@ -124,7 +124,7 @@ setMethod("netSmooth",
         autoAlphaRange=.1*(seq_len(9)),
         autoAlphaDimReduceFlavor='auto',
         is.counts=TRUE,
-        bpparam=BiocParallel::SnowParam(workers = 1, type = "SOCK"),
+        bpparam=BiocParallel::SnowParam(workers = 1),
         ...) {
         autoAlphaMethod <- match.arg(autoAlphaMethod)
         normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
