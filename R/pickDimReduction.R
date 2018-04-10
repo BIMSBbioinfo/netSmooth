@@ -22,8 +22,8 @@ setGeneric(
 #' pickDimReduction(x)
 #' @export
 setMethod("pickDimReduction",
-          signature(x='matrix'),
-          function(x, flavors=c('pca', 'tsne'), is.counts=TRUE) {
+    signature(x='matrix'),
+    function(x, flavors=c('pca', 'tsne'), is.counts=TRUE) {
         entropies <- sapply(flavors, function(flavor) {
             calc2DEntropy(dimReduce(x, flavor=flavor, is.counts=is.counts))
         })
@@ -35,17 +35,17 @@ setMethod("pickDimReduction",
 #' @importFrom SummarizedExperiment assay
 #' @rdname pickDimReduction
 setMethod("pickDimReduction",
-          signature(x='SummarizedExperiment'),
-          function(x) pickDimReduction(assay(x)))
+    signature(x='SummarizedExperiment'),
+    function(x) pickDimReduction(assay(x)))
 
 #' @export
 #' @rdname pickDimReduction
 setMethod("pickDimReduction",
-          signature(x='Matrix'),
-          function(x, flavors=c('pca', 'tsne'), is.counts=TRUE) {
-              entropies <- sapply(flavors, function(flavor) {
-                  calc2DEntropy(dimReduce(x, flavor=flavor, is.counts=is.counts))
-              })
-              return(names(which.max(entropies)))
-          }
+    signature(x='Matrix'),
+    function(x, flavors=c('pca', 'tsne'), is.counts=TRUE) {
+        entropies <- sapply(flavors, function(flavor) {
+            calc2DEntropy(dimReduce(x, flavor=flavor, is.counts=is.counts))
+        })
+        return(names(which.max(entropies)))
+    }
 )

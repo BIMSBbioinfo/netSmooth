@@ -13,11 +13,11 @@
 #' @return network-smoothed gene expression
 #' @keywords internal
 randomWalkByMatrixInv <- function(f0, adjMatrix, alpha,
-                                  normalizeAjdMatrix=c('rows','columns')) {
+    normalizeAjdMatrix=c('rows','columns')) {
     normalizeAjdMatrix <- match.arg(normalizeAjdMatrix)
     if(normalizeAjdMatrix=='rows') Anorm <- l1NormalizeRows(adjMatrix)
     else if(normalizeAjdMatrix=='columns') Anorm <-
-            l1NormalizeColumns(adjMatrix)
+        l1NormalizeColumns(adjMatrix)
     eye <- diag(dim(adjMatrix)[1])
     K <- (1 - alpha) * solve(eye - alpha * Anorm)
     return(K %*% f0)

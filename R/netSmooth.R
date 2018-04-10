@@ -49,15 +49,15 @@ setGeneric(
 #' @aliases netSmooth
 #' @importFrom SummarizedExperiment colData
 setMethod("netSmooth",
-          signature(x='matrix'),
-          function(x, adjMatrix, alpha='auto',
-                      normalizeAdjMatrix=c('rows','columns'),
-                      autoAlphaMethod=c('robustness', 'entropy'),
-                      autoAlphaRange=.1*(seq_len(9)),
-                      autoAlphaDimReduceFlavor='auto',
-                      is.counts=TRUE,
-                      bpparam=BiocParallel::SnowParam(workers = 1, type = "SOCK"),
-                      ...) {
+    signature(x='matrix'),
+    function(x, adjMatrix, alpha='auto',
+        normalizeAdjMatrix=c('rows','columns'),
+        autoAlphaMethod=c('robustness', 'entropy'),
+        autoAlphaRange=.1*(seq_len(9)),
+        autoAlphaDimReduceFlavor='auto',
+        is.counts=TRUE,
+        bpparam=BiocParallel::SnowParam(workers = 1, type = "SOCK"),
+        ...) {
         autoAlphaMethod <- match.arg(autoAlphaMethod)
         normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
 
@@ -76,25 +76,26 @@ setMethod("netSmooth",
                 autoAlphaDimReduceFlavor <-
                     pickDimReduction(x, is.counts=is.counts)
                 message("Picked dimReduceFlavor: ",
-                           autoAlphaDimReduceFlavor,
-                           "\n")
+                    autoAlphaDimReduceFlavor, "\n")
             }
 
-            smoothed.expression.matrices <- BiocParallel::bplapply(autoAlphaRange,
-                                                     function(a) {
-                smoothAndRecombine(x, adjMatrix, a,
-                                   normalizeAdjMatrix=normalizeAdjMatrix)
-            })
+            smoothed.expression.matrices <- BiocParallel::bplapply(
+                autoAlphaRange,
+                function(a) {
+                    smoothAndRecombine(x, adjMatrix, a,
+                        normalizeAdjMatrix=normalizeAdjMatrix)
+                }
+            )
 
-            scores <- unlist(BiocParallel::bplapply(seq_len(length(smoothed.expression.matrices)),
-                                      function(i) {
-                                          x.sm <-
-                                              smoothed.expression.matrices[[i]]
-                  scoreSmoothing(x=x.sm,
-                                 method=autoAlphaMethod,
-                                 is.counts=is.counts,
-                                 dimReduceFlavor=autoAlphaDimReduceFlavor, ...)
-                                      }))
+            scores <- unlist(BiocParallel::bplapply(
+                seq_len(length(smoothed.expression.matrices)),
+                function(i) {
+                    x.sm <- smoothed.expression.matrices[[i]]
+                    scoreSmoothing(x=x.sm,
+                        method=autoAlphaMethod,
+                        is.counts=is.counts,
+                        dimReduceFlavor=autoAlphaDimReduceFlavor, ...)
+                }))
             x.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
             chosen.a <- autoAlphaRange[which.max(scores)]
             message("Picked alpha=",chosen.a,"\n")
@@ -106,66 +107,68 @@ setMethod("netSmooth",
 #' @rdname netSmooth
 #' @export
 setMethod("netSmooth",
-          signature(x='SummarizedExperiment'),
-          function(x, ...) {
-             matrixdata <- assay(x)
-             ret <- netSmooth(matrixdata, ...)
-             return(SummarizedExperiment(ret, colData=colData(x)))
-          })
+    signature(x='SummarizedExperiment'),
+    function(x, ...) {
+        matrixdata <- assay(x)
+        ret <- netSmooth(matrixdata, ...)
+        return(SummarizedExperiment(ret, colData=colData(x)))
+    })
 
 #' @rdname netSmooth
 #' @export
 setMethod("netSmooth",
-          signature(x='Matrix'),
-          function(x, adjMatrix, alpha='auto',
-                   normalizeAdjMatrix=c('rows','columns'),
-                   autoAlphaMethod=c('robustness', 'entropy'),
-                   autoAlphaRange=.1*(seq_len(9)),
-                   autoAlphaDimReduceFlavor='auto',
-                   is.counts=TRUE,
-                   bpparam=BiocParallel::SnowParam(workers = 1, type = "SOCK"),
-                   ...) {
-              autoAlphaMethod <- match.arg(autoAlphaMethod)
-              normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
+    signature(x='Matrix'),
+    function(x, adjMatrix, alpha='auto',
+        normalizeAdjMatrix=c('rows','columns'),
+        autoAlphaMethod=c('robustness', 'entropy'),
+        autoAlphaRange=.1*(seq_len(9)),
+        autoAlphaDimReduceFlavor='auto',
+        is.counts=TRUE,
+        bpparam=BiocParallel::SnowParam(workers = 1, type = "SOCK"),
+        ...) {
+        autoAlphaMethod <- match.arg(autoAlphaMethod)
+        normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
 
-              stopifnot(is(adjMatrix, 'matrix') || is(adjMatrix, 'sparseMatrix'))
-              stopifnot((is.numeric(alpha) && (alpha > 0 && alpha < 1)) || alpha == "auto")
+        stopifnot(is(adjMatrix, 'matrix') || is(adjMatrix, 'sparseMatrix'))
+        stopifnot((is.numeric(alpha) && (alpha > 0 && alpha < 1)) || alpha == "auto")
 
-              if(is.numeric(alpha)) {
-                  message("Using given alpha: ", alpha,"\n")
-                  if(alpha<0 | alpha > 1) {
-                      stop('alpha must be between 0 and 1')
-                  }
-                  x.smoothed <- smoothAndRecombine(x, adjMatrix, alpha,
-                                                   normalizeAdjMatrix=normalizeAdjMatrix)
-              } else if(alpha=='auto') {
-                  if(autoAlphaDimReduceFlavor=='auto') {
-                      autoAlphaDimReduceFlavor <-
-                          pickDimReduction(x, is.counts=is.counts)
-                      message("Picked dimReduceFlavor: ",
-                                 autoAlphaDimReduceFlavor,
-                                 "\n")
-                  }
+        if(is.numeric(alpha)) {
+            message("Using given alpha: ", alpha,"\n")
+            if(alpha<0 | alpha > 1) {
+                stop('alpha must be between 0 and 1')
+            }
+            x.smoothed <- smoothAndRecombine(x, adjMatrix, alpha,
+            normalizeAdjMatrix=normalizeAdjMatrix)
+        } else if(alpha=='auto') {
+            if(autoAlphaDimReduceFlavor=='auto') {
+                autoAlphaDimReduceFlavor <- pickDimReduction(x,
+                    is.counts=is.counts)
+                message("Picked dimReduceFlavor: ", autoAlphaDimReduceFlavor,
+                    "\n")
+            }
 
-                  smoothed.expression.matrices <- BiocParallel::bplapply(autoAlphaRange,
-                                                           function(a) {
-                                                               smoothAndRecombine(x, adjMatrix, a,
-                                                                                  normalizeAdjMatrix=normalizeAdjMatrix)
-                                                           })
+            smoothed.expression.matrices <- BiocParallel::bplapply(
+                autoAlphaRange,
+                function(a) {
+                    smoothAndRecombine(x, adjMatrix, a,
+                        normalizeAdjMatrix=normalizeAdjMatrix)
+                }
+            )
 
-                  scores <- unlist(BiocParallel::bplapply(seq_len(length(smoothed.expression.matrices)),
-                                            function(i) {
-                                                x.sm <-
-                                                    smoothed.expression.matrices[[i]]
-                                                scoreSmoothing(x=x.sm,
-                                                               method=autoAlphaMethod,
-                                                               is.counts=is.counts,
-                                                               dimReduceFlavor=autoAlphaDimReduceFlavor, ...)
-                                            }))
-                  x.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
-                  chosen.a <- autoAlphaRange[which.max(scores)]
-                  message("Picked alpha=",chosen.a,"\n")
-              } else stop("unsupprted alpha value: ", class(alpha))
-              return(x.smoothed)
-          }
+            scores <- unlist(BiocParallel::bplapply(
+                seq_len(length(smoothed.expression.matrices)),
+                function(i) {
+                    x.sm <- smoothed.expression.matrices[[i]]
+                    scoreSmoothing(x=x.sm,
+                        method=autoAlphaMethod,
+                        is.counts=is.counts,
+                        dimReduceFlavor=autoAlphaDimReduceFlavor, ...)
+                }
+            ))
+            x.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
+            chosen.a <- autoAlphaRange[which.max(scores)]
+            message("Picked alpha=",chosen.a,"\n")
+        } else stop("unsupprted alpha value: ", class(alpha))
+        return(x.smoothed)
+    }
 )

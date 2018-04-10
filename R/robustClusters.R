@@ -22,19 +22,19 @@ setGeneric(
 #' @return list(clusters, proportion.robust)
 #' @export
 setMethod("robustClusters",
-          signature(x='SummarizedExperiment'),
-          function(x, dimReduceFlavor='auto', is.counts=TRUE, ...) {
+    signature(x='SummarizedExperiment'),
+    function(x, dimReduceFlavor='auto', is.counts=TRUE, ...) {
         if(any(is(assay(x))=='Matrix')){
             stop("robust clustering does not currently support sparse matrices.")
         }
         if(dimReduceFlavor=='auto') {
             dimReduceFlavor <- pickDimReduction(assay(x),
-                                                flavors=c('pca', 'tsne'),
-                                                is.counts=is.counts)
+                flavors=c('pca', 'tsne'),
+                is.counts=is.counts)
             message("Picked dimReduceFlavor: ",dimReduceFlavor,"\n")
         }
         yhat <- clusterExperimentWorkflow(x, is.counts=is.counts,
-                                          dimReduceFlavor=dimReduceFlavor, ...)
+            dimReduceFlavor=dimReduceFlavor, ...)
         proportion.robust <- mean(yhat!=-1)
         return(list(clusters=yhat, proportion.robust=proportion.robust))
     }
@@ -44,9 +44,9 @@ setMethod("robustClusters",
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @rdname robustClusters
 setMethod("robustClusters",
-          signature(x='matrix'),
-          function(x, ...) {
-              robustClusters(SummarizedExperiment(x), ...)
-  }
+    signature(x='matrix'),
+    function(x, ...) {
+        robustClusters(SummarizedExperiment(x), ...)
+    }
 )
 

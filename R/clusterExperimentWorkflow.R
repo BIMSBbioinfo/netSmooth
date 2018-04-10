@@ -18,24 +18,24 @@
 #'                               setToFinal transformation
 #' @keywords internal
 clusterExperimentWorkflow <- function(se,
-                                      dimReduceFlavor=c('pca', 'tsne', 'dm'),
-                                      cluster.ks=5:10,
-                                      cluster.function='pam',
-                                      nVarDims=c(100,500,1000),
-                                      combineManyProportion=.7,
-                                      combineManyMinSize=4,
-                                      runMergeClusters=TRUE,
-                                      is.counts=TRUE,
-                                      random.seed=1) {
+    dimReduceFlavor=c('pca', 'tsne', 'dm'),
+    cluster.ks=5:10,
+    cluster.function='pam',
+    nVarDims=c(100,500,1000),
+    combineManyProportion=.7,
+    combineManyMinSize=4,
+    runMergeClusters=TRUE,
+    is.counts=TRUE,
+    random.seed=1) {
     dimReduceFlavor <- match.arg(dimReduceFlavor)
     # Run variable genes clusterings
     nVarDims <- nVarDims[nVarDims < dim(se)[1]]
     ce <- clusterMany(se, clusterFunction=cluster.function,
-                                         ks=cluster.ks,
-                                         isCount=is.counts, dimReduce=c("var"), nVarDims=nVarDims,
-                                         run=TRUE,
-                                         subsampling=FALSE,
-                                         random.seed=random.seed)
+        ks=cluster.ks,
+        isCount=is.counts, dimReduce=c("var"), nVarDims=nVarDims,
+        run=TRUE,
+        subsampling=FALSE,
+        random.seed=random.seed)
 
     # Run dim reduce clusterings
     if(dimReduceFlavor=='pca') dim.reduce.ks <- c(5,15,50)
@@ -45,23 +45,23 @@ clusterExperimentWorkflow <- function(se,
     dim.reduce.ks <- dim.reduce.ks[dim.reduce.ks <= dim(se)[2]]
 
     dim.reduce.clustermatrix <- matrix(rep(-1, dim(ce)[2] * length(cluster.ks) *
-                                               length(dim.reduce.ks)),
-                                       ncol=length(cluster.ks)*
-                                           length(dim.reduce.ks))
+        length(dim.reduce.ks)),
+        ncol=length(cluster.ks)*
+        length(dim.reduce.ks))
     dim.reduce.cluster.labels <- rep(NA,
-                                     length(dim.reduce.ks) * length(cluster.ks))
+        length(dim.reduce.ks) * length(cluster.ks))
 
     i <- 1
     for(dim.reduce.k in dim.reduce.ks) {
         x <- dimReduce(assay(se), flavor=dimReduceFlavor, k=dim.reduce.k,
-                       is.counts=is.counts)
+            is.counts=is.counts)
         for(cluster.k in cluster.ks) {
             dim.reduce.cluster.labels[i] <- paste0(dimReduceFlavor,
-                                                   dim.reduce.k,
-                                                   cluster.function,
-                                                   cluster.k)
+                dim.reduce.k,
+                cluster.function,
+                cluster.k)
             dim.reduce.clustermatrix[,i] <- clusterOne(x, cluster.function,
-                                                       cluster.k)
+                cluster.k)
             i <- i+1
         }
     }
@@ -69,42 +69,41 @@ clusterExperimentWorkflow <- function(se,
 
     # Make a new overall clusterExperiment object
     ce <- ClusterExperiment(se,
-                                    cbind(clusterMatrix(ce),
-                                          dim.reduce.clustermatrix),
-                                    transformation=transformation(ce))
+        cbind(clusterMatrix(ce),
+        dim.reduce.clustermatrix),
+        transformation=transformation(ce))
 
     # Run a few combinations of the manys
     ce <- combineMany(ce, proportion=combineManyProportion,
-                                         minSize=combineManyMinSize,
-                                         clusterLabel="combineMany",
-                                         whichClusters = 'all')
+        minSize=combineManyMinSize,
+        clusterLabel="combineMany",
+        whichClusters = 'all')
     if(runMergeClusters) {
         # Make a dendrogram
         ce <- makeDendrogram(ce, reduceMethod="var", nDims=500,
-                                                whichCluster="combineMany")
+            whichCluster="combineMany")
 
         # Merge clusters
         ce <- mergeClusters(ce, cutoff=0.05,
-                                               mergeMethod="adjP",
-                                               plotInfo="none",
-                                               plot=FALSE,
-                                               showWarnings=FALSE,
-                                               clusterLabel="mergeClusters")
+            mergeMethod="adjP",
+            plotInfo="none",
+            plot=FALSE,
+            showWarnings=FALSE,
+            clusterLabel="mergeClusters")
 
         # Set merged to final
         ce <- setToFinal(ce,
-                                            whichCluster="mergeClusters",
-                                            clusterLabel="Final Clustering")
+            whichCluster="mergeClusters",
+            clusterLabel="Final Clustering")
     }
     else {
         ce <- setToFinal(ce,
-                                            whichCluster='combineMany',
-                                            clusterLabel='Final Clustering')
+            whichCluster='combineMany',
+            clusterLabel='Final Clustering')
     }
 
     # Return cluster assignments
-    final.ix <- which(colnames(clusterMatrix(ce))==
-                          'Final Clustering')
+    final.ix <- which(colnames(clusterMatrix(ce))== 'Final Clustering')
     yhat <- clusterMatrix(ce)[,final.ix]
     names(yhat) <- colnames(se)
     return(yhat)

@@ -25,11 +25,11 @@
 #'          not present in smoothing network will retain original values.
 #' @keywords internal
 smoothAndRecombine <- function(gene_expression, adj_matrix, alpha,
-                               smoothing.function=randomWalkBySolve,
-                               normalizeAdjMatrix=c('rows','columns')) {
+    smoothing.function=randomWalkBySolve,
+    normalizeAdjMatrix=c('rows','columns')) {
     normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
     gene_expression_in_A_space <- projectOnNetwork(gene_expression,
-                                                   rownames(adj_matrix))
+        rownames(adj_matrix))
     gene_expression_in_A_space_smooth <- smoothing.function(
         gene_expression_in_A_space, adj_matrix, alpha, normalizeAdjMatrix)
     gene_expression_smooth <- projectFromNetworkRecombine(

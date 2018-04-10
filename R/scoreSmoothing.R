@@ -7,7 +7,7 @@
 #' @return the score
 #' @keywords internal
 scoreSmoothing <- function(x, method=c('entropy', 'robustness'),
-                           is.counts=TRUE, ...) {
+    is.counts=TRUE, ...) {
     if(class(x)=='matrix' || any(is(x)=='Matrix')) {
         x <- x
         se <- SummarizedExperiment::SummarizedExperiment(x)
@@ -19,11 +19,11 @@ scoreSmoothing <- function(x, method=c('entropy', 'robustness'),
     method <- match.arg(method)
     if(method=='entropy') {
         score <- calc2DEntropy(dimReduce(x,
-                                         flavor='pca', is.counts=is.counts))
+            flavor='pca', is.counts=is.counts))
     }
     else if(method=='robustness') {
         score <- robustClusters(se, runMergeClusters=FALSE,
-                                ...)$proportion.robust
+            ...)$proportion.robust
     }
     return(score)
 }
