@@ -13,6 +13,10 @@ mouse.ppi
 }
 \description{
 An adjacency matrix of the 10 percent highest confidence interactions
-between mouse proteins on STRINGdb
+between mouse proteins on STRINGdb.
+}
+\details{
+See the script in `system.file(package="netSmooth", "data-raw", "make_ppi_from_string.R")`
+for full details of how this object was made.
 }
 \keyword{datasets}

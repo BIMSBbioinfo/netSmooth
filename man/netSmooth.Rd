@@ -12,7 +12,7 @@
   normalizeAdjMatrix = c("rows", "columns"),
   autoAlphaMethod = c("robustness", "entropy"), autoAlphaRange = 0.1 *
   (seq_len(9)), autoAlphaDimReduceFlavor = "auto", is.counts = TRUE,
-  bpparam = BiocParallel::SnowParam(workers = 1, type = "SOCK"), ...)
+  bpparam = BiocParallel::SnowParam(workers = 1), ...)
 
 \S4method{netSmooth}{SummarizedExperiment}(x, ...)
 
@@ -20,7 +20,7 @@
   normalizeAdjMatrix = c("rows", "columns"),
   autoAlphaMethod = c("robustness", "entropy"), autoAlphaRange = 0.1 *
   (seq_len(9)), autoAlphaDimReduceFlavor = "auto", is.counts = TRUE,
-  bpparam = BiocParallel::SnowParam(workers = 1, type = "SOCK"), ...)
+  bpparam = BiocParallel::SnowParam(workers = 1), ...)
 }
 \arguments{
 \item{x}{matrix or SummarizedExperiment}

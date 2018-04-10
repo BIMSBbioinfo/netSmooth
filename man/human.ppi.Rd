@@ -13,6 +13,10 @@ human.ppi
 }
 \description{
 An adjacency matrix of the 10 percent highest confidence interactions
-between human proteins on STRINGdb
+between human proteins on STRINGdb.
+}
+\details{
+See the script in `system.file(package="netSmooth", "data-raw", "make_ppi_from_string.R")`
+for full details of how this object was made.
 }
 \keyword{datasets}
