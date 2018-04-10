@@ -16,6 +16,7 @@
 #' @importFrom clusterExperiment clusterMany clusterMatrix ClusterExperiment
 #'                               combineMany makeDendrogram mergeClusters
 #'                               setToFinal transformation
+#' @keywords internal
 clusterExperimentWorkflow <- function(se,
                                       dimReduceFlavor=c('pca', 'tsne', 'dm'),
                                       cluster.ks=5:10,

@@ -38,3 +38,4 @@ cluster assignments
 \description{
 Performs clustering workflow using `clusterExperiment` functions
 }
+\keyword{internal}
