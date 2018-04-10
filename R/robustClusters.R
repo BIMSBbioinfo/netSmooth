@@ -31,7 +31,7 @@ setMethod("robustClusters",
             dimReduceFlavor <- pickDimReduction(assay(x),
                                                 flavors=c('pca', 'tsne'),
                                                 is.counts=is.counts)
-            cat(paste0("Picked dimReduceFlavor: ",dimReduceFlavor,"\n"))
+            message("Picked dimReduceFlavor: ",dimReduceFlavor,"\n")
         }
         yhat <- clusterExperimentWorkflow(x, is.counts=is.counts,
                                           dimReduceFlavor=dimReduceFlavor, ...)
