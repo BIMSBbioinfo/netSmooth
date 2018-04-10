@@ -30,7 +30,8 @@ setGeneric(
 #'                                    used in robust clustering (if
 #'                                    `autoAlphamethod='robustness'`)
 #' @param is.counts    logical: is the assay count data
-#' @param numcores    number of parallel processes to use for auto alpha choice
+#' @param bpparam    instance of SnowParam, for parallel computation with the
+#'                   `alpha='auto'` option. See the BiocParallel manual.
 #' @param ...    arguments passed on to `robustClusters` if using the robustness
 #'               criterion for optimizing alpha
 #' @return network-smoothed gene expression matrix or SummarizedExperiment
@@ -55,7 +56,7 @@ setMethod("netSmooth",
                       autoAlphaRange=.1*(seq_len(9)),
                       autoAlphaDimReduceFlavor='auto',
                       is.counts=TRUE,
-                      numcores=1,
+                      bpparam=BiocParallel::SnowParam(workers = 1, type = "SOCK"),
                       ...) {
         autoAlphaMethod <- match.arg(autoAlphaMethod)
         normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
@@ -79,14 +80,13 @@ setMethod("netSmooth",
                            "\n")
             }
 
-            smoothed.expression.matrices <- mclapply(autoAlphaRange,
+            smoothed.expression.matrices <- BiocParallel::bplapply(autoAlphaRange,
                                                      function(a) {
                 smoothAndRecombine(x, adjMatrix, a,
                                    normalizeAdjMatrix=normalizeAdjMatrix)
-            },
-            mc.cores=numcores)
+            })
 
-            scores <- unlist(mclapply(seq_len(length(smoothed.expression.matrices)),
+            scores <- unlist(BiocParallel::bplapply(seq_len(length(smoothed.expression.matrices)),
                                       function(i) {
                                           x.sm <-
                                               smoothed.expression.matrices[[i]]
@@ -94,8 +94,7 @@ setMethod("netSmooth",
                                  method=autoAlphaMethod,
                                  is.counts=is.counts,
                                  dimReduceFlavor=autoAlphaDimReduceFlavor, ...)
-                                      },
-                                      mc.cores=numcores))
+                                      }))
             x.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
             chosen.a <- autoAlphaRange[which.max(scores)]
             message("Picked alpha=",chosen.a,"\n")
@@ -124,7 +123,7 @@ setMethod("netSmooth",
                    autoAlphaRange=.1*(seq_len(9)),
                    autoAlphaDimReduceFlavor='auto',
                    is.counts=TRUE,
-                   numcores=1,
+                   bpparam=BiocParallel::SnowParam(workers = 1, type = "SOCK"),
                    ...) {
               autoAlphaMethod <- match.arg(autoAlphaMethod)
               normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
@@ -148,14 +147,13 @@ setMethod("netSmooth",
                                  "\n")
                   }
 
-                  smoothed.expression.matrices <- mclapply(autoAlphaRange,
+                  smoothed.expression.matrices <- BiocParallel::bplapply(autoAlphaRange,
                                                            function(a) {
                                                                smoothAndRecombine(x, adjMatrix, a,
                                                                                   normalizeAdjMatrix=normalizeAdjMatrix)
-                                                           },
-                                                           mc.cores=numcores)
+                                                           })
 
-                  scores <- unlist(mclapply(seq_len(length(smoothed.expression.matrices)),
+                  scores <- unlist(BiocParallel::bplapply(seq_len(length(smoothed.expression.matrices)),
                                             function(i) {
                                                 x.sm <-
                                                     smoothed.expression.matrices[[i]]
@@ -163,8 +161,7 @@ setMethod("netSmooth",
                                                                method=autoAlphaMethod,
                                                                is.counts=is.counts,
                                                                dimReduceFlavor=autoAlphaDimReduceFlavor, ...)
-                                            },
-                                            mc.cores=numcores))
+                                            }))
                   x.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
                   chosen.a <- autoAlphaRange[which.max(scores)]
                   message("Picked alpha=",chosen.a,"\n")

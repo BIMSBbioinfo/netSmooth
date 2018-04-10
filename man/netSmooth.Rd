@@ -12,7 +12,7 @@
   normalizeAdjMatrix = c("rows", "columns"),
   autoAlphaMethod = c("robustness", "entropy"), autoAlphaRange = 0.1 *
   (seq_len(9)), autoAlphaDimReduceFlavor = "auto", is.counts = TRUE,
-  numcores = 1, ...)
+  bpparam = BiocParallel::SnowParam(workers = 1, type = "SOCK"), ...)
 
 \S4method{netSmooth}{SummarizedExperiment}(x, ...)
 
@@ -20,7 +20,7 @@
   normalizeAdjMatrix = c("rows", "columns"),
   autoAlphaMethod = c("robustness", "entropy"), autoAlphaRange = 0.1 *
   (seq_len(9)), autoAlphaDimReduceFlavor = "auto", is.counts = TRUE,
-  numcores = 1, ...)
+  bpparam = BiocParallel::SnowParam(workers = 1, type = "SOCK"), ...)
 }
 \arguments{
 \item{x}{matrix or SummarizedExperiment}
@@ -55,7 +55,8 @@ used in robust clustering (if
 
 \item{is.counts}{logical: is the assay count data}
 
-\item{numcores}{number of parallel processes to use for auto alpha choice}
+\item{bpparam}{instance of SnowParam, for parallel computation with the
+`alpha='auto'` option. See the BiocParallel manual.}
 
 \item{...}{arguments passed on to `robustClusters` if using the robustness
 criterion for optimizing alpha}
