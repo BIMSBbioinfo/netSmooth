@@ -60,6 +60,9 @@ setMethod("netSmooth",
         autoAlphaMethod <- match.arg(autoAlphaMethod)
         normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
 
+        stopifnot(is(adjMatrix, 'matrix') || is(adjMatrix, 'sparseMatrix'))
+        stopifnot((is.numeric(alpha) && (alpha > 0 && alpha < 1)) || alpha == "auto")
+
         if(is.numeric(alpha)) {
             message("Using given alpha: ", alpha,"\n")
             if(alpha<0 | alpha > 1) {
@@ -125,6 +128,9 @@ setMethod("netSmooth",
                    ...) {
               autoAlphaMethod <- match.arg(autoAlphaMethod)
               normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
+
+              stopifnot(is(adjMatrix, 'matrix') || is(adjMatrix, 'sparseMatrix'))
+              stopifnot((is.numeric(alpha) && (alpha > 0 && alpha < 1)) || alpha == "auto")
 
               if(is.numeric(alpha)) {
                   message("Using given alpha: ", alpha,"\n")
