@@ -19,7 +19,7 @@ randomWalkByIterations <- function(f0, adjMatrix, alpha,
     else if(normalizeAjdMatrix=='columns') Anorm <-
         l1NormalizeColumns(adjMatrix)
     f <- f0
-    for(i in 1:max.iter) {
+    for(i in seq_len(max.iter)) {
         f_next <- alpha * Anorm %*% f + (1-alpha)*f0
         e <- norm(f_next - f)
         if(e<tol) break
