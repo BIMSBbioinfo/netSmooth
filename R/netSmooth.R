@@ -30,7 +30,7 @@ setGeneric(
 #'                                    used in robust clustering (if
 #'                                    `autoAlphamethod='robustness'`)
 #' @param is.counts    logical: is the assay count data
-#' @param bpparam    instance of SnowParam, for parallel computation with the
+#' @param bpparam    instance of bpparam, for parallel computation with the
 #'                   `alpha='auto'` option. See the BiocParallel manual.
 #' @param ...    arguments passed on to `robustClusters` if using the robustness
 #'               criterion for optimizing alpha
@@ -56,7 +56,7 @@ setMethod("netSmooth",
         autoAlphaRange=.1*(seq_len(9)),
         autoAlphaDimReduceFlavor='auto',
         is.counts=TRUE,
-        bpparam=BiocParallel::SnowParam(workers = 1),
+        bpparam=BiocParallel::SerialParam(),
         ...) {
         autoAlphaMethod <- match.arg(autoAlphaMethod)
         normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
@@ -79,13 +79,24 @@ setMethod("netSmooth",
                     autoAlphaDimReduceFlavor, "\n")
             }
 
+            if (!BiocParallel::bpisup(bpparam)) {
+                bpstart(bpparam)
+                on.exit(bpstop(bpparam), add=TRUE)
+            }
+
             smoothed.expression.matrices <- BiocParallel::bplapply(
                 autoAlphaRange,
                 function(a) {
                     smoothAndRecombine(x, adjMatrix, a,
                         normalizeAdjMatrix=normalizeAdjMatrix)
-                }
+                },
+                BPPARAM = bpparam
             )
+
+            if (!BiocParallel::bpisup(bpparam)) {
+                bpstart(bpparam)
+                on.exit(bpstop(bpparam), add=TRUE)
+            }
 
             scores <- unlist(BiocParallel::bplapply(
                 seq_len(length(smoothed.expression.matrices)),
@@ -124,7 +135,7 @@ setMethod("netSmooth",
         autoAlphaRange=.1*(seq_len(9)),
         autoAlphaDimReduceFlavor='auto',
         is.counts=TRUE,
-        bpparam=BiocParallel::SnowParam(workers = 1),
+        bpparam=BiocParallel::SerialParam(),
         ...) {
         autoAlphaMethod <- match.arg(autoAlphaMethod)
         normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
@@ -152,7 +163,8 @@ setMethod("netSmooth",
                 function(a) {
                     smoothAndRecombine(x, adjMatrix, a,
                         normalizeAdjMatrix=normalizeAdjMatrix)
-                }
+                },
+                BPPARAM = bpparam
             )
 
             scores <- unlist(BiocParallel::bplapply(
