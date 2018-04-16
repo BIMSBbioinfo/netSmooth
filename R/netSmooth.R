@@ -80,8 +80,8 @@ setMethod("netSmooth",
             }
 
             if (!BiocParallel::bpisup(bpparam)) {
-                bpstart(bpparam)
-                on.exit(bpstop(bpparam), add=TRUE)
+                BiocParallel::bpstart(bpparam)
+                on.exit(BiocParallel::bpstop(bpparam), add=TRUE)
             }
 
             smoothed.expression.matrices <- BiocParallel::bplapply(
@@ -94,8 +94,8 @@ setMethod("netSmooth",
             )
 
             if (!BiocParallel::bpisup(bpparam)) {
-                bpstart(bpparam)
-                on.exit(bpstop(bpparam), add=TRUE)
+                BiocParallel::bpstart(bpparam)
+                on.exit(BiocParallel::bpstop(bpparam), add=TRUE)
             }
 
             scores <- unlist(BiocParallel::bplapply(

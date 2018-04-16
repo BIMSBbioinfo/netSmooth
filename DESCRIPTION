@@ -36,6 +36,7 @@ Suggests: knitr,
     ggplot2,
     BiocStyle, 
     knitr, 
-    rmarkdown
+    rmarkdown,
+    BiocParallel
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
