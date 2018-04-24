@@ -1,7 +1,7 @@
 Package: netSmooth
 Type: Package
 Title: Network smoothing for scRNAseq
-Version: 0.99.9
+Version: 0.99.10
 Authors@R: c(person("Jonathan", "Ronen", role = c("aut", "cre"),
                      email = "yablee@gmail.com"),
               person("Altuna", "Akalin", role = c("aut")))
