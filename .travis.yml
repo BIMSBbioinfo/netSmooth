@@ -23,7 +23,6 @@ r_binary_packages:
   - memoise
   - deoptimr
   - iterators
-  - robustbase
   - dichromat
   - munsell
   - labeling
@@ -39,6 +38,7 @@ r_binary_packages:
   - reshape2
   - rjson
 r_packages:
+  - robustbase
   - bitops
   - plyr
   - scales
