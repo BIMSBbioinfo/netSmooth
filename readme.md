@@ -6,7 +6,7 @@
 ---------
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1119064.svg)](https://doi.org/10.5281/zenodo.1119064)
-[![Build Status](https://travis-ci.org/BIMSBbioinfo/netSmooth.svg?branch=master)](https://travis-ci.org/BIMSBbioinfo/netSmooth) [![codecov](https://codecov.io/gh/BIMSBbioinfo/netSmooth/branch/master/graph/badge.svg)](https://codecov.io/gh/BIMSBbioinfo/netSmooth)
+[![Build Status](https://travis-ci.org/BIMSBbioinfo/netSmooth.svg?branch=master)](https://travis-ci.org/BIMSBbioinfo/netSmooth) [![codecov](https://codecov.io/gh/BIMSBbioinfo/netSmooth/branch/master/graph/badge.svg)](https://codecov.io/gh/BIMSBbioinfo/netSmooth) [![BioC_years](http://www.bioconductor.org/shields/years-in-bioc/netSmooth.svg)](http://www.bioconductor.org/packages/release/bioc/html/netSmooth.html)
 
 **netSmooth: A Network smoothing based method for single cell RNA-seq**
 -----
@@ -18,7 +18,16 @@ The algorithm uses a network-diffusion based approach which takes in a network (
 expression values in the matrix are smoothed using the interaction information in the network. The network-smoothing parameter is 
 optimized using a robust clustering approach.
 
+For a detailed exposition, check out [our paper on F1000Research](https://f1000research.com/articles/7-8/v2).
+
 ### Installation
+
+netSmooth is available via Bioconductor:
+
+	source("http://bioconductor.org/biocLite.R")
+	biocLite("netSmooth")
+
+Alternatively, using `devtools`:
 
 	library(devtools)
 	install_github("BIMSBbioinfo/netSmooth")
@@ -27,8 +36,10 @@ optimized using a robust clustering approach.
 For detailed usage information see  [the vignette](http://htmlpreview.github.io/?https://github.com/BIMSBbioinfo/netSmooth/blob/master/vignettes/netSmoothIntro.html). In addition,
 R package has full function documentation with examples. 
 
-### How to cite 
-Ronen J and Akalin A. netSmooth: Network-smoothing based imputation for single cell RNA-seq [version 2; referees: 1 approved]. F1000Research 2018, 7:8 (doi: 10.12688/f1000research.13511.2)
+### How to cite
+Please cite the netSmooth paper:
+
+> Ronen J and Akalin A. netSmooth: Network-smoothing based imputation for single cell RNA-seq [version 2; referees: 2 approved]. F1000Research 2018, 7:8 (doi: 10.12688/f1000research.13511.2)
 
 ### License
 
