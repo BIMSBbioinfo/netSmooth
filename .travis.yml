@@ -27,7 +27,6 @@ r_binary_packages:
   - dichromat
   - munsell
   - labeling
-  - bitops
   - dbi
   - rsqlite
   - foreach
@@ -40,6 +39,7 @@ r_binary_packages:
   - reshape2
   - rjson
 r_packages:
+  - bitops
   - plyr
   - scales
   - RCurl
