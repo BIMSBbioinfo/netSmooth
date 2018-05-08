@@ -10,6 +10,7 @@ bioc_packages:
   - scater
   - SingleCellExperiment
   - SummarizedExperiment
+  - ggplot2
 sudo: required
 r_binary_packages:
   - reshape
@@ -36,7 +37,6 @@ r_binary_packages:
   - hdf5
   - rcolorbrewer
   - stringr
-  - ggplot2
   - plyr
   - reshape2
   - rjson
