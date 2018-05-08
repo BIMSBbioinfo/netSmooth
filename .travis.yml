@@ -42,13 +42,13 @@ r_binary_packages:
   - rjson
 r_packages:
   - kernlab
-  - matrixstats
+  - matrixStats
   - ape
-  - gridextra
+  - gridExtra
   - httpuv
   - covr
   - modeltools
-  - doparallel
+  - doParallel
   - ade4
   - stringi
   - beeswarm
