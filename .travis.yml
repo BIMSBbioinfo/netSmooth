@@ -46,7 +46,7 @@ r_binary_packages:
   - reshape2
   - rjson
 r_packages:
-  - xml
+  - XML
   - kernlab
   - matrixStats
   - ape
