@@ -36,8 +36,8 @@ r_binary_packages:
   - rcolorbrewer
   - stringr
   - reshape2
-  - rjson
 r_packages:
+  - rjson
   - robustbase
   - bitops
   - plyr
