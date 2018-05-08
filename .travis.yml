@@ -6,11 +6,17 @@ r_build_args: --no-build-vignettes --no-manual --no-resave-data
 r_check_args: --no-build-vignettes --no-manual
 
 bioc_packages:
-  - clusterExperiment
-  - scater
-  - SingleCellExperiment
+  - NMF
   - SummarizedExperiment
+  - phylobase
+  - dendextend
+  - clusterExperiment
+  - SingleCellExperiment
   - ggplot2
+  - ggbeeswarm
+  - shiny
+  - shinydashboard
+  - scater
 sudo: required
 r_binary_packages:
   - reshape
@@ -31,7 +37,6 @@ r_binary_packages:
   - rcppeigen
   - gtable
   - scales
-  - xml
   - rcurl
   - xtable
   - hdf5
@@ -41,6 +46,7 @@ r_binary_packages:
   - reshape2
   - rjson
 r_packages:
+  - xml
   - kernlab
   - matrixStats
   - ape
