@@ -23,7 +23,6 @@ r_binary_packages:
   - memoise
   - deoptimr
   - iterators
-  - mvtnorm
   - robustbase
   - dichromat
   - munsell
@@ -31,21 +30,22 @@ r_binary_packages:
   - bitops
   - dbi
   - rsqlite
-  - digest
-  - colorspace
   - foreach
   - rcppeigen
   - gtable
-  - scales
-  - rcurl
   - xtable
   - hdf5
   - rcolorbrewer
   - stringr
-  - plyr
   - reshape2
   - rjson
 r_packages:
+  - plyr
+  - scales
+  - RCurl
+  - mvtnorm
+  - colorspace
+  - digest
   - XML
   - kernlab
   - matrixStats
