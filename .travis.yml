@@ -12,9 +12,7 @@ bioc_packages:
   - SummarizedExperiment
 sudo: required
 r_binary_packages:
-  - covr
   - reshape
-  - modeltools
   - memoise
   - deoptimr
   - iterators
@@ -29,29 +27,31 @@ r_binary_packages:
   - digest
   - colorspace
   - foreach
-  - doparallel
-  - ade4
   - rcppeigen
-  - stringi
   - gtable
   - scales
   - xml
   - rcurl
-  - beeswarm
-  - httpuv
   - xtable
-  - gridextra
   - hdf5
   - rcolorbrewer
-  - ape
-  - matrixstats
-  - kernlab
   - stringr
   - ggplot2
   - plyr
   - reshape2
   - rjson
 r_packages:
+  - kernlab
+  - matrixstats
+  - ape
+  - gridextra
+  - httpuv
+  - covr
+  - modeltools
+  - doparallel
+  - ade4
+  - stringi
+  - beeswarm
   - Rcpp
   - Rtsne
 after_success:
