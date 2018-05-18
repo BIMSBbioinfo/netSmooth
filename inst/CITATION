@@ -1,0 +1,12 @@
+citEntry(
+    entry = "article",
+    title = "netSmooth: Network-smoothing based imputation for single cell RNA-seq",
+    author = "Jonathan Ronen and Altuna Akalin",
+    year = 2018,
+    journal = "F1000Research",
+    number = "7:8",
+    doi = "10.12688/f1000research.13511.2",
+    url = "https://f1000research.com/articles/7-8/v2",
+    textVersion = " Ronen J and Akalin A. netSmooth: Network-smoothing based imputation for single cell RNA-seq [version 2; referees: 2 approved]. F1000Research 2018, 7:8
+(doi: 10.12688/f1000research.13511.2) "
+);
