@@ -21,3 +21,10 @@ test_that("netSmooth accepts spase matrices", {
 
     sink()
 })
+
+test_that("stops with error message if PPI has zero rows/columns", {
+    smallPPI.with.zero.row <- data.table::copy(smallPPI)
+    smallPPI.with.zero.row[10,] <- 0
+    smallPPI.with.zero.row[,10] <- 0
+    expect_error(netSmooth(smallscRNAseq, smallPPI.with.zero.row, 0.5))
+})

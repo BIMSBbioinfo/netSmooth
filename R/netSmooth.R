@@ -63,6 +63,8 @@ setMethod("netSmooth",
 
         stopifnot(is(adjMatrix, 'matrix') || is(adjMatrix, 'sparseMatrix'))
         stopifnot((is.numeric(alpha) && (alpha > 0 && alpha < 1)) || alpha == "auto")
+        if(sum(Matrix::rowSums(adjMatrix)==0)>0) stop("PPI cannot have zero rows/columns")
+        if(sum(Matrix::colSums(adjMatrix)==0)>0) stop("PPI cannot have zero rows/columns")
 
         if(is.numeric(alpha)) {
             message("Using given alpha: ", alpha,"\n")
@@ -142,6 +144,8 @@ setMethod("netSmooth",
 
         stopifnot(is(adjMatrix, 'matrix') || is(adjMatrix, 'sparseMatrix'))
         stopifnot((is.numeric(alpha) && (alpha > 0 && alpha < 1)) || alpha == "auto")
+        if(sum(Matrix::rowSums(adjMatrix)==0)>0) stop("PPI cannot have zero rows/columns")
+        if(sum(Matrix::colSums(adjMatrix)==0)>0) stop("PPI cannot have zero rows/columns")
 
         if(is.numeric(alpha)) {
             message("Using given alpha: ", alpha,"\n")
