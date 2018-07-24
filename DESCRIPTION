@@ -1,7 +1,7 @@
 Package: netSmooth
 Type: Package
 Title: Network smoothing for scRNAseq
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(person("Jonathan", "Ronen", role = c("aut", "cre"),
                      email = "yablee@gmail.com"),
               person("Altuna", "Akalin", role = c("aut")))
@@ -12,6 +12,8 @@ Description: netSmooth is an R package for network smoothing of single cell RNA
 biocViews: Network, GraphAndNetwork, SingleCell, RNASeq, GeneExpression,
     Sequencing, Transcriptomics, Normalization, Preprocessing, Clustering,
     DimensionReduction
+URL: https://github.com/BIMSBbioinfo/netSmooth
+BugReports: https://github.com/BIMSBbioinfo/netSmooth/issues
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
