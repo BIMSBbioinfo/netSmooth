@@ -85,6 +85,7 @@ clusterExperimentWorkflow <- function(se,
 
         # Merge clusters
         ce <- mergeClusters(ce, cutoff=0.05,
+            DEMethod="edgeR",
             mergeMethod="adjP",
             plotInfo="none",
             plot=FALSE,
