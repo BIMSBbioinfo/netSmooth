@@ -24,8 +24,9 @@ For a detailed exposition, check out [our paper on F1000Research](https://f1000r
 
 _netSmooth_ is available via Bioconductor:
 
-	source("http://bioconductor.org/biocLite.R")
-	biocLite("netSmooth")
+	if (!requireNamespace("BiocManager", quietly=TRUE))
+    	install.packages("BiocManager")
+	BiocManager::install("netSmooth")
 
 Alternatively, using `devtools`:
 
