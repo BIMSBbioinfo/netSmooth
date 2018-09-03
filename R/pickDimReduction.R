@@ -12,7 +12,7 @@ setGeneric(
 #' @aliases pickDimReduction
 #' @param x  matrix or SummarizedExperiment object [GENES x SAMPLES]
 #' @param flavors    list of dimensionality reduction algorithms to try.
-#'                   Currently the options are "pca" and "tsne"
+#'                   Currently the options are "pca", "tsne" and "umap"
 #' @param is.counts    logical: is exprs count data
 #' @return    name of dimensionality reduction method that gives the highest
 #'            2d entropy
@@ -23,7 +23,7 @@ setGeneric(
 #' @export
 setMethod("pickDimReduction",
     signature(x='matrix'),
-    function(x, flavors=c('pca', 'tsne'), is.counts=TRUE) {
+    function(x, flavors=c('pca', 'tsne', 'umap'), is.counts=TRUE) {
         entropies <- sapply(flavors, function(flavor) {
             calc2DEntropy(dimReduce(x, flavor=flavor, is.counts=is.counts))
         })
@@ -42,7 +42,7 @@ setMethod("pickDimReduction",
 #' @rdname pickDimReduction
 setMethod("pickDimReduction",
     signature(x='Matrix'),
-    function(x, flavors=c('pca', 'tsne'), is.counts=TRUE) {
+    function(x, flavors=c('pca', 'tsne', 'umap'), is.counts=TRUE) {
         entropies <- sapply(flavors, function(flavor) {
             calc2DEntropy(dimReduce(x, flavor=flavor, is.counts=is.counts))
         })

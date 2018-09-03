@@ -143,8 +143,8 @@ dimensionality reduction methods.
 
 We can directly use the robust clustering function `robustClusters`.
 ```{r , echo=TRUE, eval=TRUE}
-yhat <- robustClusters(smallscRNAseq, combineManyMinSize=2, combineManyProportion=.9)$clusters
-yhat.sm <- robustClusters(smallscRNAseq.sm.se, combineManyMinSize=2, combineManyProportion=.9)$clusters
+yhat <- robustClusters(smallscRNAseq, makeConsensusMinSize=2, makeConsensusProportion=.9)$clusters
+yhat.sm <- robustClusters(smallscRNAseq.sm.se, makeConsensusMinSize=2, makeConsensusProportion=.9)$clusters
 cell.types <- colData(smallscRNAseq)$source_name_ch1
 knitr::kable(
   table(cell.types, yhat), caption = 'Cell types and `robustClusters` in the raw data.'
@@ -173,6 +173,7 @@ for different 2D embedding methods.
 ```{r , echo=TRUE, eval=TRUE}
 plotPCA(smallscRNAseq, colour_by='source_name_ch1') + ggtitle("PCA plot")
 plotTSNE(smallscRNAseq, colour_by='source_name_ch1') + ggtitle("tSNE plot")
+plotUMAP(smallscRNAseq, colour_by='source_name_ch1') + ggtitle("UMAP plot")
 ```
 
 The `pickDimReduction` method picks the dimensionality reduction method which

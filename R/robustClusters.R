@@ -12,7 +12,7 @@ setGeneric(
 #' @param x    matrix or SummarizedExperiment object
 #' @param dimReduceFlavor    algorithm for dimensionality reduction step
 #'                           of clustering procedure. May be 'pca', 'tsne',
-#'                           'dm' or 'auto', which uses shannon entropy to
+#'                           'dm', 'umap' or 'auto', which uses shannon entropy to
 #'                           pick the algorithm.
 #' @param is.counts    logical: is the data counts
 #' @param ...    arguments passed on to `clusterExperimentWorkflow`
@@ -29,7 +29,7 @@ setMethod("robustClusters",
         }
         if(dimReduceFlavor=='auto') {
             dimReduceFlavor <- pickDimReduction(assay(x),
-                flavors=c('pca', 'tsne'),
+                flavors=c('pca', 'tsne', 'umap'),
                 is.counts=is.counts)
             message("Picked dimReduceFlavor: ",dimReduceFlavor,"\n")
         }

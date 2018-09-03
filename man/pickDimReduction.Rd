@@ -9,12 +9,12 @@
 \title{Pick the dimensionality reduction method for a dataset that gives the
 2D embedding with the highest entropy}
 \usage{
-\S4method{pickDimReduction}{matrix}(x, flavors = c("pca", "tsne"),
+\S4method{pickDimReduction}{matrix}(x, flavors = c("pca", "tsne", "umap"),
   is.counts = TRUE)
 
 \S4method{pickDimReduction}{SummarizedExperiment}(x)
 
-\S4method{pickDimReduction}{Matrix}(x, flavors = c("pca", "tsne"),
+\S4method{pickDimReduction}{Matrix}(x, flavors = c("pca", "tsne", "umap"),
   is.counts = TRUE)
 }
 \arguments{
