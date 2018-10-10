@@ -55,3 +55,86 @@ setMethod("projectOnNetwork",
         return(data_in_new_space)
     }
 )
+
+setMethod("projectOnNetwork",
+          signature(gene_expression='DelayedMatrix'),
+          function(gene_expression, new_features, missing.value=1) {
+            
+            # new matrix that then will be written on disk
+            data_in_new_space = as(Matrix::Matrix(rep(1, length(new_features)*
+                                                     dim(gene_expression)[2]),
+                                               nrow=length(new_features)), "HDF5Array")
+            
+            message("Type of data in new space: ", typeof(data_in_new_space@seed),"\n")
+            
+            rownames(data_in_new_space) <- new_features
+            colnames(data_in_new_space) <- colnames(gene_expression)
+            
+            genes_in_both <- intersect(rownames(data_in_new_space),
+                                       rownames(gene_expression))
+            
+            data_in_new_space[genes_in_both,] <- gene_expression[genes_in_both,]
+            
+            # not sure if necessary
+            # genes_only_in_network <- setdiff(new_features, rownames(gene_expression))
+            # if(length(genes_only_in_network)>0) {
+            #   fill_matrix <- Matrix::Matrix(rep(missing.value,
+            #                                     prod(dim(data_in_new_space[genes_only_in_network,]))),
+            #                                 nrow=length(genes_only_in_network))
+            #   data_in_new_space[genes_only_in_network,] <- fill_matrix
+            # }
+            return(data_in_new_space)
+            
+            
+            
+            
+            
+            
+            
+            # get genes in expression matrix and network
+            in.both <- intersect(gene_expression@seed@dimnames[[1]], new_features)
+            
+            # get genes exclusive in network
+            ppi.exclusive <- new_features[!(new_features %in% in.both)]
+            
+            
+            expression.both <- as(gene_expression[gene_expression@seed@dimnames[[1]] %in% new_features], "HDF5Array")
+            
+            # init delayed matrix for ppi exclusive genes
+            ppi.genes <- as( matrix(rep(missing.value,
+                                        length(ppi.exclusive)*dim(gene_expression)[2]),
+                                    nrow = length(ppi.exclusive)), "HDF5Array")
+            
+            # add col and row names
+          
+            #colnames(ppi.genes) <- colnames(gene_expression)
+            
+            # file path for ppi.genes
+            #ppi.genes.filepath <- ppi.genes@seed@filepath
+            
+            data_in_new_space <- arbind(expression.both , ppi.genes)
+            
+            
+            
+            # add row and colnames
+            colnames(data_in_new_space) <- colnames(gene_expression)
+            rownames(data_in_new_space) <- c(in.both, ppi.exclusive)
+            #rownames(data_in_new_space) <- 
+            
+            # # seed is now concat of overlap and excusive genes
+            # data_in_new_space <- DelayedArray(rbind(matrix(gene_expression[
+            #   gene_expression@seed@dimnames[[1]] %in% new_features],
+            #   nrow = length(new_features)),
+            #   matrix(rep(missing.value,
+            #              length(ppi.exclusive)*dim(gene_expression)[2]),
+            #          nrow = length(ppi.exclusive))
+            #   ))
+              
+              
+            # delete temporary ppi exclusive object and file on disk
+            #rm(ppi.genes)
+            #file.remove(ppi.genes.filepath)
+
+            return(data_in_new_space)
+          }
+)

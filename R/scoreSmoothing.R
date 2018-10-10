@@ -8,7 +8,7 @@
 #' @keywords internal
 scoreSmoothing <- function(x, method=c('entropy', 'robustness'),
     is.counts=TRUE, ...) {
-    if(class(x)=='matrix' || any(is(x)=='Matrix')) {
+    if(class(x)=='matrix' || any(is(x)=='Matrix' || class(x)=='DelayedMatrix')) {
         x <- x
         se <- SummarizedExperiment::SummarizedExperiment(x)
     } else if(class(x)=='SummarizedExperiment') {

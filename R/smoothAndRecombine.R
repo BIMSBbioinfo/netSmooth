@@ -1,3 +1,13 @@
+setGeneric(
+  name = "smoothAndRecombine",
+  def = function(gene_expression, adj_matrix, alpha,
+                 smoothing.function=randomWalkBySolve,
+                 normalizeAdjMatrix=c('rows','columns')) {
+    standardGeneric("smoothAndRecombine")
+  }
+)
+
+
 #' Perform network smoothing on network when the network genes and the
 #' experiment genes aren't exactly the same.
 #'
@@ -24,15 +34,66 @@
 #' @return  matrix with network-smoothed gene expression data. Genes that are
 #'          not present in smoothing network will retain original values.
 #' @keywords internal
-smoothAndRecombine <- function(gene_expression, adj_matrix, alpha,
-    smoothing.function=randomWalkBySolve,
-    normalizeAdjMatrix=c('rows','columns')) {
-    normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
-    gene_expression_in_A_space <- projectOnNetwork(gene_expression,
-        rownames(adj_matrix))
-    gene_expression_in_A_space_smooth <- smoothing.function(
-        gene_expression_in_A_space, adj_matrix, alpha, normalizeAdjMatrix)
-    gene_expression_smooth <- projectFromNetworkRecombine(
-        gene_expression, gene_expression_in_A_space_smooth)
-    return(gene_expression_smooth)
-}
+setMethod("smoothAndRecombine",
+          signature(gene_expression='matrix'),
+          function(gene_expression, adj_matrix, alpha,
+                   smoothing.function=randomWalkBySolve,
+                   normalizeAdjMatrix=c('rows','columns')) {
+            normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
+            gene_expression_in_A_space <- projectOnNetwork(gene_expression,
+                                                           rownames(adj_matrix))
+            gene_expression_in_A_space_smooth <- smoothing.function(
+              gene_expression_in_A_space, adj_matrix, alpha, normalizeAdjMatrix)
+            gene_expression_smooth <- projectFromNetworkRecombine(
+              gene_expression, gene_expression_in_A_space_smooth)
+            return(gene_expression_smooth)
+          })
+
+setMethod("smoothAndRecombine",
+          signature(gene_expression='Matrix'),
+          function(gene_expression, adj_matrix, alpha,
+                   smoothing.function=randomWalkBySolve,
+                   normalizeAdjMatrix=c('rows','columns')) {
+            normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
+            gene_expression_in_A_space <- projectOnNetwork(gene_expression,
+                                                           rownames(adj_matrix))
+            gene_expression_in_A_space_smooth <- smoothing.function(
+              gene_expression_in_A_space, adj_matrix, alpha, normalizeAdjMatrix)
+            gene_expression_smooth <- projectFromNetworkRecombine(
+              gene_expression, gene_expression_in_A_space_smooth)
+            return(gene_expression_smooth)
+          })
+
+setMethod("smoothAndRecombine",
+          signature(gene_expression='DelayedMatrix'),
+          function(gene_expression, adj_matrix, alpha,
+                   smoothing.function=randomWalkByMatrixInv,
+                   normalizeAdjMatrix=c('rows','columns')) {
+            normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
+            gene_expression_in_A_space <- projectOnNetwork(gene_expression,
+                                                           rownames(adj_matrix))
+            
+            # smooth in place
+            # get number of columns
+            col.number <- dim(gene_expression_in_A_space)[2]
+            
+            Anorm <- l1NormalizeColumns(adj_matrix)
+            eye <- diag(dim(adj_matrix)[1])
+            K <- (1 - alpha) * solve(eye - alpha * Anorm)
+            
+            for (i in 1:col.number) {
+              
+              # get column(s) with current index
+              tmp.col <- gene_expression_in_A_space[,i]
+              
+              # replace col with smoothed values
+              gene_expression_in_A_space[,i] <- K %*% tmp.col
+            }
+            
+            gene_expression_smooth <- projectFromNetworkRecombine(
+              gene_expression, gene_expression_in_A_space)
+            
+            return(gene_expression_smooth)
+          })
+
+

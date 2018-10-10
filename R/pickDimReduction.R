@@ -38,6 +38,8 @@ setMethod("pickDimReduction",
     signature(x='SummarizedExperiment'),
     function(x) pickDimReduction(assay(x)))
 
+
+
 #' @export
 #' @rdname pickDimReduction
 setMethod("pickDimReduction",
@@ -49,3 +51,16 @@ setMethod("pickDimReduction",
         return(names(which.max(entropies)))
     }
 )
+
+#' @export
+#' @rdname pickDimReduction
+setMethod("pickDimReduction",
+          signature(x='DelayedMatrix'),
+          function(x, flavors=c('pca', 'tsne', 'umap'), is.counts=TRUE) {
+            entropies <- sapply(flavors, function(flavor) {
+              calc2DEntropy(dimReduce(x, flavor=flavor, is.counts=is.counts))
+            })
+            return(names(which.max(entropies)))
+          }
+)
+
