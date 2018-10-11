@@ -34,6 +34,9 @@ setGeneric(
 #'                   `alpha='auto'` option. See the BiocParallel manual.
 #' @param ...    arguments passed on to `robustClusters` if using the robustness
 #'               criterion for optimizing alpha
+#' @param chunk.size    integer in [1,length(colnames[x])]. Number of columns that
+#'                      processed at the same time when using disk based DelayedMatrix.
+#'                      Will be ignored when regular matrices are used as input.
 #' @return network-smoothed gene expression matrix or SummarizedExperiment
 #'         object
 #' @examples
@@ -211,6 +214,7 @@ setMethod("netSmooth",
                    autoAlphaDimReduceFlavor='auto',
                    is.counts=TRUE,
                    bpparam=BiocParallel::SerialParam(),
+                   chunk.size = 1,
                    ...)
           {
             
@@ -230,7 +234,8 @@ setMethod("netSmooth",
               }
 
               x.smoothed <- smoothAndRecombine(x, adjMatrix, alpha,
-                                               normalizeAdjMatrix=normalizeAdjMatrix)
+                                               normalizeAdjMatrix=normalizeAdjMatrix,
+                                               chunk.size)
             } else if(alpha=='auto') {
               if(autoAlphaDimReduceFlavor=='auto') {
                 autoAlphaDimReduceFlavor <- pickDimReduction(x,

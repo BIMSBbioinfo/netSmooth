@@ -2,7 +2,8 @@ setGeneric(
   name = "smoothAndRecombine",
   def = function(gene_expression, adj_matrix, alpha,
                  smoothing.function=randomWalkBySolve,
-                 normalizeAdjMatrix=c('rows','columns')) {
+                 normalizeAdjMatrix=c('rows','columns'),
+                 chunk.size = 1) {
     standardGeneric("smoothAndRecombine")
   }
 )
@@ -68,26 +69,31 @@ setMethod("smoothAndRecombine",
           signature(gene_expression='DelayedMatrix'),
           function(gene_expression, adj_matrix, alpha,
                    smoothing.function=randomWalkByMatrixInv,
-                   normalizeAdjMatrix=c('rows','columns')) {
+                   normalizeAdjMatrix=c('rows','columns'),
+                   chunk.size = 1) {
             normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
             gene_expression_in_A_space <- projectOnNetwork(gene_expression,
                                                            rownames(adj_matrix))
             
             # smooth in place
-            # get number of columns
-            col.number <- dim(gene_expression_in_A_space)[2]
+            # vector containing the indeces of the columns
+            index.vector <- 1:dim(gene_expression_in_A_space)[2]
+            
+            # seperate indices according to chunk size
+            index.chunks <- split(index.vector, ceiling(seq_along(index.vector)/chunk.size))
             
             Anorm <- l1NormalizeColumns(adj_matrix)
             eye <- diag(dim(adj_matrix)[1])
             K <- (1 - alpha) * solve(eye - alpha * Anorm)
             
-            for (i in 1:col.number) {
+            # smoothing one chunk at a time
+            for (i in 1:length(index.chunks)) {
               
               # get column(s) with current index
-              tmp.col <- gene_expression_in_A_space[,i]
+              tmp.col <- gene_expression_in_A_space[,index.chunks[[i]]]
               
               # replace col with smoothed values
-              gene_expression_in_A_space[,i] <- K %*% tmp.col
+              gene_expression_in_A_space[,index.chunks[[i]]] <- K %*% tmp.col
             }
             
             gene_expression_smooth <- projectFromNetworkRecombine(
