@@ -253,7 +253,7 @@ setMethod("netSmooth",
                 BPPARAM = bpparam
               )
               
-              # biocparallel does not work at this point
+              # biocparallel does not work at this point TODO: check if this is a misconception
               scores <- unlist(lapply(
                 seq_len(length(smoothed.expression.matrices)),
                 function(i) {

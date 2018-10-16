@@ -44,13 +44,31 @@ setMethod("projectFromNetworkRecombine",
                    smoothed_expression) {
             
             
+            # genes in orignal and smoothed expression
             genes.in.both <- intersect(original_expression@seed@dimnames[[1]],
                       smoothed_expression@seed@dimnames[[1]])
             
-            # replace values in original expression
-            original_expression[genes.in.both,] <- smoothed_expression[genes.in.both,]
+            # genes not in intersection
+            original.exclusive <- original_expression@seed@dimnames[[1]][which(!(original_expression@seed@dimnames[[1]] %in% genes.in.both))]
+              
 
-            return(original_expression)
+            # new File, empty matrix as seed
+            data_in_original_space <- as( matrix(rep(0, dim(original_expression)[1]*dim(original_expression)[2]),
+                                                 nrow=dim(original_expression)[1]), "HDF5Array")
+            
+            # set and row/col names and coerce to DelayedMatrix
+            rownames(data_in_original_space) <- original_expression@seed@dimnames[[1]]
+            colnames(data_in_original_space) <- original_expression@seed@dimnames[[2]]
+            
+            # replace rows in output
+            data_in_original_space[genes.in.both,] <- smoothed_expression[genes.in.both,]
+            data_in_original_space[original.exclusive,] <- original_expression[original.exclusive,]
+            
+            # delete file containing smoothing matrix
+            file.path <- path(smoothed_expression)
+            file.remove(file.path)
+
+            return(data_in_original_space)
           })
   
 

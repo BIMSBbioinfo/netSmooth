@@ -20,8 +20,7 @@ LazyData: true
 Depends:
     R (>= 3.5),
     scater (>= 1.9.20),
-    clusterExperiment (>= 2.1.6),
-    diffusr (>= 0.1.4)
+    clusterExperiment (>= 2.1.6)
 Imports:
     entropy,
     SummarizedExperiment,
@@ -30,8 +29,7 @@ Imports:
     cluster,
     data.table,
     stats,
-    methods,
-    diffusr
+    methods
 Suggests: knitr,
     testthat,
     Rtsne,
