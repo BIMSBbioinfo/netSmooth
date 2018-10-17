@@ -3,7 +3,8 @@ setGeneric(
   def = function(gene_expression, adj_matrix, alpha,
                  smoothing.function=randomWalkBySolve,
                  normalizeAdjMatrix=c('rows','columns'),
-                 chunk.size = 1) {
+                 chunk.size = 1,
+                 filepath = NULL) {
     standardGeneric("smoothAndRecombine")
   }
 )
@@ -32,6 +33,13 @@ setGeneric(
 #'                              adjacency matrix be normalized by. rows
 #'                              corresponds to in-degree, columns to
 #'                              out-degree.
+#' @param chunk.size    integer in [1,length(colnames[x])]. Number of columns that
+#'                      processed at the same time when using disk based DelayedMatrix.
+#'                      Will be ignored when regular matrices or SummarizedExperiment are
+#'                      used as input.
+#' @param filepath      String: Path to location where hdf5 output file is supposed to be saved. 
+#'                      Will be ignored when regular matrices or SummarizedExperiment are
+#'                      used as input.
 #' @return  matrix with network-smoothed gene expression data. Genes that are
 #'          not present in smoothing network will retain original values.
 #' @keywords internal
@@ -70,7 +78,8 @@ setMethod("smoothAndRecombine",
           function(gene_expression, adj_matrix, alpha,
                    smoothing.function=randomWalkByMatrixInv,
                    normalizeAdjMatrix=c('rows','columns'),
-                   chunk.size = 1) {
+                   chunk.size = 1,
+                   filepath = NULL) {
             normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
             gene_expression_in_A_space <- projectOnNetwork(gene_expression,
                                                            rownames(adj_matrix))
@@ -97,7 +106,7 @@ setMethod("smoothAndRecombine",
             }
             
             gene_expression_smooth <- projectFromNetworkRecombine(
-              gene_expression, gene_expression_in_A_space)
+              gene_expression, gene_expression_in_A_space, filepath)
             
             return(gene_expression_smooth)
           })

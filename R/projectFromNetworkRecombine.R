@@ -1,6 +1,6 @@
 setGeneric(
   name = "projectFromNetworkRecombine",
-  def = function(original_expression, smoothed_expression) {
+  def = function(original_expression, smoothed_expression, filepath) {
     standardGeneric("projectFromNetworkRecombine")
   }
 )
@@ -11,6 +11,9 @@ setGeneric(
 #' @param original_expression    the non-smoothed expression
 #' @param smoothed_expression    the smoothed gene expression, in the space
 #'                               of the genes defined by the network
+#' @param filepath      String: Path to location where hdf5 output file is supposed to be saved. 
+#'                      Will be ignored when regular matrices or SummarizedExperiment are
+#'                      used as input.
 #' @return a matrix in the dimensions of original_expression, where values that
 #'         are present in smoothed_expression are copied from there.
 #' @importFrom data.table copy
@@ -41,7 +44,8 @@ setMethod("projectFromNetworkRecombine",
 setMethod("projectFromNetworkRecombine",
           signature(original_expression='DelayedMatrix'),
           function(original_expression,
-                   smoothed_expression) {
+                   smoothed_expression,
+                   filepath = NULL) {
             
             
             # genes in orignal and smoothed expression
@@ -50,11 +54,9 @@ setMethod("projectFromNetworkRecombine",
             
             # genes not in intersection
             original.exclusive <- original_expression@seed@dimnames[[1]][which(!(original_expression@seed@dimnames[[1]] %in% genes.in.both))]
-              
-
-            # new File, empty matrix as seed
-            data_in_original_space <- as( matrix(rep(0, dim(original_expression)[1]*dim(original_expression)[2]),
-                                                 nrow=dim(original_expression)[1]), "HDF5Array")
+            
+            # use orignal expression as seed
+            data_in_original_space <- writeHDF5Array(DelayedArray(original_expression), filepath = filepath)
             
             # set and row/col names and coerce to DelayedMatrix
             rownames(data_in_original_space) <- original_expression@seed@dimnames[[1]]
@@ -62,7 +64,7 @@ setMethod("projectFromNetworkRecombine",
             
             # replace rows in output
             data_in_original_space[genes.in.both,] <- smoothed_expression[genes.in.both,]
-            data_in_original_space[original.exclusive,] <- original_expression[original.exclusive,]
+            #data_in_original_space[original.exclusive,] <- original_expression[original.exclusive,]
             
             # delete file containing smoothing matrix
             file.path <- path(smoothed_expression)
