@@ -13,7 +13,7 @@ test_that("netSmooth accepts SingleCellExperiment", {
     sink()
 })
 
-test_that("netSmooth accepts spase matrices", {
+test_that("netSmooth accepts sparse matrices", {
     sink(ifelse(.Platform$OS.type=='unix', '/dev/null', 'NUL'))
 
     netSmooth(Matrix(assay(smallscRNAseq)), smallPPI, alpha=.5)

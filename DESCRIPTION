@@ -29,7 +29,8 @@ Imports:
     cluster,
     data.table,
     stats,
-    methods
+    methods,
+    HDF5Array
 Suggests: knitr,
     testthat,
     Rtsne,

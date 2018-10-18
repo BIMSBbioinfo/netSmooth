@@ -8,13 +8,16 @@
 #' @keywords internal
 scoreSmoothing <- function(x, method=c('entropy', 'robustness'),
     is.counts=TRUE, ...) {
-    if(class(x)=='matrix' || any(is(x)=='Matrix' || class(x)=='DelayedMatrix')) {
+  if(class(x)=='matrix' || any(is(x)=='Matrix')) {
         x <- x
         se <- SummarizedExperiment::SummarizedExperiment(x)
     } else if(class(x)=='SummarizedExperiment') {
         se <- x
         x <- assay(x)
-    } else stop("must be matrix/Matrix or SummarizedExperiment object")
+    } else if(class(x) == 'DelayedMatrix'){
+      x <- x
+      se <- SummarizedExperiment::SummarizedExperiment(x)
+      } else stop("must be matrix/Matrix or SummarizedExperiment object")
 
     method <- match.arg(method)
     if(method=='entropy') {
