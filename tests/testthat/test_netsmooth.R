@@ -53,4 +53,18 @@ test_that("robusClusters work with umap", {
   sink()
 })
 
+test_that("netSmooth accepts DelayedMatrix objects", {
+  sink(ifelse(.Platform$OS.type=='unix', '/dev/null', 'NUL'))
+  
+  singleHDF5 <- as(assay(smallscRNAseq), "HDF5Array")
+  
+  rownames(singleHDF5) <- rownames(smallscRNAseq)
+  colnames(singleHDF5) <- colnames(smallscRNAseq)
+  
+  netSmooth(singleHDF5, smallPPI, alpha=.5)
+  netSmooth(singleHDF5, smallPPI, alpha='auto', autoAlphaMethod='entropy')
+  
+  sink()
+})
+
 

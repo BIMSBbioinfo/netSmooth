@@ -4,10 +4,11 @@
 \alias{clusterExperimentWorkflow}
 \title{Performs clustering workflow using `clusterExperiment` functions}
 \usage{
-clusterExperimentWorkflow(se, dimReduceFlavor = c("pca", "tsne", "dm", "umap"),
-  cluster.ks = 5:10, cluster.function = "pam", nVarDims = c(100, 500,
-  1000), makeConsensusProportion = 0.7, makeConsensusMinSize = 4,
-  runMergeClusters = TRUE, is.counts = TRUE, random.seed = 1)
+clusterExperimentWorkflow(se, dimReduceFlavor = c("pca", "tsne", "dm",
+  "umap"), cluster.ks = 5:10, cluster.function = "pam",
+  nVarDims = c(100, 500, 1000), makeConsensusProportion = 0.7,
+  makeConsensusMinSize = 4, runMergeClusters = TRUE,
+  is.counts = TRUE, random.seed = 1)
 }
 \arguments{
 \item{se}{SummarizedExperiment object}
@@ -20,10 +21,10 @@ clusterExperimentWorkflow(se, dimReduceFlavor = c("pca", "tsne", "dm", "umap"),
 
 \item{nVarDims}{numbers of variable genes to perform clusterings over}
 
-\item{combineManyProportion}{proportion of times samples need to be
+\item{makeConsensusProportion}{proportion of times samples need to be
 co-clustered for co-clustering step}
 
-\item{combineManyMinSize}{minimum cluster size}
+\item{makeConsensusMinSize}{minimum cluster size}
 
 \item{runMergeClusters}{logical: merge similar clusters}
 

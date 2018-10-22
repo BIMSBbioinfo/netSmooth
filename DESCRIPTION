@@ -30,6 +30,7 @@ Imports:
     data.table,
     stats,
     methods,
+    DelayedArray,
     HDF5Array
 Suggests: knitr,
     testthat,
@@ -44,4 +45,4 @@ Suggests: knitr,
     rmarkdown,
     BiocParallel
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

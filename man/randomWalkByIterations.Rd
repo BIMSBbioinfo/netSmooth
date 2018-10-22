@@ -4,8 +4,9 @@
 \alias{randomWalkByIterations}
 \title{Smooth data on graph by computing iterations}
 \usage{
-randomWalkByIterations(f0, adjMatrix, alpha, normalizeAjdMatrix = c("rows",
-  "columns"), tol = 1e-06, max.iter = 100)
+randomWalkByIterations(f0, adjMatrix, alpha,
+  normalizeAjdMatrix = c("rows", "columns"), tol = 1e-06,
+  max.iter = 100)
 }
 \arguments{
 \item{f0}{initial data matrix [NxM]}

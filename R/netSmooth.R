@@ -32,8 +32,6 @@ setGeneric(
 #' @param is.counts    logical: is the assay count data
 #' @param bpparam    instance of bpparam, for parallel computation with the
 #'                   `alpha='auto'` option. See the BiocParallel manual.
-#' @param ...    arguments passed on to `robustClusters` if using the robustness
-#'               criterion for optimizing alpha
 #' @param chunk.size    integer in [1,length(colnames[x])]. Number of columns that
 #'                      processed at the same time when using disk based DelayedMatrix.
 #'                      Will be ignored when regular matrices or SummarizedExperiment are
@@ -41,6 +39,8 @@ setGeneric(
 #' @param filepath      String: Path to location where hdf5 output file is supposed to be saved. 
 #'                      Will be ignored when regular matrices or SummarizedExperiment are
 #'                      used as input.
+#' @param ...    arguments passed on to `robustClusters` if using the robustness
+#'               criterion for optimizing alpha
 #' @return network-smoothed gene expression matrix or SummarizedExperiment
 #'         object
 #' @examples
@@ -141,7 +141,8 @@ setMethod("netSmooth",
           function(x, ...) {
             matrixdata <- assay(x)
             ret <- netSmooth(matrixdata, ...)
-            return(SingleCellExperiment(ret, colData=colData(x)))
+            return(SingleCellExperiment(assays = list(counts = ret)))
+            #sce <- SingleCellExperiment(assays = list(counts = counts))
           })
 
 #' @rdname netSmooth
@@ -259,7 +260,6 @@ setMethod("netSmooth",
                 BPPARAM = bpparam
               )
               
-              # biocparallel does not work at this point TODO: check if this is a misconception
               scores <- unlist(BiocParallel::bplapply(
                 seq_len(length(smoothed.expression.matrices)),
                 function(i) {

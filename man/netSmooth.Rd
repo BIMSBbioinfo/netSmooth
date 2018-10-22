@@ -5,7 +5,9 @@
 \alias{netSmooth,matrix-method}
 \alias{netSmooth}
 \alias{netSmooth,SummarizedExperiment-method}
+\alias{netSmooth,SingleCellExperiment-method}
 \alias{netSmooth,Matrix-method}
+\alias{netSmooth,DelayedMatrix-method}
 \title{Perform network smoothing of gene expression or other omics data}
 \usage{
 \S4method{netSmooth}{matrix}(x, adjMatrix, alpha = "auto",
@@ -16,11 +18,20 @@
 
 \S4method{netSmooth}{SummarizedExperiment}(x, ...)
 
+\S4method{netSmooth}{SingleCellExperiment}(x, ...)
+
 \S4method{netSmooth}{Matrix}(x, adjMatrix, alpha = "auto",
   normalizeAdjMatrix = c("rows", "columns"),
   autoAlphaMethod = c("robustness", "entropy"), autoAlphaRange = 0.1 *
   (seq_len(9)), autoAlphaDimReduceFlavor = "auto", is.counts = TRUE,
   bpparam = BiocParallel::SerialParam(), ...)
+
+\S4method{netSmooth}{DelayedMatrix}(x, adjMatrix, alpha = "auto",
+  normalizeAdjMatrix = c("rows", "columns"),
+  autoAlphaMethod = c("robustness", "entropy"), autoAlphaRange = 0.1 *
+  (seq_len(9)), autoAlphaDimReduceFlavor = "auto", is.counts = TRUE,
+  bpparam = BiocParallel::SerialParam(), chunk.size = 1,
+  filepath = NULL, ...)
 }
 \arguments{
 \item{x}{matrix or SummarizedExperiment}
@@ -60,6 +71,15 @@ used in robust clustering (if
 
 \item{...}{arguments passed on to `robustClusters` if using the robustness
 criterion for optimizing alpha}
+
+\item{chunk.size}{integer in [1,length(colnames[x])]. Number of columns that
+processed at the same time when using disk based DelayedMatrix.
+Will be ignored when regular matrices or SummarizedExperiment are
+ used as input.}
+
+\item{filepath}{String: Path to location where hdf5 output file is supposed to be saved. 
+Will be ignored when regular matrices or SummarizedExperiment are
+used as input.}
 }
 \value{
 network-smoothed gene expression matrix or SummarizedExperiment

@@ -17,6 +17,9 @@ scoreSmoothing <- function(x, method=c('entropy', 'robustness'),
     } else if(class(x) == 'DelayedMatrix'){
       x <- x
       se <- SummarizedExperiment::SummarizedExperiment(x)
+    } else if (class(x) == 'SingleCellExperiment'){
+        sce <- x
+        x <- assay(x)
       } else stop("must be matrix/Matrix or SummarizedExperiment object")
 
     method <- match.arg(method)
