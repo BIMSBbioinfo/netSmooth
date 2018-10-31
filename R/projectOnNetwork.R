@@ -55,3 +55,24 @@ setMethod("projectOnNetwork",
         return(data_in_new_space)
     }
 )
+
+setMethod("projectOnNetwork",
+          signature(gene_expression='DelayedMatrix'),
+          function(gene_expression, new_features, missing.value=0) {
+            
+            # new matrix that then will be written on disk in temporary file
+            data_in_new_space = as(Matrix::Matrix(rep(missing.value, length(new_features)*
+                                                     dim(gene_expression)[2]),
+                                               nrow=length(new_features)), "HDF5Array")
+            
+            rownames(data_in_new_space) <- new_features
+            colnames(data_in_new_space) <- colnames(gene_expression)
+            
+            genes_in_both <- intersect(rownames(data_in_new_space),
+                                       rownames(gene_expression))
+            
+            data_in_new_space[genes_in_both,] <- gene_expression[genes_in_both,]
+            
+            return(data_in_new_space)
+          }
+)

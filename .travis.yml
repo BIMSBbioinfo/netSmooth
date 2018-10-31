@@ -1,5 +1,5 @@
 language: r
-r: release
+r: bioc-devel
 cache: packages
 warnings_are_errors: false
 r_build_args: --no-build-vignettes --no-manual --no-resave-data

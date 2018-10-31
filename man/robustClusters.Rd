@@ -8,8 +8,8 @@
 \title{Perform robust clustering on dataset, and calculate the proportion of
 samples in robust clusters}
 \usage{
-\S4method{robustClusters}{SummarizedExperiment}(x, dimReduceFlavor = "auto",
-  is.counts = TRUE, ...)
+\S4method{robustClusters}{SummarizedExperiment}(x,
+  dimReduceFlavor = "auto", is.counts = TRUE, ...)
 
 \S4method{robustClusters}{matrix}(x, ...)
 }
@@ -18,7 +18,7 @@ samples in robust clusters}
 
 \item{dimReduceFlavor}{algorithm for dimensionality reduction step
 of clustering procedure. May be 'pca', 'tsne',
-'dm' or 'auto', which uses shannon entropy to
+'dm', 'umap' or 'auto', which uses shannon entropy to
 pick the algorithm.}
 
 \item{is.counts}{logical: is the data counts}

@@ -19,8 +19,8 @@ Encoding: UTF-8
 LazyData: true
 Depends:
     R (>= 3.5),
-    scater (>= 1.7.11),
-    clusterExperiment (>= 1.99.1)
+    scater (>= 1.9.20),
+    clusterExperiment (>= 2.1.6)
 Imports:
     entropy,
     SummarizedExperiment,
@@ -29,7 +29,9 @@ Imports:
     cluster,
     data.table,
     stats,
-    methods
+    methods,
+    DelayedArray,
+    HDF5Array
 Suggests: knitr,
     testthat,
     Rtsne,
@@ -43,4 +45,4 @@ Suggests: knitr,
     rmarkdown,
     BiocParallel
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

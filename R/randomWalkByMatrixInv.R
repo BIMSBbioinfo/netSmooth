@@ -1,3 +1,11 @@
+setGeneric(
+  name = "randomWalkByMatrixInv",
+  def = function(f0, adjMatrix, alpha,
+                 normalizeAjdMatrix=c('rows','columns')) {
+    standardGeneric("randomWalkByMatrixInv")
+  }
+)
+
 #' Smooth data on graph by computing the closed-form steady state
 #' distribution of the random walk with restarts process.
 #'
@@ -12,13 +20,29 @@
 #'                random walk)
 #' @return network-smoothed gene expression
 #' @keywords internal
-randomWalkByMatrixInv <- function(f0, adjMatrix, alpha,
-    normalizeAjdMatrix=c('rows','columns')) {
-    normalizeAjdMatrix <- match.arg(normalizeAjdMatrix)
-    if(normalizeAjdMatrix=='rows') Anorm <- l1NormalizeRows(adjMatrix)
-    else if(normalizeAjdMatrix=='columns') Anorm <-
-        l1NormalizeColumns(adjMatrix)
-    eye <- diag(dim(adjMatrix)[1])
-    K <- (1 - alpha) * solve(eye - alpha * Anorm)
-    return(K %*% f0)
-}
+setMethod("randomWalkByMatrixInv",
+          signature(f0='matrix'),
+          function(f0, adjMatrix, alpha,
+          normalizeAjdMatrix=c('rows','columns')) {
+            normalizeAjdMatrix <- match.arg(normalizeAjdMatrix)
+            if(normalizeAjdMatrix=='rows') Anorm <- l1NormalizeRows(adjMatrix)
+            else if(normalizeAjdMatrix=='columns') Anorm <-
+                l1NormalizeColumns(adjMatrix)
+            eye <- diag(dim(adjMatrix)[1])
+            K <- (1 - alpha) * solve(eye - alpha * Anorm)
+            return(K %*% f0)
+            })
+
+setMethod("randomWalkByMatrixInv",
+          signature(f0='Matrix'),
+          function(f0, adjMatrix, alpha,
+                   normalizeAjdMatrix=c('rows','columns')) {
+            normalizeAjdMatrix <- match.arg(normalizeAjdMatrix)
+            if(normalizeAjdMatrix=='rows') Anorm <- l1NormalizeRows(adjMatrix)
+            else if(normalizeAjdMatrix=='columns') Anorm <-
+                l1NormalizeColumns(adjMatrix)
+            eye <- diag(dim(adjMatrix)[1])
+            K <- (1 - alpha) * solve(eye - alpha * Anorm)
+            return(K %*% f0)
+          })
+

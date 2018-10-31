@@ -6,22 +6,26 @@
 \alias{pickDimReduction}
 \alias{pickDimReduction,SummarizedExperiment-method}
 \alias{pickDimReduction,Matrix-method}
+\alias{pickDimReduction,DelayedMatrix-method}
 \title{Pick the dimensionality reduction method for a dataset that gives the
 2D embedding with the highest entropy}
 \usage{
-\S4method{pickDimReduction}{matrix}(x, flavors = c("pca", "tsne"),
-  is.counts = TRUE)
+\S4method{pickDimReduction}{matrix}(x, flavors = c("pca", "tsne",
+  "umap"), is.counts = TRUE)
 
 \S4method{pickDimReduction}{SummarizedExperiment}(x)
 
-\S4method{pickDimReduction}{Matrix}(x, flavors = c("pca", "tsne"),
-  is.counts = TRUE)
+\S4method{pickDimReduction}{Matrix}(x, flavors = c("pca", "tsne",
+  "umap"), is.counts = TRUE)
+
+\S4method{pickDimReduction}{DelayedMatrix}(x, flavors = c("pca", "tsne",
+  "umap"), is.counts = TRUE)
 }
 \arguments{
 \item{x}{matrix or SummarizedExperiment object [GENES x SAMPLES]}
 
 \item{flavors}{list of dimensionality reduction algorithms to try.
-Currently the options are "pca" and "tsne"}
+Currently the options are "pca", "tsne" and "umap"}
 
 \item{is.counts}{logical: is exprs count data}
 }

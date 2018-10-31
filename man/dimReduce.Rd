@@ -4,14 +4,14 @@
 \alias{dimReduce}
 \title{Get lower dimension embedding}
 \usage{
-dimReduce(x, flavor = c("pca", "tsne"), k = 2, is.counts = TRUE,
-  ntop = 500)
+dimReduce(x, flavor = c("pca", "tsne", "umap"), k = 2,
+  is.counts = TRUE, ntop = 500)
 }
 \arguments{
 \item{x}{gene expresison matrix [GENES x SAMPLES]}
 
 \item{flavor}{the algorithm to use to obtain the dimensionality reduction
-must be in c('pca', 'tsne')}
+must be in c('pca', 'tsne', 'umap')}
 
 \item{k}{the number of dimensions in the reduced dimension representation}
 
