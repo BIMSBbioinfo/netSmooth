@@ -1,7 +1,7 @@
 Package: netSmooth
 Type: Package
 Title: Network smoothing for scRNAseq
-Version: 1.5.0
+Version: 1.5.1
 Authors@R: c(person("Jonathan", "Ronen", role = c("aut", "cre"),
                      email = "yablee@gmail.com"),
               person("Altuna", "Akalin", role = c("aut")))
@@ -43,6 +43,7 @@ Suggests: knitr,
     ggplot2,
     BiocStyle, 
     rmarkdown,
-    BiocParallel
+    BiocParallel,
+    uwot
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
