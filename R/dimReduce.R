@@ -17,14 +17,14 @@ dimReduce <- function(x, flavor=c('pca', 'tsne', 'umap'), k=2, is.counts=TRUE, n
   if(flavor=='pca') function.to.call <- runPCA
   if(flavor=='tsne') function.to.call <- runTSNE
   if(flavor=='umap') function.to.call <- runUMAP
-  
+
   if(is.counts){
     sce <- SingleCellExperiment(assays=list(counts=x))
-    exprs(sce) <- log2(calculateCPM(sce, use_size_factors = FALSE) + 1)
+    exprs(sce) <- log2(calculateCPM(sce, size_factors = FALSE) + 1)
   } else {
     sce <- SingleCellExperiment(assays=list(logcounts=x))
   }
-  
+
   sce <- function.to.call(sce, ncomponents=k, ntop=ntop)
   red.dim <- data.frame(reducedDim(sce))[,seq_len(k)]
   colnames(red.dim) <- paste0(flavor, seq_len(k))
