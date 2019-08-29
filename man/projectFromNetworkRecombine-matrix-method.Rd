@@ -15,7 +15,7 @@ expression of genes that were not smoothed (not present in network)}
 \item{smoothed_expression}{the smoothed gene expression, in the space
 of the genes defined by the network}
 
-\item{filepath}{String: Path to location where hdf5 output file is supposed to be saved. 
+\item{filepath}{String: Path to location where hdf5 output file is supposed to be saved.
 Will be ignored when regular matrices or SummarizedExperiment are
 used as input.}
 }
