@@ -20,7 +20,7 @@ dimReduce <- function(x, flavor=c('pca', 'tsne', 'umap'), k=2, is.counts=TRUE, n
 
   if(is.counts){
     sce <- SingleCellExperiment(assays=list(counts=x))
-    exprs(sce) <- log2(calculateCPM(sce, use_size_factors = FALSE) + 1)
+    exprs(sce) <- log2(calculateCPM(sce) + 1)
   } else {
     sce <- SingleCellExperiment(assays=list(logcounts=x))
   }
