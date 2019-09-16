@@ -1,7 +1,7 @@
 setGeneric(
   name = "randomWalkByMatrixInv",
   def = function(f0, adjMatrix, alpha,
-                 normalizeAjdMatrix=c('rows','columns')) {
+                 normalizeAdjMatrix=c('rows','columns')) {
     standardGeneric("randomWalkByMatrixInv")
   }
 )
@@ -23,10 +23,10 @@ setGeneric(
 setMethod("randomWalkByMatrixInv",
           signature(f0='matrix'),
           function(f0, adjMatrix, alpha,
-          normalizeAjdMatrix=c('rows','columns')) {
-            normalizeAjdMatrix <- match.arg(normalizeAjdMatrix)
-            if(normalizeAjdMatrix=='rows') Anorm <- l1NormalizeRows(adjMatrix)
-            else if(normalizeAjdMatrix=='columns') Anorm <-
+          normalizeAdjMatrix=c('rows','columns')) {
+            normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
+            if(normalizeAdjMatrix=='rows') Anorm <- l1NormalizeRows(adjMatrix)
+            else if(normalizeAdjMatrix=='columns') Anorm <-
                 l1NormalizeColumns(adjMatrix)
             eye <- diag(dim(adjMatrix)[1])
             K <- (1 - alpha) * solve(eye - alpha * Anorm)
@@ -36,10 +36,23 @@ setMethod("randomWalkByMatrixInv",
 setMethod("randomWalkByMatrixInv",
           signature(f0='Matrix'),
           function(f0, adjMatrix, alpha,
-                   normalizeAjdMatrix=c('rows','columns')) {
-            normalizeAjdMatrix <- match.arg(normalizeAjdMatrix)
-            if(normalizeAjdMatrix=='rows') Anorm <- l1NormalizeRows(adjMatrix)
-            else if(normalizeAjdMatrix=='columns') Anorm <-
+                   normalizeAdjMatrix=c('rows','columns')) {
+            normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
+            if(normalizeAdjMatrix=='rows') Anorm <- l1NormalizeRows(adjMatrix)
+            else if(normalizeAdjMatrix=='columns') Anorm <-
+                l1NormalizeColumns(adjMatrix)
+            eye <- diag(dim(adjMatrix)[1])
+            K <- (1 - alpha) * solve(eye - alpha * Anorm)
+            return(K %*% f0)
+          })
+
+setMethod("randomWalkByMatrixInv",
+          signature(f0='DelayedMatrix'),
+          function(f0, adjMatrix, alpha,
+                   normalizeAdjMatrix) {
+            normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
+            if(normalizeAdjMatrix=='rows') Anorm <- l1NormalizeRows(adjMatrix)
+            else if(normalizeAdjMatrix=='columns') Anorm <-
                 l1NormalizeColumns(adjMatrix)
             eye <- diag(dim(adjMatrix)[1])
             K <- (1 - alpha) * solve(eye - alpha * Anorm)

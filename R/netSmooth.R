@@ -32,10 +32,6 @@ setGeneric(
 #' @param is.counts    logical: is the assay count data
 #' @param bpparam    instance of bpparam, for parallel computation with the
 #'                   `alpha='auto'` option. See the BiocParallel manual.
-#' @param chunk.size    integer in [1,length(colnames[x])]. Number of columns that
-#'                      processed at the same time when using disk based DelayedMatrix.
-#'                      Will be ignored when regular matrices or SummarizedExperiment are
-#'                       used as input.
 #' @param filepath      String: Path to location where hdf5 output file is supposed to be saved. 
 #'                      Will be ignored when regular matrices or SummarizedExperiment are
 #'                      used as input.
@@ -219,7 +215,6 @@ setMethod("netSmooth",
                    autoAlphaDimReduceFlavor='auto',
                    is.counts=TRUE,
                    bpparam=BiocParallel::SerialParam(),
-                   chunk.size = 1,
                    filepath = NULL,
                    ...)
           {
@@ -241,7 +236,6 @@ setMethod("netSmooth",
 
               x.smoothed <- smoothAndRecombine(x, adjMatrix, alpha,
                                                normalizeAdjMatrix=normalizeAdjMatrix,
-                                               chunk.size=chunk.size,
                                                filepath=filepath)
             } else if(alpha=='auto') {
               if(autoAlphaDimReduceFlavor=='auto') {
