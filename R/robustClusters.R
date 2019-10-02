@@ -33,6 +33,7 @@ setMethod("robustClusters",
                 is.counts=is.counts)
             message("Picked dimReduceFlavor: ",dimReduceFlavor,"\n")
         }
+        
         yhat <- clusterExperimentWorkflow(x, is.counts=is.counts,
             dimReduceFlavor=dimReduceFlavor, ...)
         proportion.robust <- mean(yhat!=-1)

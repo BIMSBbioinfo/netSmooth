@@ -7,7 +7,7 @@
 distribution of the random walk with restarts process.}
 \usage{
 \S4method{randomWalkByMatrixInv}{matrix}(f0, adjMatrix, alpha,
-  normalizeAjdMatrix = c("rows", "columns"))
+  normalizeAdjMatrix = c("rows", "columns"))
 }
 \arguments{
 \item{f0}{initial data matrix [NxM]}

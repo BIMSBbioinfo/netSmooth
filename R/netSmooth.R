@@ -83,7 +83,6 @@ setMethod("netSmooth",
                 message("Picked dimReduceFlavor: ",
                     autoAlphaDimReduceFlavor, "\n")
             }
-
             if (!BiocParallel::bpisup(bpparam)) {
                 BiocParallel::bpstart(bpparam)
                 on.exit(BiocParallel::bpstop(bpparam), add=TRUE)
@@ -102,7 +101,6 @@ setMethod("netSmooth",
                 BiocParallel::bpstart(bpparam)
                 on.exit(BiocParallel::bpstop(bpparam), add=TRUE)
             }
-
             scores <- unlist(BiocParallel::bplapply(
                 seq_len(length(smoothed.expression.matrices)),
                 function(i) {
@@ -115,7 +113,7 @@ setMethod("netSmooth",
             x.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
             chosen.a <- autoAlphaRange[which.max(scores)]
             message("Picked alpha=",chosen.a,"\n")
-        } else stop("unsupprted alpha value: ", class(alpha))
+        } else stop("unsupported alpha value: ", class(alpha))
         return(x.smoothed)
     }
 )
@@ -198,7 +196,7 @@ setMethod("netSmooth",
               x.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
               chosen.a <- autoAlphaRange[which.max(scores)]
               message("Picked alpha=",chosen.a,"\n")
-            } else stop("unsupprted alpha value: ", class(alpha))
+            } else stop("unsupported alpha value: ", class(alpha))
             return(x.smoothed)
           }
 )
@@ -280,7 +278,7 @@ setMethod("netSmooth",
               
               chosen.a <- autoAlphaRange[which.max(scores)]
               message("Picked alpha=",chosen.a,"\n")
-            } else stop("unsupprted alpha value: ", class(alpha))
+            } else stop("unsupported alpha value: ", class(alpha))
             
             
             return(x.smoothed)

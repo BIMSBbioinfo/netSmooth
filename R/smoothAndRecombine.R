@@ -74,17 +74,12 @@ setMethod("smoothAndRecombine",
                    smoothing.function=randomWalkByMatrixInv,
                    normalizeAdjMatrix=c('rows','columns'),
                    filepath = NULL) {
-            #normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
             gene_expression_in_A_space <- projectOnNetwork(gene_expression,
                                                            rownames(adj_matrix))
-            
             gene_expression_in_A_space_smooth <- smoothing.function(
-            gene_expression_in_A_space, adj_matrix, alpha, normalizeAdjMatrix='columns')
-            
-            # create output object (projection to input and saving with given path)
+              gene_expression_in_A_space, adj_matrix, alpha, normalizeAdjMatrix='columns')
             gene_expression_smooth <- projectFromNetworkRecombine(
               gene_expression, gene_expression_in_A_space_smooth, filepath)
-
             return(gene_expression_smooth)
           })
 

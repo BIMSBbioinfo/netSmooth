@@ -30,8 +30,7 @@
   normalizeAdjMatrix = c("rows", "columns"),
   autoAlphaMethod = c("robustness", "entropy"), autoAlphaRange = 0.1 *
   (seq_len(9)), autoAlphaDimReduceFlavor = "auto", is.counts = TRUE,
-  bpparam = BiocParallel::SerialParam(), chunk.size = 1,
-  filepath = NULL, ...)
+  bpparam = BiocParallel::SerialParam(), filepath = NULL, ...)
 }
 \arguments{
 \item{x}{matrix or SummarizedExperiment}
@@ -71,11 +70,6 @@ used in robust clustering (if
 
 \item{...}{arguments passed on to `robustClusters` if using the robustness
 criterion for optimizing alpha}
-
-\item{chunk.size}{integer in [1,length(colnames[x])]. Number of columns that
-processed at the same time when using disk based DelayedMatrix.
-Will be ignored when regular matrices or SummarizedExperiment are
- used as input.}
 
 \item{filepath}{String: Path to location where hdf5 output file is supposed to be saved. 
 Will be ignored when regular matrices or SummarizedExperiment are
