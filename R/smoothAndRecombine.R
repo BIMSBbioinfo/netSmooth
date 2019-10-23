@@ -3,7 +3,6 @@ setGeneric(
   def = function(gene_expression, adj_matrix, alpha,
                  smoothing.function=randomWalkBySolve,
                  normalizeAdjMatrix=c('rows','columns'),
-                 chunk.size = 1,
                  filepath = NULL) {
     standardGeneric("smoothAndRecombine")
   }
@@ -33,10 +32,6 @@ setGeneric(
 #'                              adjacency matrix be normalized by. rows
 #'                              corresponds to in-degree, columns to
 #'                              out-degree.
-#' @param chunk.size    integer in [1,length(colnames[x])]. Number of columns that
-#'                      processed at the same time when using disk based DelayedMatrix.
-#'                      Will be ignored when regular matrices or SummarizedExperiment are
-#'                      used as input.
 #' @param filepath      String: Path to location where hdf5 output file is supposed to be saved. 
 #'                      Will be ignored when regular matrices or SummarizedExperiment are
 #'                      used as input.
@@ -78,36 +73,13 @@ setMethod("smoothAndRecombine",
           function(gene_expression, adj_matrix, alpha,
                    smoothing.function=randomWalkByMatrixInv,
                    normalizeAdjMatrix=c('rows','columns'),
-                   chunk.size = 1,
                    filepath = NULL) {
-            normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
             gene_expression_in_A_space <- projectOnNetwork(gene_expression,
                                                            rownames(adj_matrix))
-            
-            # smooth in place
-            # vector containing the indeces of the columns
-            index.vector <- 1:dim(gene_expression_in_A_space)[2]
-            
-            # seperate indices according to chunk size
-            index.chunks <- split(index.vector, ceiling(seq_along(index.vector)/chunk.size))
-            
-            Anorm <- l1NormalizeColumns(adj_matrix)
-            eye <- diag(dim(adj_matrix)[1])
-            K <- (1 - alpha) * solve(eye - alpha * Anorm)
-            
-            # smoothing one chunk at a time
-            for (i in 1:length(index.chunks)) {
-              
-              # get column(s) with current index
-              tmp.col <- gene_expression_in_A_space[,index.chunks[[i]]]
-              
-              # replace col with smoothed values
-              gene_expression_in_A_space[,index.chunks[[i]]] <- K %*% tmp.col
-            }
-            
+            gene_expression_in_A_space_smooth <- smoothing.function(
+              gene_expression_in_A_space, adj_matrix, alpha, normalizeAdjMatrix)
             gene_expression_smooth <- projectFromNetworkRecombine(
-              gene_expression, gene_expression_in_A_space, filepath)
-            
+              gene_expression, gene_expression_in_A_space_smooth, filepath)
             return(gene_expression_smooth)
           })
 

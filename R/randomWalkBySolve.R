@@ -6,7 +6,7 @@ setGeneric(
 )
 
 #' Smooth data on graph by solving the linear equation
-#' (I - alpha*A)^T * E_sm^T = E^T * (1-alpha)
+#' (I - alpha*A) * E_sm = E * (1-alpha)
 #'
 #'
 #' @param E      initial data matrix [NxM]
@@ -23,7 +23,7 @@ setMethod("randomWalkBySolve",
     if(normalizeAjdMatrix=='rows') Anorm <- l1NormalizeRows(A)
     else if(normalizeAjdMatrix=='columns') Anorm <- l1NormalizeColumns(A)
     eye <- diag(dim(A)[1])
-    AA <- Matrix::t(eye - alpha*Anorm)
+    AA <- eye - alpha*Anorm
     BB <- (1-alpha) * E
     return(solve(AA, BB))
     }
@@ -37,7 +37,7 @@ setMethod("randomWalkBySolve",
     if(normalizeAjdMatrix=='rows') Anorm <- l1NormalizeRows(A)
     else if(normalizeAjdMatrix=='columns') Anorm <- l1NormalizeColumns(A)
     eye <- diag(dim(A)[1])
-    AA <- Matrix::t(eye - alpha*Anorm)
+    AA <- eye - alpha*Anorm
     BB <- (1-alpha) * E
     return(Matrix::solve(AA, BB))
     }

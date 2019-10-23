@@ -36,7 +36,6 @@ clusterExperimentWorkflow <- function(se,
                     run=TRUE,
                     subsampling=FALSE,
                     random.seed=random.seed)
-  
   # Run dim reduce clusterings
   if(dimReduceFlavor=='pca') dim.reduce.ks <- c(5,15,50)
   else dim.reduce.ks <- c(2,3)

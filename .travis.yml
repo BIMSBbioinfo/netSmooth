@@ -32,7 +32,6 @@ r_binary_packages:
   - rcppeigen
   - gtable
   - xtable
-  - hdf5
   - rcolorbrewer
   - stringr
   - reshape2

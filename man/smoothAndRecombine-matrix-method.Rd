@@ -30,11 +30,6 @@ adjacency matrix be normalized by. rows
 corresponds to in-degree, columns to
 out-degree.}
 
-\item{chunk.size}{integer in [1,length(colnames[x])]. Number of columns that
-processed at the same time when using disk based DelayedMatrix.
-Will be ignored when regular matrices or SummarizedExperiment are
-used as input.}
-
 \item{filepath}{String: Path to location where hdf5 output file is supposed to be saved. 
 Will be ignored when regular matrices or SummarizedExperiment are
 used as input.}
