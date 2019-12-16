@@ -32,7 +32,7 @@ setGeneric(
 #' @param is.counts    logical: is the assay count data
 #' @param bpparam    instance of bpparam, for parallel computation with the
 #'                   `alpha='auto'` option. See the BiocParallel manual.
-#' @param filepath      String: Path to location where hdf5 output file is supposed to be saved. 
+#' @param filepath      String: Path to location where hdf5 output file is supposed to be saved.
 #'                      Will be ignored when regular matrices or SummarizedExperiment are
 #'                      used as input.
 #' @param ...    arguments passed on to `robustClusters` if using the robustness
@@ -136,7 +136,6 @@ setMethod("netSmooth",
             matrixdata <- assay(x)
             ret <- netSmooth(matrixdata, ...)
             return(SingleCellExperiment(assays = list(counts = ret)))
-            #sce <- SingleCellExperiment(assays = list(counts = counts))
           })
 
 #' @rdname netSmooth
@@ -153,12 +152,12 @@ setMethod("netSmooth",
                    ...) {
             autoAlphaMethod <- match.arg(autoAlphaMethod)
             normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
-            
+
             stopifnot(is(adjMatrix, 'matrix') || is(adjMatrix, 'sparseMatrix'))
             stopifnot((is.numeric(alpha) && (alpha > 0 && alpha < 1)) || alpha == "auto")
             if(sum(Matrix::rowSums(adjMatrix)==0)>0) stop("PPI cannot have zero rows/columns")
             if(sum(Matrix::colSums(adjMatrix)==0)>0) stop("PPI cannot have zero rows/columns")
-            
+
             if(is.numeric(alpha)) {
               message("Using given alpha: ", alpha,"\n")
               if(alpha<0 | alpha > 1) {
@@ -173,7 +172,7 @@ setMethod("netSmooth",
                 message("Picked dimReduceFlavor: ", autoAlphaDimReduceFlavor,
                         "\n")
               }
-              
+
               smoothed.expression.matrices <- BiocParallel::bplapply(
                 autoAlphaRange,
                 function(a) {
@@ -182,7 +181,7 @@ setMethod("netSmooth",
                 },
                 BPPARAM = bpparam
               )
-              
+
               scores <- unlist(BiocParallel::bplapply(
                 seq_len(length(smoothed.expression.matrices)),
                 function(i) {
@@ -205,7 +204,7 @@ setMethod("netSmooth",
 #' @export
 setMethod("netSmooth",
           signature(x='DelayedMatrix'),
-          
+
           function(x, adjMatrix, alpha='auto',
                    normalizeAdjMatrix=c('rows','columns'),
                    autoAlphaMethod=c('robustness', 'entropy'),
@@ -216,16 +215,16 @@ setMethod("netSmooth",
                    filepath = NULL,
                    ...)
           {
-            
+
             autoAlphaMethod <- match.arg(autoAlphaMethod)
             normalizeAdjMatrix <- match.arg(normalizeAdjMatrix)
-            
+
             stopifnot(is(adjMatrix, 'matrix') || is(adjMatrix, 'sparseMatrix'))
             stopifnot((is.numeric(alpha) && (alpha > 0 && alpha < 1)) || alpha == "auto")
             if(sum(Matrix::rowSums(adjMatrix)==0)>0) stop("PPI cannot have zero rows/columns")
             if(sum(Matrix::colSums(adjMatrix)==0)>0) stop("PPI cannot have zero rows/columns")
-            
-            
+
+
             if(is.numeric(alpha)) {
               message("Using given alpha: ", alpha,"\n")
               if(alpha<0 | alpha > 1) {
@@ -251,7 +250,7 @@ setMethod("netSmooth",
                 },
                 BPPARAM = bpparam
               )
-              
+
               scores <- unlist(BiocParallel::bplapply(
                 seq_len(length(smoothed.expression.matrices)),
                 function(i) {
@@ -262,24 +261,24 @@ setMethod("netSmooth",
                                  dimReduceFlavor=autoAlphaDimReduceFlavor, ...)
                 }
               ))
-              
+
               if (is.null(filepath)){
                 x.smoothed <- smoothed.expression.matrices[[which.max(scores)]]
               } else{
                 x.smoothed <- HDF5Array::writeHDF5Array(smoothed.expression.matrices[[which.max(scores)]], filepath = filepath)
-                
+
                 # set row and col names and coerce to DelayedMatrix object
                 rownames(x.smoothed) <- rownames(smoothed.expression.matrices[[which.max(scores)]])
                 colnames(x.smoothed) <- colnames(smoothed.expression.matrices[[which.max(scores)]])
               }
-              
+
               # delete temporary smoothed expression matrices from disk
               lapply(smoothed.expression.matrices, function(x) file.remove(path(x)))
-              
+
               chosen.a <- autoAlphaRange[which.max(scores)]
               message("Picked alpha=",chosen.a,"\n")
             } else stop("unsupported alpha value: ", class(alpha))
-            
-            
+
+
             return(x.smoothed)
           })

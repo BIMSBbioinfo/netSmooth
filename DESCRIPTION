@@ -19,7 +19,7 @@ Encoding: UTF-8
 LazyData: true
 Depends:
     R (>= 3.5),
-    scater (>= 1.9.20),
+    scater (>= 1.15.11),
     clusterExperiment (>= 2.1.6)
 Imports:
     entropy,
@@ -46,4 +46,4 @@ Suggests: knitr,
     BiocParallel,
     uwot
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2

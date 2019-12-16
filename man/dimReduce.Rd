@@ -4,8 +4,13 @@
 \alias{dimReduce}
 \title{Get lower dimension embedding}
 \usage{
-dimReduce(x, flavor = c("pca", "tsne", "umap"), k = 2,
-  is.counts = TRUE, ntop = 500)
+dimReduce(
+  x,
+  flavor = c("pca", "tsne", "umap"),
+  k = 2,
+  is.counts = TRUE,
+  ntop = 500
+)
 }
 \arguments{
 \item{x}{gene expresison matrix [GENES x SAMPLES]}

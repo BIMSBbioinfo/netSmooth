@@ -4,8 +4,7 @@
 \alias{scoreSmoothing}
 \title{Calculate a score for a smoothing result, for picking the best alpha value}
 \usage{
-scoreSmoothing(x, method = c("entropy", "robustness"),
-  is.counts = TRUE, ...)
+scoreSmoothing(x, method = c("entropy", "robustness"), is.counts = TRUE, ...)
 }
 \arguments{
 \item{x}{the network-smoothed expression matrix}

@@ -171,6 +171,10 @@ strategy and returns the best embedding according to this strategy.
 Below, we pick the best embedding for our example dataset and plot scatter plots
 for different 2D embedding methods.
 ```{r , echo=TRUE, eval=TRUE}
+smallscRNAseq <- runPCA(smallscRNAseq, ncomponents=2)
+smallscRNAseq <- runTSNE(smallscRNAseq, ncomponents=2)
+smallscRNAseq <- runUMAP(smallscRNAseq, ncomponents=2)
+
 plotPCA(smallscRNAseq, colour_by='source_name_ch1') + ggtitle("PCA plot")
 plotTSNE(smallscRNAseq, colour_by='source_name_ch1') + ggtitle("tSNE plot")
 plotUMAP(smallscRNAseq, colour_by='source_name_ch1') + ggtitle("UMAP plot")

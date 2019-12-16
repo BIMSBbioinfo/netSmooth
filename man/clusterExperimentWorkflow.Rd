@@ -4,11 +4,18 @@
 \alias{clusterExperimentWorkflow}
 \title{Performs clustering workflow using `clusterExperiment` functions}
 \usage{
-clusterExperimentWorkflow(se, dimReduceFlavor = c("pca", "tsne", "dm",
-  "umap"), cluster.ks = 5:10, cluster.function = "pam",
-  nVarDims = c(100, 500, 1000), makeConsensusProportion = 0.7,
-  makeConsensusMinSize = 4, runMergeClusters = TRUE,
-  is.counts = TRUE, random.seed = 1)
+clusterExperimentWorkflow(
+  se,
+  dimReduceFlavor = c("pca", "tsne", "dm", "umap"),
+  cluster.ks = 5:10,
+  cluster.function = "pam",
+  nVarDims = c(100, 500, 1000),
+  makeConsensusProportion = 0.7,
+  makeConsensusMinSize = 4,
+  runMergeClusters = TRUE,
+  is.counts = TRUE,
+  random.seed = 1
+)
 }
 \arguments{
 \item{se}{SummarizedExperiment object}
